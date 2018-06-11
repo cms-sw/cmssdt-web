@@ -11,9 +11,9 @@ def check_event(data):
   if not 'HTTP_X_GITHUB_EVENT' in os.environ: return False,''
   event = os.environ['HTTP_X_GITHUB_EVENT']
   if not event in ['issues', 'issue_comment', 'pull_request' , 'push']: return False,event
+  ok_event = False
   try:
     if repo_config.VALID_WEB_HOOKS:
-      ok_event = False
       for ex in repo_config.VALID_WEB_HOOKS:
         if re.match('^'+ex+'$',event):
           ok_event = True
@@ -23,22 +23,19 @@ def check_event(data):
         return False,event
   except: pass
   full_name = data['repository']['full_name']
+  if (not ok_event) and (not is_valid_gh_repo(full_name)): return False,event
   if (event == 'push'):
     branch = data["ref"]
     if not branch.startswith("refs/heads/"): return False, event
-    if not get_repository_hooks(full_name,"Jenkins_Github_Hook_Push"): return False,event
+    if not ok_event:
+      if not get_repository_hooks(full_name,"Jenkins_Github_Hook_Push"): return False,event
     branch = branch.replace("refs/heads/","")
     if branch=="master": return True, event
     repo = data['repository']['name']
     if (repo in ['cmssw']) and branch.startswith("CMSSW_"): return True, event
     if (repo in ['cmsdist']) and branch.startswith("IB/CMSSW_"): return True, event
     return False, event
-  if not is_valid_gh_repo(full_name):
-    try:
-      if repo_config.GH_REPO_FULLNAME!=full_name: return False,event
-    except Exception as e:
-      return False,event
-  elif not get_repository_hooks(full_name,"Jenkins_Github_Hook"): return False,event
+  if (not ok_event) and (not get_repository_hooks(full_name,"Jenkins_Github_Hook")): return False,event
   if (event == 'pull_request'): return True,event
   elif (event == 'issues') and (not data['action'] in ['opened']): return False,event
   elif (event == 'issue_comment'):
