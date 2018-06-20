@@ -835,7 +835,7 @@ Click on the alert icon (%s) to see information provided by the release manager 
 def main():
 
     style = """
-    <link rel="stylesheet" type="text/css" href="%s/css/intbld.css">
+    <link rel="stylesheet" type="text/css" href="%s/intbld.css">
 
     <style type="text/css">  
     .info { display: none; }
@@ -843,7 +843,7 @@ def main():
     .showOld { font-size: 18; text-decoration: underline; padding: 20px}
     </style>  
 
-    <script type="text/javascript" src="%s/js/libs/jquery.min.js"></script>
+    <script type="text/javascript" src="%s/jsExt/jquery.js"></script>
 
     <!-- 
     <script type="text/javascript" src="%s/jsExt/dataTables.js"></script>
