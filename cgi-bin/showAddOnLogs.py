@@ -323,7 +323,7 @@ class LogViewer(object):
 def main():
 
     style = """
-    <link rel="stylesheet" type="text/css" href="/SDT/html/intbld.css">\n
+    <link rel="stylesheet" type="text/css" href="/SDT/html/css/intbld.css">\n
     
     <style type="text/css">  
     .info { display: none; }

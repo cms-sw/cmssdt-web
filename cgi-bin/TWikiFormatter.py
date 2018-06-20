@@ -267,8 +267,8 @@ way to fit your requirements.
 
 """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath']) )
     
-	    self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'colors.css">\n')
-            self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'intbld.css">\n')
+	    self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'css/colors.css">\n')
+            self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'css/intbld.css">\n')
 	    self.outFile.write("""
 <TITLE> CMSSW Integration Build Scram Info</TITLE>
 </head>

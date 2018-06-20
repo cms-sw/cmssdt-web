@@ -1,2 +1,3 @@
 # cmssdt-web 
-  - FIX ME   
+
+Prepared fronted code and CGI scripts of CMSSDT.

@@ -835,7 +835,7 @@ Click on the alert icon (%s) to see information provided by the release manager 
 def main():
 
     style = """
-    <link rel="stylesheet" type="text/css" href="%s/intbld.css">
+    <link rel="stylesheet" type="text/css" href="%s/css/intbld.css">
 
     <style type="text/css">  
     .info { display: none; }

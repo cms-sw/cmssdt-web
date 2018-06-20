@@ -149,7 +149,7 @@ def main():
 
     
     style = """
-    <link rel="stylesheet" type="text/css" href="http://cern.ch/cms-sdt/intbld.css">\n
+    <link rel="stylesheet" type="text/css" href="http://cern.ch/cms-sdt/css/intbld.css">\n
     """
 
     fmtr = Formatter.SimpleHTMLFormatter(title="CMSSW Integration Build Scram Info", style=style)

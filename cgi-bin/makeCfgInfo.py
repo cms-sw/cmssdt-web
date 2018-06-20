@@ -26,7 +26,7 @@ class makeCfgInfo(object):
     def AnalyzeLog(self) :
 	self.cfgInfo = open(self.outPath+'/cfgInfo.html','w')
 	self.cfgInfo.write('\n')
-	self.cfgInfo.write('<html>\n<head>\n<link rel="stylesheet" type="text/css" href="http://cern.ch/cms-sdt/intbld.css"><Title>Old Cfg file</Title></head><body>')
+	self.cfgInfo.write('<html>\n<head>\n<link rel="stylesheet" type="text/css" href="http://cern.ch/cms-sdt/css/intbld.css"><Title>Old Cfg file</Title></head><body>')
         try:
             page = open(self.logfile)
         except:

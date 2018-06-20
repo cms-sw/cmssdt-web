@@ -713,7 +713,7 @@ class BuildLogDisplay(object):
 def main():
 
     style = """
-    <link rel="stylesheet" type="text/css" href="%s/intbld.css">
+    <link rel="stylesheet" type="text/css" href="%s/css/intbld.css">
 
     <style type="text/css">  
     @import url(css.css);  
