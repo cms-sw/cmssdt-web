@@ -323,7 +323,7 @@ class LogViewer(object):
 def main():
 
     style = """
-    <link rel="stylesheet" type="text/css" href="/SDT/html/css/intbld.css">\n
+    <link rel="stylesheet" type="text/css" href="/SDT/html/intbld.css">\n
     
     <style type="text/css">  
     .info { display: none; }
@@ -334,7 +334,7 @@ def main():
     }
     </style>  
 
-    <script type="text/javascript" src="/SDT/html/js/libs/jquery.min.js"></script>
+    <script type="text/javascript" src="/SDT/html/jsExt/jquery.js"></script>
     <script>
     function showHide(obj){
         var myname = obj.name;

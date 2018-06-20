@@ -1,0 +1,62 @@
+
+.unknown { 
+  font-weight : bold;
+  color: white;
+  background-color: #888888;
+ }
+.failed { 
+  font-weight : bold;
+  color: white;
+  background-color: #ff0033;
+ }
+.error { 
+  font-weight : bold;
+  color: white;
+  background-color: #ff0033;
+ }
+.warning { 
+  font-weight : bold;
+  color: black;
+  background-color: #ffff00;
+ }
+.passed { 
+  background-color: #66cc66;
+ }
+
+.skipped { 
+  background-color: #001aff;
+ }
+
+tr td {
+  background-color: rgb(234, 235, 255);
+}
+tr.alt td {
+  background-color: rgb(211, 214, 255);
+}
+
+tr.dictErr  {   color: white; font-weight:bold; background-color: #ff0000; }
+tr.compErr  {   color: black; font-weight:bold; background-color: #ff3300; }
+tr.linkErr  {   color: black; font-weight:bold; background-color: #ff6600; } 
+tr.pyErr    {   color: black; font-weight:bold; background-color: #ffa500; }
+tr.compWarn {   color: black; font-weight:bold; background-color: #ff6666; }
+tr.dwnldErr {   color: black; font-weight:bold; background-color: #ff9999; }
+tr.miscErr  {   color: black; font-weight:bold; background-color: #ff9999; }
+tr.lcErr    {   color: black; font-weight:bold; background-color: #ff6666; }
+tr.scErr    {   color: black; font-weight:bold; background-color: #ff6666; }
+tr.scWarn   {   color: black; font-weight:bold; background-color: #ff9999; }
+tr.ok       {   color: black; font-weight:bold; background-color: #32cd32; }
+tr.skipped  {   color: black; font-weight:bold; background-color: #001aff; }
+
+td.dictErr  {   color: white; font-weight:bold; background-color: #ff0000; }
+td.compErr  {   color: black; font-weight:bold; background-color: #ff3300; }
+td.linkErr  {   color: black; font-weight:bold; background-color: #ff6600; } 
+td.pyErr    {   color: black; font-weight:bold; background-color: #ffa500; }
+td.compWarn {   color: black; font-weight:bold; background-color: #ff6666; }
+td.dwnldErr {   color: black; font-weight:bold; background-color: #ff9999; }
+td.miscErr  {   color: black; font-weight:bold; background-color: #ff9999; }
+td.lcErr    {   color: black; font-weight:bold; background-color: #ff6666; }
+td.scErr    {   color: black; font-weight:bold; background-color: #ff6666; }
+td.scWarn   {   color: black; font-weight:bold; background-color: #ff9999; }
+td.ok       {   color: black; font-weight:bold; background-color: #32cd32; }
+td.skipped  {   color: black; font-weight:bold; background-color: #001aff; }
+
