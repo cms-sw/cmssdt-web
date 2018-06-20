@@ -241,7 +241,7 @@ way to fit your requirements.
 		@import "%s/jsExt/dataTables/media/css/demo_table.css";
 	</style>
 
-    <script type="text/javascript" src="%s/jsExt/jquery.js"></script>
+    <script type="text/javascript" src="%s/js/libs/jquery.min.js"></script>
 
     <script type="text/javascript" src="%s/js/igpSummary.js"></script>
 
@@ -267,8 +267,8 @@ way to fit your requirements.
 
 """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath']) )
     
-	    self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'colors.css">\n')
-            self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'intbld.css">\n')
+	    self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'css/colors.css">\n')
+            self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'css/intbld.css">\n')
 	    self.outFile.write("""
 <TITLE> CMSSW Integration Build Scram Info</TITLE>
 </head>

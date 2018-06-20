@@ -36,7 +36,7 @@ def main():
 </style>  
 
 
-<script type="text/javascript" src="@HOST@/jsExt/jquery.js"></script>
+<script type="text/javascript" src="@HOST@/js/libs/jquery.min.js"></script>
 
 <script type="text/javascript">
 function showHide(obj){

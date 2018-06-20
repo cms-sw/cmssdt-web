@@ -17,7 +17,7 @@ class makePyCheck(object) :
     def AnalyzeLog(self) :
 	self.PyInfo = open(self.outPath+'/pyCheck.html','w')
 	self.PyInfo.write('\n')
-	self.PyInfo.write('<html>\n<head>\n<link rel="stylesheet" type="text/css" href="http://cern.ch/cms-sdt/intbld.css"><Title>Checking Python Configuration file</Title></head><body>')
+	self.PyInfo.write('<html>\n<head>\n<link rel="stylesheet" type="text/css" href="http://cern.ch/cms-sdt/css/intbld.css"><Title>Checking Python Configuration file</Title></head><body>')
 	current_pkg=''
        	pkg = {}
 	try : 
