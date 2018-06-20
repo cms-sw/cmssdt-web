@@ -139,7 +139,7 @@ class SimpleHTMLFormatter :
         if id:
             tableString += ' id="'+id+'" '
         if cls:
-            tableString += ' class="'+cls+'" '
+            tableString += ' class="table '+cls+'" '
         tableString += '>'
         self.outFile.write( tableString + '\n')
 
@@ -205,7 +205,8 @@ class SimpleHTMLFormatter :
             if self.scriptCode:
                 self.outFile.write( self.scriptCode + '\n' )
             self.outFile.write( "</head> " + '\n')
-            self.outFile.write( "<body>" + '\n')
+            self.outFile.write( '<body>\n')
+            self.outFile.write( '<div class="container">\n')
         self.headersDone = True
 
         return
@@ -214,6 +215,7 @@ class SimpleHTMLFormatter :
     def trailers(self) :
         # write only if headers have been written ...
         if self.headersDone :
+            self.outFile.write( "</div>" + '\n')
             self.outFile.write( "</body>" + '\n')
             self.outFile.write( "</html> " + '\n')
             pass
