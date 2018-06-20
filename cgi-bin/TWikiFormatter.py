@@ -241,7 +241,7 @@ way to fit your requirements.
 		@import "%s/jsExt/dataTables/media/css/demo_table.css";
 	</style>
 
-    <script type="text/javascript" src="%s/jsExt/jquery.js"></script>
+    <script type="text/javascript" src="%s/js/libs/jquery.min.js"></script>
 
     <script type="text/javascript" src="%s/js/igpSummary.js"></script>
 

@@ -334,7 +334,7 @@ def main():
     }
     </style>  
 
-    <script type="text/javascript" src="/SDT/html/jsExt/jquery.js"></script>
+    <script type="text/javascript" src="/SDT/html/js/libs/jquery.min.js"></script>
     <script>
     function showHide(obj){
         var myname = obj.name;
