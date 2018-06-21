@@ -323,7 +323,11 @@ class LogViewer(object):
 def main():
 
     style = """
-    <link rel="stylesheet" type="text/css" href="/SDT/html/intbld.css">\n
+    <!-- bootstrap style -->
+    <link rel="stylesheet" type="text/css" href="%s/css/libs/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="%s/css/intbld.css">
+    
+    <link rel="stylesheet" type="text/css" href="%s/css/intbld.css">\n
     
     <style type="text/css">  
     .info { display: none; }
@@ -334,7 +338,11 @@ def main():
     }
     </style>  
 
-    <script type="text/javascript" src="/SDT/html/jsExt/jquery.js"></script>
+    <!-- jQuery library -->
+    <script type="text/javascript" src="%s/js/libs/jquery.min.js"></script>
+    <!-- bootstrap library -->
+    <script type="text/javascript" src="%s/js/libs/bootstrap.min.js"></script>
+    
     <script>
     function showHide(obj){
         var myname = obj.name;
@@ -342,7 +350,7 @@ def main():
         $(".info[name='"+myname+"']").toggle();
     }
     </script>
-    """
+    """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'])
 
     fmtr = Formatter.SimpleHTMLFormatter(title="Add-On Test Logs from CMSSW Integration Build", style=style)
 

@@ -713,18 +713,22 @@ class BuildLogDisplay(object):
 def main():
 
     style = """
-    <link rel="stylesheet" type="text/css" href="%s/intbld.css">
-
+    
+    <!-- bootstrap style -->
+    <link rel="stylesheet" type="text/css" href="%s/css/libs/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="%s/css/intbld.css">
     <style type="text/css">  
     @import url(css.css);  
     </style>  
-
     <style type="text/css">  
     .info { display: none; }
     </style>  
-
-    <script type="text/javascript" src="%s/jsExt/jquery.js"></script>
-
+    
+    <!-- jQuery library -->
+    <script type="text/javascript" src="%s/js/libs/jquery.min.js"></script>
+    <!-- bootstrap library -->
+    <script type="text/javascript" src="%s/js/libs/bootstrap.min.js"></script>
+    
     <script>
     function showHide(obj){
         myname = obj.name;
@@ -736,17 +740,17 @@ def main():
     <script>
     $(document).ready(function()
     {
-    $("table ").css('text-align', "center");
+    // $("table ").css('text-align', "center");
     // make the "summary" and "hide summary" underlined
-    $(".detail").css('text-decoration', "underline");
-    $(".info").css('text-decoration', "underline");
+    //(".detail").css('text-decoration', "underline");
+    // $(".info").css('text-decoration', "underline");
     // color rows of tables alternatively for even/odd rows
-    $("tr:even").css("background-color", 'rgb(234, 235, 255)');
-    $("tr:odd").css("background-color",  'rgb(211, 214, 255)');
+    // $("tr:even").css("background-color", 'rgb(234, 235, 255)');
+    // $("tr:odd").css("background-color",  'rgb(211, 214, 255)');
     });
     </script>
 
-    """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'])
+    """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'])
 
     fmtr = Formatter.SimpleHTMLFormatter(title="CMSSW Integration Build Info", style=style)
 

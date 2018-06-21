@@ -215,7 +215,7 @@ def main():
 
     
     style = """
-    <link rel="stylesheet" type="text/css" href="%s/intbld.css">\n
+    <link rel="stylesheet" type="text/css" href="%s/css/intbld.css">\n
     """ % (config.siteInfo['HtmlPath'])
 
     fmtr = Formatter.SimpleHTMLFormatter(title="CMSSW Integration Build Scram Info", style=style)

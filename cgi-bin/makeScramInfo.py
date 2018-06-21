@@ -25,7 +25,7 @@ class makeScramInfo(object):
     def AnalyzeLog(self):
 	self.scramInfo = open(self.outPath+'/scramInfo.html','w')
 	self.scramInfo.write('\n')
-	self.scramInfo.write('<html>\n<head>\n<link rel="stylesheet" type="text/css" href="http://cern.ch/cms-sdt/intbld.css"><Title>SCRAM Infomation</Title></head><body>\n')
+	self.scramInfo.write('<html>\n<head>\n<link rel="stylesheet" type="text/css" href="http://cern.ch/cms-sdt/css/intbld.css"><Title>SCRAM Infomation</Title></head><body>\n')
 	lines = []
         try:
             page = open(self.logfile)
