@@ -740,7 +740,7 @@ def main():
     <script>
     $(document).ready(function()
     {
-    $("table ").css('text-align', "center");
+    // $("table ").css('text-align', "center");
     // make the "summary" and "hide summary" underlined
     $(".detail").css('text-decoration', "underline");
     $(".info").css('text-decoration', "underline");
@@ -750,7 +750,7 @@ def main():
     });
     </script>
 
-    """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'])
+    """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'])
 
     fmtr = Formatter.SimpleHTMLFormatter(title="CMSSW Integration Build Info", style=style)
 

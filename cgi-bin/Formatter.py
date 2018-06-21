@@ -140,6 +140,8 @@ class SimpleHTMLFormatter :
             tableString += ' id="'+id+'" '
         if cls:
             tableString += ' class="table '+cls+'" '
+        else:
+            tableString += ' class="table" '
         tableString += '>'
         self.outFile.write( tableString + '\n')
 
