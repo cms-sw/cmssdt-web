@@ -742,11 +742,11 @@ def main():
     {
     // $("table ").css('text-align', "center");
     // make the "summary" and "hide summary" underlined
-    $(".detail").css('text-decoration', "underline");
-    $(".info").css('text-decoration', "underline");
+    //(".detail").css('text-decoration', "underline");
+    // $(".info").css('text-decoration', "underline");
     // color rows of tables alternatively for even/odd rows
-    $("tr:even").css("background-color", 'rgb(234, 235, 255)');
-    $("tr:odd").css("background-color",  'rgb(211, 214, 255)');
+    // $("tr:even").css("background-color", 'rgb(234, 235, 255)');
+    // $("tr:odd").css("background-color",  'rgb(211, 214, 255)');
     });
     </script>
 
