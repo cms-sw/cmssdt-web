@@ -1,56 +1,69 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
+        "http://www.w3.org/TR/html4/strict.dtd">
 
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Overview of cmssdt.cern.ch</title>
-	<base href="https://cmssdt.cern.ch/SDT/" target="_blank">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Overview of cmssdt.cern.ch</title>
+    <base href="https://cmssdt.cern.ch/SDT/" target="_blank">
+
+    <!-- boostrap CSS-->
+    <link rel="stylesheet" type="text/css" href="/SDT/html/css/libs/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script type="text/javascript" src="/SDT/html/js/libs/jquery.min.js"></script>
+    <!-- bootstrap library -->
+    <script type="text/javascript" src="/SDT/html/js/libs/bootstrap.min.js"></script>
+
 </head>
 <body>
+<div class="container">
+    <h1 id="overview_of_services_provided_on_cmssw.cern.ch">Overview of services provided by the Software Development
+        Tools service</h1>
 
-<h1 id="overview_of_services_provided_on_cmssw.cern.ch">Overview of services provided by the Software Development Tools service</h1>
+    <h2>Portals for the CMSSW Integration builds and related applications</h2>
+    <ul>
+        <li><a href="/SDT/html/cmssdt-ib">CMSSW IB - Integration Build portal</a> <a href="/SDT/html/showIB.html">(Old
+            version)</a></li>
+        <li><a href="https://twiki.cern.ch/twiki/bin/viewauth/CMS/SoftwareDevelopementToolsSubTask">SDT Twiki</a></li>
+        <li><a href="http://github.com/cms-sw/cmssw/">Github CMSSW repository</a></li>
+        <li><a href="/jenkins/">Jenkins</a></li>
+        <li><a href="https://cmskibana-dev.cern.ch/_plugin/kibana/">CMS Kibana</a></li>
+        <li id="nextORP"></li>
+    </ul>
 
-<h3>Portals for the CMSSW Integration builds and related applications</h3>
-<ul>
-	<li> <a href="/SDT/html/cmssdt-ib">CMSSW IB - Integration Build portal</a> <a href="/SDT/html/showIB.html">(Old version)</a></li>
-	<li> <a href="https://twiki.cern.ch/twiki/bin/viewauth/CMS/SoftwareDevelopementToolsSubTask">SDT Twiki</a></li>
-	<li> <a href="http://github.com/cms-sw/cmssw/">Github CMSSW repository</a> </li>
-	<li> <a href="/jenkins/">Jenkins</a> </li>
-	<li> <a href="https://cmskibana-dev.cern.ch/_plugin/kibana/">CMS Kibana</a> </li>
-	<li id="nextORP"></li>
-</ul>
+    <h2>Code documentation service for CMSSW</h2>
+    <ul>
+        <li><a href="/SDT/ReleaseNotes">CMSSW Release Notes</a></li>
+        <li><a href="/lxr">CMSSW lxr - software cross-reference</a></li>
+        <li><a href="/dxr">CMSSW dxr - software cross-reference</a></li>
+        <li><a href="http://cern.ch/cmsdoxygen"> CMSSW doxygen reference documentation </a></li>
+        <li><a href="http://cern.ch/cmscvs/cgi/viewvc.cgi/cvsroot/CMSSW/"> CMSSW CVS (old tags) </a></li>
+    </ul>
+    <h2>CMSSW on GIT</h2>
 
-<h3>Code documentation service for CMSSW</h3>
-<ul>
-	<li> <a href="/SDT/ReleaseNotes">CMSSW Release Notes</a> </li>
-	<li> <a href="/lxr">CMSSW lxr - software cross-reference</a> </li>
-        <li> <a href="/dxr">CMSSW dxr - software cross-reference</a> </li>
-	<li> <a href="http://cern.ch/cmsdoxygen"> CMSSW doxygen reference documentation </a> </li>
-	<li> <a href="http://cern.ch/cmscvs/cgi/viewvc.cgi/cvsroot/CMSSW/"> CMSSW CVS (old tags) </a> </li>
-</ul>
-<h3>CMSSW on GIT</h3>
-<ul>
-        CMSSW is moving to github for code hosting. Preliminary information can be found at:
-	<li> <a href="http://cms-sw.github.io/cmssw/faq.html">CMSSW on GIT FAQ</a> </li>
-	<li> <a href="http://cms-sw.github.io/cmssw/usercode-faq.html">UserCode migration FAQ</a> </li>
-</ul>
+    <p>CMSSW is moving to github for code hosting. Preliminary information can be found at:</p>
+    <ul>
+        <li><a href="http://cms-sw.github.io/cmssw/faq.html">CMSSW on GIT FAQ</a></li>
+        <li><a href="http://cms-sw.github.io/cmssw/usercode-faq.html">UserCode migration FAQ</a></li>
+    </ul>
 
-    <script src="jquery.min.js"></script>
     <script>
-function nextDay(day){
-var d = new Date;
-(day = (Math.abs(+day || 0) % 7) - d.getDay()) < 0 && (day += 7);
-return day && d.setDate(d.getDate() + day), d;
-};
-function dateToYMD(date) {
-    var d = date.getDate();
-    var m = date.getMonth() + 1;
-    var y = date.getFullYear();
-    return '' + y + (m<=9 ? '0' + m : m) + (d <= 9 ? '0' + d : d);
-}
+        function nextDay(day){
+        var d = new Date;
+        (day = (Math.abs(+day || 0) % 7) - d.getDay()) < 0 && (day += 7);
+        return day && d.setDate(d.getDate() + day), d;
+        };
+        function dateToYMD(date) {
+            var d = date.getDate();
+            var m = date.getMonth() + 1;
+            var y = date.getFullYear();
+            return '' + y + (m<=9 ? '0' + m : m) + (d <= 9 ? '0' + d : d);
+        }
 
-	$("#nextORP").html("<a href='https://twiki.cern.ch/twiki/bin/view/CMS/OfflineComputingPlanningMeeting" + dateToYMD(nextDay(2)) + "'>Next ORP Meeting</a>")
+            $("#nextORP").html("<a href='https://twiki.cern.ch/twiki/bin/view/CMS/OfflineComputingPlanningMeeting" + dateToYMD(nextDay(2)) + "'>Next ORP Meeting</a>")
+
+
     </script>
+</div>
 </body>
 </html>
