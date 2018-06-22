@@ -250,7 +250,7 @@ class LogViewer(object):
 
         logFilePath = logBaseURL+pathReq+'/logs/'
         self.getLogFile(os.path.dirname(normPath))
-        topCgiLogString = config.siteInfo['CgiHtmlPath']+'buildlogs/'+pathReq.split('/')[1]+'/'+ib+'/'
+        topCgiLogString = config.siteInfo['CgiHtmlPath']+'logreader/'+pathReq.split('/')[1]+'/'+ib+'/'
         for dirName, cmdList in self.commands.items():
             step = 0
             for i in range(0,len(stepRes[0])):
