@@ -374,7 +374,7 @@ class BuildLogDisplay(object):
         rel = rel.replace("_FWLITE","")
         for p in packageList: origPkgList[p.name()] = 1
 
-        self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'buildlogs/'+plat+'/'+ib+'/'
+        self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'logreader/'+plat+'/'+ib+'/'
         self.topCgiLogIWYU   = config.siteInfo['CgiHtmlPath']+'buildlogs/iwyu/'+plat+'/'+ib+'/'
         if fwlite: self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'buildlogs/fwlite/'+plat+'/'+ib+'/'
         # read libChecker info
@@ -718,7 +718,7 @@ def main():
     <link rel="stylesheet" type="text/css" href="%s/css/libs/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="%s/css/intbld.css">
     <style type="text/css">  
-    @import url(css.css);  
+    // @import url(css.css);  
     </style>  
     <style type="text/css">  
     .info { display: none; }
