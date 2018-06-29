@@ -10,26 +10,30 @@ def send_error(msg):
 try:
   data = sys.stdin.read()
   payload = json.loads(data)
-  index = payload['index']
-  if not index.startswith("cmssdt-"): index = 'cmssdt-'+index
-  if not re.match('^cmssdt-[*a-zA-Z0-9_/-]+$',index): send_error ("Invalid index name: %s" % index)
+  index = payload.pop('index','')
+  if index:
+    if not index.startswith("cmssdt-"): index = 'cmssdt-'+index
+    if not re.match('^cmssdt-[*a-zA-Z0-9_/-]+$',index): send_error ("Invalid index name: %s" % index)
   es_user = "cmssdt"
   es_pass = open('/data/secrets/apache-cmssdt-es-secret','r').read().strip()
-  search = "/_search"
-  scroll = payload.pop('scroll',0)
-  if scroll==1:
-    search = "/_search?scroll=1m"
-  elif scroll>1:
-    index = ""
-    search = "/_search/scroll"
-  url = "%s/%s%s" % (ES_CERN_URL, index, search)
+  api_type = payload.pop('api','/_search')
+  if api_type.startswith('/_search'):
+    scroll = payload.pop('scroll',0)
+    if scroll==1:
+      api_type = "/_search?scroll=1m"
+    elif scroll>1:
+      index = ""
+      api_type = "/_search/scroll"
+  if api_type.startswith('/_template'): url = "%s/%s/%s" % (ES_CERN_URL, api_type, index)
+  else: url = "%s/%s%s" % (ES_CERN_URL, index, api_type)
   passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
   passman.add_password(None, url, es_user, es_pass)
   auth_handler = urllib2.HTTPBasicAuthHandler(passman)
   opener = urllib2.build_opener(auth_handler)
   try:
     urllib2.install_opener(opener)
-    content = urllib2.urlopen(url,payload['query'])
+    if 'query' in payload: content = urllib2.urlopen(url,payload['query'])
+    else: content = urllib2.urlopen(url)
     print content.read()
   except Exception as e:
     send_error("Couldn't send data to elastic search: %s\nurl:%s\nquery:%s" % (str(e),url, query))
