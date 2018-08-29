@@ -13,6 +13,10 @@ def check_event(data):
   if not event in ['issues', 'issue_comment', 'pull_request' , 'push']: return False,event
   ok_event = False
   try:
+    try:
+      if repo_config.OPEN_ISSUE_FOR_PUSH_TESTS:
+        repo_config.VALID_WEB_HOOKS = repo_config.VALID_WEB_HOOKS+['issues', 'issue_comment']
+    except: pass
     if repo_config.VALID_WEB_HOOKS:
       for ex in repo_config.VALID_WEB_HOOKS:
         if re.match('^'+ex+'$',event):
