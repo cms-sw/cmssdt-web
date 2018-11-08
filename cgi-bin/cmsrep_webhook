@@ -56,7 +56,7 @@ xparam = []
 xparam.append({"name":"REPOSITORY",  "value":payload['repository']})
 xparam.append({"name":"ARCHITECTURE","value":payload['architecture']})
 xparam.append({"name":"RPMS",        "value":payload['package_uri']})
-xparam.append({"name":"PACKAGES",    "value":','.join(payload['packages'])})
+xparam.append({"name":"PACKAGES",    "value":' '.join(payload['packages'])})
 
 #trigger jenkins job
 for x in [(json.dumps({"parameter":xparam}),"cmsrep-webhook")]:
