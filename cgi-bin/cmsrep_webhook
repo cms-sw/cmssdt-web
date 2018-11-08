@@ -47,7 +47,7 @@ if not check_signature(data, repo_config):
   print "Invalid or wrong signatures"
   sys.exit()
 
-for k in ["repository", "architecture", "packages","package_url"]:
+for k in ["repository", "architecture", "packages","package_uri"]:
   if not k in payload:
     print "Invalid data: Missing key %s" % k
     sys.exit()
@@ -55,7 +55,7 @@ for k in ["repository", "architecture", "packages","package_url"]:
 xparam = []
 xparam.append({"name":"REPOSITORY",  "value":payload['repository']})
 xparam.append({"name":"ARCHITECTURE","value":payload['architecture']})
-xparam.append({"name":"RPMS",        "value":payload['package_url']})
+xparam.append({"name":"RPMS",        "value":payload['package_uri']})
 xparam.append({"name":"PACKAGES",    "value":','.join(payload['packages'])})
 
 #trigger jenkins job
