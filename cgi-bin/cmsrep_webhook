@@ -47,16 +47,12 @@ if not check_signature(data, repo_config):
   print "Invalid or wrong signatures"
   sys.exit()
 
-for k in ["repository", "architecture", "packages","package_uri"]:
+xparam = []
+for k in ["repository", "architecture", "payload_uri"]:
   if not k in payload:
     print "Invalid data: Missing key %s" % k
     sys.exit()
-
-xparam = []
-xparam.append({"name":"REPOSITORY",  "value":payload['repository']})
-xparam.append({"name":"ARCHITECTURE","value":payload['architecture']})
-xparam.append({"name":"RPMS",        "value":payload['package_uri']})
-xparam.append({"name":"PACKAGES",    "value":' '.join(payload['packages'])})
+  xparam.append({"name":k.upper(),  "value":payload[k]})
 
 #trigger jenkins job
 for x in [(json.dumps({"parameter":xparam}),"cmsrep-webhook")]:
