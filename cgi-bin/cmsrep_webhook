@@ -59,7 +59,6 @@ for x in [(json.dumps({"parameter":xparam}),"cmsrep-webhook")]:
   jenkins_parameters, job = x
   if not job: continue
   print "Triggering Jenkins Job: ",x
-  print "Paramters:",jenkins_parameters
   url = repo_config.JENKINS_SERVER+'/job/'+ job + '/build'
   print jenkins_parameters,job
   data = {
