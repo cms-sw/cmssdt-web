@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+print "Content-Type: text/html\n"
+
+import os , sys , cgi , json , re
+import urllib2, urllib
+
+data = sys.stdin.read()
+try:
+  payload = json.loads(data)
+except Exception as e:
+  print "Invalid data, can not read json input"
+  sys.exit(0)
+
+if (not 'DATA' in payload) or (not re.match('^[a-zA-Z0-9_-]+:[0-9]+$',payload['DATA'])):
+  print "Invalid Data: ",data
+  sys.exit(0)
+if (not 'JENKINS_SERVER' in payload) or (not re.match('^http://[a-z][a-z0-9_-]+\.cern\.ch(:[0-9]+|)(/[a-z_-]+|)$',payload['JENKINS_SERVER'])):
+  print "Invalid Data: ",data
+  sys.exit(0)
+if (not 'JENKINS_USER' in payload) or (not re.match('^[a-z0-9]+$',payload['JENKINS_USER'])):
+  print "Invalid Data: ",data
+  sys.exit(0)
+
+xparam = []
+xparam.append({'name':'HOST', 'value': os.environ['REMOTE_ADDR']})
+xparam.append({'name':'DATA', 'value': payload['DATA']})
+
+#trigger jenkins job
+for x in [(json.dumps({"parameter":xparam}),"jenkins-webhook")]:
+  jenkins_parameters, job = x
+  if not job: continue
+  print "Triggering Jenkins Job: ",x
+  url = payload['JENKINS_SERVER']+'/job/'+ job + '/build'
+  print jenkins_parameters,job
+  data = {
+              "json": jenkins_parameters,
+              "Submit": "Build"
+         }
+  try:
+    data=urllib.urlencode(data)
+    req = urllib2.Request(url=url,data=data,headers={"ADFS_LOGIN" : payload['JENKINS_USER']})
+    content = urllib2.urlopen(req).read()
+  except Exception as e:
+    print "Unable to start jenkins job:",e
+
