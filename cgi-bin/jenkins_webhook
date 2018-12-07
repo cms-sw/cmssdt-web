@@ -22,7 +22,9 @@ if (not 'JENKINS_USER' in payload) or (not re.match('^[a-z0-9]+$',payload['JENKI
   sys.exit(0)
 
 xparam = []
-xparam.append({'name':'HOST', 'value': os.environ['REMOTE_ADDR']})
+henv = 'REMOTE_ADDR'
+if 'HTTP_X_FORWARDED_FOR' in os.environ and os.environ['HTTP_X_FORWARDED_FOR']!='': henv = 'HTTP_X_FORWARDED_FOR'
+xparam.append({'name':'HOST', 'value': os.environ[henv]})
 xparam.append({'name':'DATA', 'value': payload['DATA']})
 
 #trigger jenkins job
