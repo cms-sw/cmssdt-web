@@ -135,6 +135,8 @@ try: xparam.append({"name":"BRANCH","value":payload[etype]["base"]["ref"]})
 except:
   try: xparam.append({"name":"BRANCH","value":payload["ref"]})
   except: xparam.append({"name":"BRANCH","value":""})
+if 'commits' in payload: xparam.append({"name":"COMMITS","value":' '.join([str(c['id']) for c in payload['commits']])})
+else: xparam.append({"name":"COMMITS","value":""})
 
 #trigger jenkins job
 for x in [(json.dumps({"parameter":xparam}),"github-webhook")]:
