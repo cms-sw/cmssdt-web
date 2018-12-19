@@ -83,6 +83,7 @@ class BuildLogDisplay(object):
 
         #self.unitTestLogs = {}
         self.unitTestResults = {}
+        self.GPUunitTestResults = {}
         self.IWYU = {}
         self.depViolLogs = {}
         self.depViolResults = {}
@@ -101,22 +102,21 @@ class BuildLogDisplay(object):
         #    words = item.split('/')
         #    pkg = words[-3]+'/'+words[-2]
         #    self.unitTestLogs[pkg] = item
-
+        unitTestResults = {}
         try:
           wwwFile = path+'/unitTestResults.pkl'
           if not os.path.exists(wwwFile): wwwFile=path.replace('www/','')+'/unitTestResults.pkl'
           summFile = open(wwwFile, 'r')
           pklr = Unpickler(summFile)
-          self.unitTestResults = pklr.load()
+          unitTestResults = pklr.load()
           summFile.close()
         except IOError, e:
           # print "IO ERROR reading unitTestResuls.pkl file from ", path, str(e)
-          self.unitTestResults = {}
           pass
         except Exception, e:
           print "ERROR got exception when trying to load unitTestResults.pkl", str(e)
 
-        return
+        return unitTestResults
       
     # --------------------------------------------------------------------------------
 
@@ -133,7 +133,7 @@ class BuildLogDisplay(object):
         return
     # --------------------------------------------------------------------------------
 
-    def showUnitTest(self, pkg, row, rowStyle) :
+    def showUnitTest(self, pkg, row, rowStyle, unitTestResults, utype="") :
 
         pkgOK = True
         col = ' - '
@@ -144,9 +144,9 @@ class BuildLogDisplay(object):
         #    unitTestLog = 'unknown'
         #    colStyle = ' '
         #    nFail       = 0
-        if pkg.name() in self.unitTestResults.keys():
-                nOK = self.unitTestResults[pkg.name()][-2]
-                nFail = self.unitTestResults[pkg.name()][-1]
+        if pkg.name() in unitTestResults.keys():
+                nOK = unitTestResults[pkg.name()][-2]
+                nFail = unitTestResults[pkg.name()][-1]
                 colStyle = 'ok'
                 if nFail > 0 :
                     colStyle = 'failed'
@@ -155,7 +155,7 @@ class BuildLogDisplay(object):
                 unitTestLog = ' OK:'+str(nOK)
                 unitTestLog += '/ Fail: '+str(nFail)
                 if unitTestLog != 'unknown':
-                    unitTestLog = ' <a href="'+self.topCgiLogString+'unitTestLogs/'+pkg.name()+'"> '+unitTestLog+' </a>'
+                    unitTestLog = ' <a href="'+self.topCgiLogString+utype+'unitTestLogs/'+pkg.name()+'"> '+unitTestLog+' </a>'
                     col = unitTestLog.replace(self.normPath, self.unitTestLogBase) 
                 else:
                     col = ' - '
@@ -179,7 +179,6 @@ class BuildLogDisplay(object):
             summFile.close()
         except IOError, e:
             # print "IO ERROR reading depViolationSummary.pkl file from ", path, str(e)
-            # self.unitTestResults = {}
             self.depViolResults = {}
             return
         except Exception, e:
@@ -424,7 +423,8 @@ class BuildLogDisplay(object):
         totErr += len(self.libChkErrMap.keys())
         
         if not fwlite:
-          self.getUnitTests(self.normPath)
+          self.unitTestResults = self.getUnitTests(self.normPath)
+          self.GPUunitTestResults = self.getUnitTests(self.normPath+"/GPU")
           self.getDepViol(self.normPath)
           self.getIWYU(ib, plat, jenkinsLogs)
 
@@ -548,7 +548,9 @@ class BuildLogDisplay(object):
                   # add the dependency violation log file if available
                   self.showDepViol(pkg, row, rowStyle)
                   # add the unit-test log file if available
-                  self.showUnitTest(pkg, row, rowStyle)
+                  self.showUnitTest(pkg, row, rowStyle, self.unitTestResults)
+                  # add the GPU unit-test log file if available
+                  self.showUnitTest(pkg, row, rowStyle, self.GPUunitTestResults, "GPU")
                   # libchecker
                   self.showLibChecks(pkg, row, rowStyle)
                   # IWYU
@@ -575,8 +577,6 @@ class BuildLogDisplay(object):
         newOK = []
         libChkOnly = []
         for pkg in pkgList:
-            isOK = True
-
             # set defaults for the first columns, these are OK
             link = pkg.name()
             if link in origPkgList: link = ' <a href="'+self.topCgiLogString+pkg.name()+'">'+pkg.name()+'   '+tagList[pkg.name()]+'</a> '
@@ -587,35 +587,29 @@ class BuildLogDisplay(object):
                 row.append( ' - ' )
                 rowStyle.append( ' ' )
 
-            # have to get each status and then check them all. A simpler :
-            # isOK = isOK and self.show...
-            # will not execute the self.show... method if isOK is already False ...
-            
             # SCRAM errors
-            isOK2 = self.showScramErrors(pkg, row, rowStyle)
+            isOK = self.showScramErrors(pkg, row, rowStyle)
             
             # SCRAM warnings
-            isOK3 = self.showScramWarnings(pkg, row, rowStyle)
+            isOK = self.showScramWarnings(pkg, row, rowStyle) and isOK
              
             # add the dependency violation log file if available
-            isOK4 = True
-            isOK5 = True
             isOK1 = True
-            isOK6 = True
             if not fwlite: 
               #dependency violations
-              isOK4 = self.showDepViol(pkg, row, rowStyle)
+              isOK = self.showDepViol(pkg, row, rowStyle)  and isOK
               # add the unit-test log file if available
-              isOK5 = self.showUnitTest(pkg, row, rowStyle)
+              isOK = self.showUnitTest(pkg, row, rowStyle, self.unitTestResults) and isOK
+              # add the unit-test log file if available
+              isOK = self.showUnitTest(pkg, row, rowStyle, self.GPUunitTestResults, "GPU") and isOK
               # libChecker
               isOK1 = self.showLibChecks(pkg, row, rowStyle)
               # libChecker
-              isOK6 = self.showIWYU(pkg, row, rowStyle)
+              isOK = self.showIWYU(pkg, row, rowStyle) and isOK
                 
-            if isOK1 and isOK2 and isOK3 and isOK4 and isOK5 and isOK6:
-                # store for last part
+            if isOK1 and isOK:
                 newOK.append(pkg) 
-            elif not isOK1 and isOK2 and isOK3 and isOK4 and isOK5 and isOK6:
+            elif not isOK1 and isOK:
                 libChkOnly.append(pkg)
             else:
                 rowIndex += 1
@@ -652,7 +646,9 @@ class BuildLogDisplay(object):
               # add the dependency violation log file if available
               self.showDepViol(pkg, row, rowStyle)
               # add the unit-test log file if available
-              self.showUnitTest(pkg, row, rowStyle)
+              self.showUnitTest(pkg, row, rowStyle, self.unitTestResults)
+              # add the unit-test log file if available
+              self.showUnitTest(pkg, row, rowStyle, self.GPUunitTestResults, "GPU")
               # if len( self.libChkErrMap.keys() ) > 0:
               self.showLibChecks(pkg, row, rowStyle)
               # if len( self.IWYU.keys() ) > 0:
@@ -694,7 +690,9 @@ class BuildLogDisplay(object):
             if not fwlite: self.showDepViol(pkg, row, rowStyle)
             
             # add the unit-test log file if available
-            if not fwlite: self.showUnitTest(pkg, row, rowStyle)
+            if not fwlite:
+              self.showUnitTest(pkg, row, rowStyle, self.unitTestResults)
+              self.showUnitTest(pkg, row, rowStyle, self.GPUunitTestResults, "GPU")
                     
             if (not fwlite) and len( self.libChkErrMap.keys() ) > 0:
                 row.append( ' - ' )
