@@ -136,6 +136,7 @@ class BuildLogDisplay(object):
     def showUnitTest(self, pkg, row, rowStyle, unitTestResults, utype="") :
 
         pkgOK = True
+        if not unitTestResults: return pkgOK
         col = ' - '
         colStyle = ' '
 
@@ -492,8 +493,13 @@ class BuildLogDisplay(object):
             szHdr.append(20)
         
         # and a column for the unitTests:
-        if not fwlite:
-          hdrs.append('UnitTest logfile')
+        if not fwlite and self.unitTestResults:
+          hdrs.append('UnitTest')
+          szHdr.append(20)
+
+        # and a column for the GPU unitTests:
+        if not fwlite and self.GPUunitTestResults:
+          hdrs.append('GPU UnitTest')
           szHdr.append(20)
         
         #  add headers for libcheck
