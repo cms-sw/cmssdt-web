@@ -8,6 +8,7 @@ from time import strptime
 app = bottle.default_app()
 debug(False)
 
+@route('/<architecture>/<release>/GPUunitTestLogs/<subsystem>/<package>')
 @route('/<architecture>/<release>/unitTestLogs/<subsystem>/<package>')
 @route('/<architecture>/<release>/addOnTests/logs/<filename>')
 @route('/<architecture>/<release>/pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
