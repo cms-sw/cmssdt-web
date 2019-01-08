@@ -41,13 +41,13 @@ def unitTestRaw(architecture, release, subsystem, package):
 #----- GPUunitTest
 @route('/<architecture>/<release>/GPUunitTestLogs/<subsystem>/<package>')
 def unitTest(architecture, release, subsystem, package):
-  return "<pre>"+extractFile(architecture, release, 'unitTestLogs', 'GPU', format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),False)+"</pre>"
+  return "<pre>"+extractFile(architecture, release, 'GPU/unitTestLogs', 'GPU', format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),False)+"</pre>"
 
 # to get raw JSON data: GPU
 @route('/raw/<architecture>/<release>/GPUunitTestLogs/<subsystem>/<package>')
 def unitTestRaw(architecture, release, subsystem, package):
   response.set_header('Content-Type', 'text/plain')
-  return extractFile(architecture, release, 'unitTestLogs', 'GPU', format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),False)
+  return extractFile(architecture, release, 'GPU/unitTestLogs', 'GPU', format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),False)
 
 # to get display configs
 @route('/raw_read_config/<architecture>/<release>/unitTestLogs/<subsystem>/<package>')
