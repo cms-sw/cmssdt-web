@@ -434,9 +434,9 @@ class BuildLogDisplay(object):
         totErr += len(self.libChkErrMap.keys())
         
         if not fwlite:
-          if (not testName) or (testName=='unittest'):
+          if (not testName) or (testName=='utests'):
             self.unitTestResults = self.getUnitTests(self.normPath)
-          if (not testName) or (testName=='GPUunittest'):
+          if (not testName) or (testName=='gpu_utests'):
             self.GPUunitTestResults = self.getUnitTests(self.normPath+"/GPU")
           if (not testName) or (testName=='DepViol'):
             self.getDepViol(self.normPath)
