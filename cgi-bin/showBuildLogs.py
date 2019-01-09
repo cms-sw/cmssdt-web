@@ -89,6 +89,7 @@ class BuildLogDisplay(object):
         self.depViolResults = {}
         self.topCgiLogString = ''
         self.topCgiLogIWYU = ''
+        self.addRow = False
 
         return
       
@@ -146,6 +147,7 @@ class BuildLogDisplay(object):
         #    colStyle = ' '
         #    nFail       = 0
         if pkg.name() in unitTestResults.keys():
+                self.addRow = True
                 nOK = unitTestResults[pkg.name()][-2]
                 nFail = unitTestResults[pkg.name()][-1]
                 colStyle = 'ok'
@@ -221,6 +223,7 @@ class BuildLogDisplay(object):
               col = "X"
             colStyle = 'failed'
             pkgOK = False
+            self.addRow = True
             
         row.append( col )
         rowStyle.append( colStyle )
@@ -241,6 +244,7 @@ class BuildLogDisplay(object):
             col = ' <a href="'+self.topCgiLogIWYU+pname+'/index.html"> '+iwyuLog+' </a>'
             colStyle = 'failed'
             pkgOK = False
+            self.addRow = True
         row.append( col )
         rowStyle.append( colStyle )
         return pkgOK
@@ -263,6 +267,7 @@ class BuildLogDisplay(object):
             bldInfo    = '<a class="info"   name="'+detailId+'" onclick="showHide(this) "> '+info+' </a>'
             col =  bldDetails + bldInfo 
             pkgOK = False
+            self.addRow = True
 
         row.append( col )
         rowStyle.append( colStyle )
@@ -281,12 +286,14 @@ class BuildLogDisplay(object):
         if len(self.sa.errPkg.keys()) > 0:
             if self.sa.errPkg.has_key(pkg.name()):
                 pkgOK = False
+                self.addRow = True
                 detailId = 'scerr1_'+pkg.name().replace('/','_')
                 info = "hide<br/> <br/> " + '<br/>'.join(self.sa.errPkg[pkg.name()])
                 summ = str( len( self.sa.errPkg[pkg.name()] ) )
                 bldDetails = '<a class="detail" name="'+detailId+'" onclick="showHide(this) "> &nbsp;'+summ+'&nbsp; </a>'
                 bldInfo    = '<a class="info"   name="'+detailId+'" onclick="showHide(this) "> '+info+' </a>'
-                col = bldDetails + bldInfo 
+                col = bldDetails + bldInfo
+                self.addRow = True
 
         row.append( col )
         rowStyle.append( colStyle )
@@ -310,7 +317,8 @@ class BuildLogDisplay(object):
                 summ = str( len( self.sa.warnPkg[pkg.name()] ) )
                 bldDetails = '<a class="detail" name="'+detailId+'" onclick="showHide(this) "> &nbsp;'+summ+'&nbsp; </a>'
                 bldInfo    = '<a class="info"   name="'+detailId+'" onclick="showHide(this) "> '+info+' </a>'
-                col = bldDetails + bldInfo 
+                col = bldDetails + bldInfo
+                self.addRow = True
 
         row.append( col )
         rowStyle.append( colStyle )
@@ -322,9 +330,11 @@ class BuildLogDisplay(object):
     def showLogInfo(self):
         
         pathReq = ""
+        testName = None
         try:
             scriptName = os.environ["SCRIPT_NAME"]
-            requestURI = os.environ["REQUEST_URI"]
+            requestURI = os.environ["REQUEST_URI"].split('?',1)[0]
+            if '?' in os.environ["REQUEST_URI"]: testName = os.environ["REQUEST_URI"].split('?',1)[-1]
             pathReq = cleanPath( requestURI.replace(scriptName,'') )
         except:
             pathReq = sys.argv[1]
@@ -379,7 +389,7 @@ class BuildLogDisplay(object):
         if fwlite: self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'buildlogs/fwlite/'+plat+'/'+ib+'/'
         # read libChecker info
         self.libChkErrMap = {}
-        if not fwlite:
+        if not fwlite and ((not testName) or (testName=='libchk')):
           try:
             libChkFile = open(self.normPath+'/new/libchk.pkl','r')
             lcPklr = Unpickler(libChkFile)
@@ -424,10 +434,14 @@ class BuildLogDisplay(object):
         totErr += len(self.libChkErrMap.keys())
         
         if not fwlite:
-          self.unitTestResults = self.getUnitTests(self.normPath)
-          self.GPUunitTestResults = self.getUnitTests(self.normPath+"/GPU")
-          self.getDepViol(self.normPath)
-          self.getIWYU(ib, plat, jenkinsLogs)
+          if (not testName) or (testName=='unittest'):
+            self.unitTestResults = self.getUnitTests(self.normPath)
+          if (not testName) or (testName=='GPUunittest'):
+            self.GPUunitTestResults = self.getUnitTests(self.normPath+"/GPU")
+          if (not testName) or (testName=='DepViol'):
+            self.getDepViol(self.normPath)
+          if (not testName) or (testName=='IWYU'):
+            self.getIWYU(ib, plat, jenkinsLogs)
 
         lcErrs = 0
         if not fwlite: 
@@ -543,7 +557,7 @@ class BuildLogDisplay(object):
                     else:
                         row.append( ' - ' )
                         rowStyle.append( ' ' )
-
+                self.addRow = False
                 # SCRAM errors
                 self.showScramErrors(pkg, row, rowStyle)
             
@@ -562,6 +576,7 @@ class BuildLogDisplay(object):
                   # IWYU
                   self.showIWYU(pkg, row, rowStyle)
 
+                if not self.addRow: continue
                 rowIndex += 1
                 self.formatter.writeStyledRow(row,rowStyle)
 
@@ -584,6 +599,7 @@ class BuildLogDisplay(object):
         libChkOnly = []
         for pkg in pkgList:
             # set defaults for the first columns, these are OK
+            self.addRow = False
             link = pkg.name()
             if link in origPkgList: link = ' <a href="'+self.topCgiLogString+pkg.name()+'">'+pkg.name()+'   '+tagList[pkg.name()]+'</a> '
             row = ['&nbsp;'+str(rowIndex), link]
@@ -617,7 +633,7 @@ class BuildLogDisplay(object):
                 newOK.append(pkg) 
             elif not isOK1 and isOK:
                 libChkOnly.append(pkg)
-            else:
+            elif self.addRow:
                 rowIndex += 1
                 self.formatter.writeStyledRow(row,rowStyle)
 
@@ -627,6 +643,7 @@ class BuildLogDisplay(object):
         pkgList = libChkOnly
         pkgList.sort(pkgCmp)
         for pkg in pkgList:
+            self.addRow = False
             link = pkg.name()
             if link in origPkgList: link = ' <a href="'+self.topCgiLogString+pkg.name()+'">'+pkg.name()+'   '+tagList[pkg.name()]+'</a> '
             row = ['&nbsp;'+str(rowIndex), link]
@@ -659,7 +676,8 @@ class BuildLogDisplay(object):
               self.showLibChecks(pkg, row, rowStyle)
               # if len( self.IWYU.keys() ) > 0:
               self.showIWYU(pkg, row, rowStyle)
-                
+
+            if not self.addRow: continue
             rowIndex += 1
             self.formatter.writeStyledRow(row,rowStyle)
 
@@ -669,6 +687,7 @@ class BuildLogDisplay(object):
         pkgList = newOK
         pkgList.sort(pkgCmp)
         for pkg in pkgList:
+            self.addRow = False
             # skip these, they were treated above ...
             if pkg.name() in self.libChkErrMap.keys() and len(self.libChkErrMap[pkg.name()])>0: continue
             link = pkg.name()
@@ -704,6 +723,7 @@ class BuildLogDisplay(object):
                 row.append( ' - ' )
                 rowStyle.append( ' ' )
 
+            if not self.addRow: continue
             rowIndex += 1
             self.formatter.writeStyledRow(row,rowStyle)
 
