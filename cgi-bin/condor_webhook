@@ -1,0 +1,65 @@
+#!/usr/bin/env python
+print "Content-Type: text/html\n"
+
+from json import loads, dumps
+from sys import exit, stdin
+import cgi
+import urllib2, urllib
+
+BASE_DIRECTORY = '/data'
+
+#check signature function
+def check_signature(payload):
+  from commands import getstatusoutput as run_cmd
+  from hashlib import sha256
+  e, token = run_cmd("sha256sum %s/secrets/github_hook_secret | sed 's| .*||'" % BASE_DIRECTORY)
+  if e: return False
+  return payload['signature']==sha256(payload['condor_job_id']+':'+payload['work_dir']+' '+token).hexdigest()
+
+#check source ip in white list fucntion
+def check_ip():
+  return True
+
+try:
+  payload = loads(stdin.read())
+except Exception as e:
+  print "Invalid data, can not read json input"
+  exit()
+
+if not check_ip():
+  print "Invalid IP"
+  exit()
+
+xparam = []
+for k in ['work_dir', 'condor_job_id', 'labels', 'status']:
+  if not k in payload:
+    print "Invalid data: Missing key %s" % k
+    exit()
+  xparam.append({"name":k.upper(),  "value":payload[k]})
+
+for k in ['signature', 'jenkins_url']:
+  if k in payload: continue
+  print "Invalid data: Missing key %s" % k
+  exit()
+
+if not check_signature(payload):
+  print "Invalid or wrong signatures"
+  exit()
+
+#trigger jenkins job
+for x in [(dumps({"parameter":xparam}),"condor-webhook")]:
+  jenkins_parameters, job = x
+  if not job: continue
+  print "Triggering Jenkins Job: ",x
+  url = payload['jenkins_url']+'/job/'+ job + '/build'
+  print jenkins_parameters,job
+  data = {
+              "json": jenkins_parameters,
+              "Submit": "Build"
+         }
+  try:
+    data=urllib.urlencode(data)
+    req = urllib2.Request(url=url,data=data,headers={"ADFS_LOGIN" : "cmssdt"})
+    content = urllib2.urlopen(req).read()
+  except Exception as e:
+    print "Unable to start jenkins job:",e
