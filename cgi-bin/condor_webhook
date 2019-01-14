@@ -47,7 +47,7 @@ if not check_signature(payload):
   exit()
 
 #trigger jenkins job
-for x in [(dumps({"parameter":xparam}),"condor-webhook")]:
+for x in [(dumps({"parameter":xparam}),"grid-webhook")]:
   jenkins_parameters, job = x
   if not job: continue
   print "Triggering Jenkins Job: ",x
