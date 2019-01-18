@@ -575,7 +575,7 @@ class BuildLogDisplay(object):
                   self.showLibChecks(pkg, row, rowStyle)
                   # IWYU
                   self.showIWYU(pkg, row, rowStyle)
-
+                if not testName: self.addRow=True
                 if not self.addRow: continue
                 rowIndex += 1
                 self.formatter.writeStyledRow(row,rowStyle)
@@ -628,7 +628,7 @@ class BuildLogDisplay(object):
               isOK1 = self.showLibChecks(pkg, row, rowStyle)
               # libChecker
               isOK = self.showIWYU(pkg, row, rowStyle) and isOK
-                
+            if not testName: self.addRow=True
             if isOK1 and isOK:
                 newOK.append(pkg) 
             elif not isOK1 and isOK:
@@ -676,7 +676,7 @@ class BuildLogDisplay(object):
               self.showLibChecks(pkg, row, rowStyle)
               # if len( self.IWYU.keys() ) > 0:
               self.showIWYU(pkg, row, rowStyle)
-
+            if not testName: self.addRow=True
             if not self.addRow: continue
             rowIndex += 1
             self.formatter.writeStyledRow(row,rowStyle)
@@ -722,7 +722,7 @@ class BuildLogDisplay(object):
             if (not fwlite) and len( self.libChkErrMap.keys() ) > 0:
                 row.append( ' - ' )
                 rowStyle.append( ' ' )
-
+            if not testName: self.addRow=True
             if not self.addRow: continue
             rowIndex += 1
             self.formatter.writeStyledRow(row,rowStyle)
