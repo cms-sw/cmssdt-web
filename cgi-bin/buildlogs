@@ -19,6 +19,11 @@ def index():
 def sanitize(s, ok="a-zA-Z0-9_.,:=+-"):
   return re.sub("[.]/", "", re.sub("[^%s]" % ok, "", s))
 
+#----- Python3
+@route('/python3/<architecture>/<release>/python3.log')
+def python3Log(architecture, release):
+  return "<pre>"+extractFile(architecture, release, '', '', 'python3.log',False)+"</pre>"
+
 @route('/fwlite/<architecture>/<release>/<subsystem>/<package>')
 def buildLog(architecture, release, subsystem, package):
   return extractFile(architecture, release, 'new_FWLITE/html-logs', 'new', format("%(subsystem)s/%(package)s/log.html", subsystem=sanitize(subsystem), package=sanitize(package)))
@@ -103,11 +108,6 @@ def includeWhatYouUse(architecture, release, subsystem, package):
 @route('/iwyu/<architecture>/<release>/<subsystem>/<package>/build.log')
 def includeWhatYouUse(architecture, release, subsystem, package):
   return "<pre>"+extractJenkinsArtifacts(architecture, release, 'iwyu', 'iwyu', format("%(subsystem)s/%(package)s/build.log", subsystem=sanitize(subsystem), package=sanitize(package)))+"</pre>"
-
-#----- Python3
-@route('/python3/<architecture>/<release>/python3.log')
-def python3Log(architecture, release):
-  return "<pre>"+extractFile(architecture, release, '', '', 'python3.log',False)+"</pre>"
 
 def getArchiveFile(archive, fileToExtract, raw=True, checkPath=True):
   command = None
