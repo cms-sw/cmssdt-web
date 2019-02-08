@@ -128,7 +128,7 @@ class BuildLogDisplay(object):
           py3 = os.path.join(path, "python3.log")
           if os.path.exists (py3):
             log = open(py3, 'r')
-            for line in [ for l in log.readlines() if ' Error compiling ' in l]:
+            for line in [l for l in log.readlines() if ' Error compiling ' in l]:
               pkg_parts = []
               if   "'cfipython/" in line: pkg_parts=line.split("'cfipython/",2)[-1].split("/",2)[:2]
               elif "'python/"    in line: pkg_parts=line.split("'python/",1)[-1].split("/",2)[:2]
