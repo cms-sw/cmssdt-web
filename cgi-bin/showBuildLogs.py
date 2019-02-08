@@ -85,6 +85,7 @@ class BuildLogDisplay(object):
         self.unitTestResults = {}
         self.GPUunitTestResults = {}
         self.IWYU = {}
+        self.Python3 = {}
         self.depViolLogs = {}
         self.depViolResults = {}
         self.topCgiLogString = ''
@@ -119,6 +120,24 @@ class BuildLogDisplay(object):
 
         return unitTestResults
       
+    # --------------------------------------------------------------------------------
+
+    def getPython3(self, path):
+        self.Python3={}
+        try:
+          py3 = os.path.join(path, "python3.log")
+          if os.path.exists (py3):
+            log = open(py3, 'r')
+            for line in [ for l in log.readlines() if ' Error compiling ' in l]:
+              pkg_parts = []
+              if   "'cfipython/" in line: pkg_parts=line.split("'cfipython/",2)[-1].split("/",2)[:2]
+              elif "'python/"    in line: pkg_parts=line.split("'python/",1)[-1].split("/",2)[:2]
+              elif "'src/"       in line: pkg_parts=line.split("'src/",1)[-1].split("/",2)[:2]
+              if pkg_parts: self.Python3["/".join(pkg_parts)]=1
+        except Exception, e:
+          print "ERROR got exception when trying to read python3.log", str(e)
+        return
+
     # --------------------------------------------------------------------------------
 
     def getIWYU(self, rel, arch, jenkins_dir):
@@ -249,6 +268,23 @@ class BuildLogDisplay(object):
         rowStyle.append( colStyle )
         return pkgOK
     
+    # --------------------------------------------------------------------------------
+
+    def showPython3(self, pkg, row, rowStyle) :
+        pname = pkg.name()
+        pkgOK =  True
+        if not self.Python3 : return pkgOK
+        col = ' - '
+        colStyle = ' '
+        if pkg.name() in self.Python3:
+            col = ' <a href="'+self.topCgiLogString+'python3.log"> 1 </a>'
+            colStyle = 'failed'
+            pkgOK = False
+            self.addRow = True
+        row.append( col )
+        rowStyle.append( colStyle )
+        return pkgOK
+
     # --------------------------------------------------------------------------------
 
     def showLibChecks(self, pkg, row, rowStyle) :
@@ -442,6 +478,8 @@ class BuildLogDisplay(object):
             self.getDepViol(self.normPath)
           if (not testName) or (testName=='IWYU'):
             self.getIWYU(ib, plat, jenkinsLogs)
+          if (not testName) or (testName=='python3'):
+            self.getPython3(self.normPath)
 
         lcErrs = 0
         if not fwlite: 
@@ -526,6 +564,11 @@ class BuildLogDisplay(object):
             hdrs.append('IWYU')
             szHdr.append(20)
 
+        #  add headers for Python3
+        if (not fwlite) and len(self.Python3.keys()) > 0:
+            hdrs.append('Python3')
+            szHdr.append(20)
+
         self.formatter.startTable(szHdr, hdrs)
         rowIndex = 0
         # --------------------------------------------------------------------------------
@@ -575,6 +618,9 @@ class BuildLogDisplay(object):
                   self.showLibChecks(pkg, row, rowStyle)
                   # IWYU
                   self.showIWYU(pkg, row, rowStyle)
+                  # Python3
+                  self.showPython3(pkg, row, rowStyle)
+
                 if not testName: self.addRow=True
                 if not self.addRow: continue
                 rowIndex += 1
@@ -626,8 +672,11 @@ class BuildLogDisplay(object):
               isOK = self.showUnitTest(pkg, row, rowStyle, self.GPUunitTestResults, "GPU") and isOK
               # libChecker
               isOK1 = self.showLibChecks(pkg, row, rowStyle)
-              # libChecker
+              # IWYU
               isOK = self.showIWYU(pkg, row, rowStyle) and isOK
+              # Python3
+              isOK = self.showPython3(pkg, row, rowStyle) and isOK
+
             if not testName: self.addRow=True
             if isOK1 and isOK:
                 newOK.append(pkg) 
@@ -676,6 +725,9 @@ class BuildLogDisplay(object):
               self.showLibChecks(pkg, row, rowStyle)
               # if len( self.IWYU.keys() ) > 0:
               self.showIWYU(pkg, row, rowStyle)
+              # Python3
+              self.showPython3(pkg, row, rowStyle)
+
             if not testName: self.addRow=True
             if not self.addRow: continue
             rowIndex += 1
