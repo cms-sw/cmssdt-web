@@ -90,6 +90,7 @@ class BuildLogDisplay(object):
         self.depViolResults = {}
         self.topCgiLogString = ''
         self.topCgiLogIWYU = ''
+        self.topCgiLogPython3 = ''
         self.addRow = False
 
         return
@@ -277,7 +278,7 @@ class BuildLogDisplay(object):
         col = ' - '
         colStyle = ' '
         if pkg.name() in self.Python3:
-            col = ' <a href="'+self.topCgiLogString+'python3.log"> 1 </a>'
+            col = ' <a href="'+self.topCgiLogPython3+'"> 1 </a>'
             colStyle = 'failed'
             pkgOK = False
             self.addRow = True
@@ -422,6 +423,7 @@ class BuildLogDisplay(object):
 
         self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'logreader/'+plat+'/'+ib+'/'
         self.topCgiLogIWYU   = config.siteInfo['CgiHtmlPath']+'buildlogs/iwyu/'+plat+'/'+ib+'/'
+        self.topCgiLogPython3   = config.siteInfo['CgiHtmlPath']+'buildlogs/python3/'+plat+'/'+ib+'/python3.log'
         if fwlite: self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'buildlogs/fwlite/'+plat+'/'+ib+'/'
         # read libChecker info
         self.libChkErrMap = {}

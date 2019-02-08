@@ -104,6 +104,11 @@ def includeWhatYouUse(architecture, release, subsystem, package):
 def includeWhatYouUse(architecture, release, subsystem, package):
   return "<pre>"+extractJenkinsArtifacts(architecture, release, 'iwyu', 'iwyu', format("%(subsystem)s/%(package)s/build.log", subsystem=sanitize(subsystem), package=sanitize(package)))+"</pre>"
 
+#----- Python3
+@route('/python3/<architecture>/<release>/python3.log')
+def python3Log(architecture, release):
+  return "<pre>"+extractFile(architecture, release, '', '', 'python3.log',False)+"</pre>"
+
 def getArchiveFile(archive, fileToExtract, raw=True, checkPath=True):
   command = None
   for ext in [".zip"]:
