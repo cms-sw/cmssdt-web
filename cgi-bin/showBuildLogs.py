@@ -85,11 +85,13 @@ class BuildLogDisplay(object):
         self.unitTestResults = {}
         self.GPUunitTestResults = {}
         self.IWYU = {}
+        self.InvalidIncludes = {}
         self.Python3 = {}
         self.depViolLogs = {}
         self.depViolResults = {}
         self.topCgiLogString = ''
         self.topCgiLogIWYU = ''
+        self.topInvalidIncludes = ''
         self.topCgiLogPython3 = ''
         self.addRow = False
 
@@ -151,6 +153,20 @@ class BuildLogDisplay(object):
               self.IWYU = load(sfile)
         except Exception, e:
           print "ERROR got exception when trying to load stats.json", str(e)
+        return
+
+    # --------------------------------------------------------------------------------
+
+    def getInvalidIncludes(self, rel, arch, jenkins_dir):
+        self.InvalidIncludes = {}
+        try:
+          stats = os.path.join(jenkins_dir, "invalid_includes", rel, arch, "summary.json")
+          if os.path.exists (stats):
+            from json import load
+            with open(stats) as sfile:
+              self.InvalidIncludes = load(sfile)
+        except Exception, e:
+          print "ERROR got exception when trying to load summary.json", str(e)
         return
     # --------------------------------------------------------------------------------
 
@@ -262,6 +278,23 @@ class BuildLogDisplay(object):
             nFail = self.IWYU[pname][0]
             iwyuLog = str(nFail)
             col = ' <a href="'+self.topCgiLogIWYU+pname+'/index.html"> '+iwyuLog+' </a>'
+            colStyle = 'failed'
+            pkgOK = False
+            self.addRow = True
+        row.append( col )
+        rowStyle.append( colStyle )
+        return pkgOK
+
+    # --------------------------------------------------------------------------------
+
+    def showInvalidIncludes(self, pkg, row, rowStyle) :
+        pname = pkg.name()
+        pkgOK =  True
+        if not self.InvalidIncludes : return pkgOK
+        col = ' - '
+        colStyle = ' '
+        if pkg.name() in self.InvalidIncludes:
+            col = ' <a href="'+self.topInvalidIncludes+pname+'"> '+str(self.InvalidIncludes[pname])+' </a>'
             colStyle = 'failed'
             pkgOK = False
             self.addRow = True
@@ -423,6 +456,7 @@ class BuildLogDisplay(object):
 
         self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'logreader/'+plat+'/'+ib+'/'
         self.topCgiLogIWYU   = config.siteInfo['CgiHtmlPath']+'buildlogs/iwyu/'+plat+'/'+ib+'/'
+        self.topInvalidIncludes = '/SDT/jenkins-artifacts/invalid_includes/'+plat+'/'+ib+'/'
         self.topCgiLogPython3   = config.siteInfo['CgiHtmlPath']+'buildlogs/python3/'+plat+'/'+ib+'/python3.log'
         if fwlite: self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'buildlogs/fwlite/'+plat+'/'+ib+'/'
         # read libChecker info
@@ -480,6 +514,8 @@ class BuildLogDisplay(object):
             self.getDepViol(self.normPath)
           if (not testName) or (testName=='IWYU'):
             self.getIWYU(ib, plat, jenkinsLogs)
+          if (not testName) or (testName=='InvalidIncludes'):
+            self.getInvalidIncludes(ib, plat, jenkinsLogs)
           if (not testName) or (testName=='python3'):
             self.getPython3(self.normPath)
 
@@ -566,6 +602,11 @@ class BuildLogDisplay(object):
             hdrs.append('IWYU')
             szHdr.append(20)
 
+        #  add headers for InvalidIncludes
+        if (not fwlite) and len(self.InvalidIncludes.keys()) > 0:
+            hdrs.append('InvalidIncludes')
+            szHdr.append(20)
+
         #  add headers for Python3
         if (not fwlite) and len(self.Python3.keys()) > 0:
             hdrs.append('Python3')
@@ -620,6 +661,8 @@ class BuildLogDisplay(object):
                   self.showLibChecks(pkg, row, rowStyle)
                   # IWYU
                   self.showIWYU(pkg, row, rowStyle)
+                  # InvalidIncludes
+                  self.showInvalidIncludes(pkg, row, rowStyle)
                   # Python3
                   self.showPython3(pkg, row, rowStyle)
 
@@ -676,6 +719,8 @@ class BuildLogDisplay(object):
               isOK1 = self.showLibChecks(pkg, row, rowStyle)
               # IWYU
               isOK = self.showIWYU(pkg, row, rowStyle) and isOK
+              # InvalidIncludes
+              isOK = self.showInvalidIncludes(pkg, row, rowStyle) and isOK
               # Python3
               isOK = self.showPython3(pkg, row, rowStyle) and isOK
 
@@ -727,6 +772,8 @@ class BuildLogDisplay(object):
               self.showLibChecks(pkg, row, rowStyle)
               # if len( self.IWYU.keys() ) > 0:
               self.showIWYU(pkg, row, rowStyle)
+              # if len( self.InvalidIncludes.keys() ) > 0:
+              self.showInvalidIncludes(pkg, row, rowStyle)
               # Python3
               self.showPython3(pkg, row, rowStyle)
 
