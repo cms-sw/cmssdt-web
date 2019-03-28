@@ -456,7 +456,7 @@ class BuildLogDisplay(object):
 
         self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'logreader/'+plat+'/'+ib+'/'
         self.topCgiLogIWYU   = config.siteInfo['CgiHtmlPath']+'buildlogs/iwyu/'+plat+'/'+ib+'/'
-        self.topInvalidIncludes = '/SDT/jenkins-artifacts/invalid_includes/'+plat+'/'+ib+'/'
+        self.topInvalidIncludes = '/SDT/jenkins-artifacts/invalid_includes/'+ib+'/'+plat+'/'
         self.topCgiLogPython3   = config.siteInfo['CgiHtmlPath']+'buildlogs/python3/'+plat+'/'+ib+'/python3.log'
         if fwlite: self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'buildlogs/fwlite/'+plat+'/'+ib+'/'
         # read libChecker info
