@@ -311,7 +311,8 @@ class BuildLogDisplay(object):
         col = ' - '
         colStyle = ' '
         if pkg.name() in self.Python3:
-            col = ' <a href="'+self.topCgiLogPython3+'"> 1 </a>'
+            anchor = pkg.name().replace('/','')
+            col = ' <a href="'+self.topCgiLogPython3+'#'+anchor+'"> 1 </a>'
             colStyle = 'failed'
             pkgOK = False
             self.addRow = True
