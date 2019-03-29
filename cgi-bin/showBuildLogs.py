@@ -160,7 +160,7 @@ class BuildLogDisplay(object):
     def getInvalidIncludes(self, rel, arch, jenkins_dir):
         self.InvalidIncludes = {}
         try:
-          stats = os.path.join(jenkins_dir, "invalid_includes", rel, arch, "summary.json")
+          stats = os.path.join(jenkins_dir, "invalid-includes", rel, arch, "summary.json")
           if os.path.exists (stats):
             from json import load
             with open(stats) as sfile:
@@ -456,7 +456,7 @@ class BuildLogDisplay(object):
 
         self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'logreader/'+plat+'/'+ib+'/'
         self.topCgiLogIWYU   = config.siteInfo['CgiHtmlPath']+'buildlogs/iwyu/'+plat+'/'+ib+'/'
-        self.topInvalidIncludes = '/SDT/jenkins-artifacts/invalid_includes/'+ib+'/'+plat+'/'
+        self.topInvalidIncludes = '/SDT/jenkins-artifacts/invalid-includes/'+ib+'/'+plat+'/'
         self.topCgiLogPython3   = config.siteInfo['CgiHtmlPath']+'buildlogs/python3/'+plat+'/'+ib+'/python3.log'
         if fwlite: self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'buildlogs/fwlite/'+plat+'/'+ib+'/'
         # read libChecker info
