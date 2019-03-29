@@ -22,7 +22,7 @@ def sanitize(s, ok="a-zA-Z0-9_.,:=+-"):
 #----- Python3
 @route('/python3/<architecture>/<release>/python3.html')
 def python3Log(architecture, release):
-  return "<pre>"+extractFile(architecture, release, '', '', 'python3.html',False)+"</pre>"
+  return extractFile(architecture, release, '', '', 'python3.html',False)
 
 @route('/fwlite/<architecture>/<release>/<subsystem>/<package>')
 def buildLog(architecture, release, subsystem, package):
