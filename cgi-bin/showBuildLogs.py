@@ -128,7 +128,7 @@ class BuildLogDisplay(object):
     def getPython3(self, path):
         self.Python3={}
         try:
-          py3 = os.path.join(path, "python3.log")
+          py3 = os.path.join(path, "python3.html")
           if os.path.exists (py3):
             log = open(py3, 'r')
             for line in [l for l in log.readlines() if ' Error compiling ' in l]:
