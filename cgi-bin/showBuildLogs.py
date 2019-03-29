@@ -138,7 +138,7 @@ class BuildLogDisplay(object):
               elif "'src/"       in line: pkg_parts=line.split("'src/",1)[-1].split("/",2)[:2]
               if pkg_parts: self.Python3["/".join(pkg_parts)]=1
         except Exception, e:
-          print "ERROR got exception when trying to read python3.log", str(e)
+          print "ERROR got exception when trying to read python3.html", str(e)
         return
 
     # --------------------------------------------------------------------------------
@@ -457,7 +457,7 @@ class BuildLogDisplay(object):
         self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'logreader/'+plat+'/'+ib+'/'
         self.topCgiLogIWYU   = config.siteInfo['CgiHtmlPath']+'buildlogs/iwyu/'+plat+'/'+ib+'/'
         self.topInvalidIncludes = '/SDT/jenkins-artifacts/invalid-includes/'+ib+'/'+plat+'/'
-        self.topCgiLogPython3   = config.siteInfo['CgiHtmlPath']+'buildlogs/python3/'+plat+'/'+ib+'/python3.log'
+        self.topCgiLogPython3   = config.siteInfo['CgiHtmlPath']+'buildlogs/python3/'+plat+'/'+ib+'/python3.html'
         if fwlite: self.topCgiLogString = config.siteInfo['CgiHtmlPath']+'buildlogs/fwlite/'+plat+'/'+ib+'/'
         # read libChecker info
         self.libChkErrMap = {}
