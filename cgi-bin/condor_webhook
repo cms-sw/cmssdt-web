@@ -30,9 +30,10 @@ if not check_ip():
   print "Invalid IP"
   exit()
 
+if 'schedd_name' not in payload: payload['schedd_name'] = ""
 xparam = []
 for k in ['work_dir', 'condor_job_id', 'labels', 'status', 'schedd_name']:
-  if not k in payload:
+  if k not in payload:
     print "Invalid data: Missing key %s" % k
     exit()
   xparam.append({"name":k.upper(),  "value":payload[k]})
