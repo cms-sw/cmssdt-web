@@ -80,20 +80,19 @@ def check_signature(data, repo_config):
 
 #check source ip in white list fucntion
 def check_ip():
-  try:
-    ip_net = open(BASE_DIRECTORY+'/sdt/github-hook-meta.txt','r').read().split('\n')[0].strip()
-  except Exception as e:
-    print "Unable to read github hoot meta information, using hard coded value"
-    ip_net ="192.30.252.0/22"
-
-  ip, mask = ip_net.split('/')
-  mask = int(mask)
-  ip = ''.join(["{0:08b}".format(int(i)) for i in ip.split('.') ])[0:mask]
+  sip = os.environ['REMOTE_ADDR']
   if 'HTTP_X_FORWARDED_FOR' in os.environ and os.environ['HTTP_X_FORWARDED_FOR']!='':
-    src_ip = ''.join([ "{0:08b}".format(int(i)) for i in os.environ['HTTP_X_FORWARDED_FOR'].split('.')])[0:mask]
-  else:
-    src_ip = ''.join([ "{0:08b}".format(int(i)) for i in os.environ['REMOTE_ADDR'].split('.')])[0:mask]
-  return ip == src_ip
+    sip = os.environ['HTTP_X_FORWARDED_FOR']
+  print "GH IP",sip
+  for ip_net in [i.strip() for i in open(BASE_DIRECTORY+'/sdt/github-hook-meta.txt').readlines()]:
+    ip, mask = ip_net.split('/')
+    mask = int(mask)
+    ip = ''.join(["{0:08b}".format(int(i)) for i in ip.split('.') ])[0:mask]
+    src_ip = ''.join([ "{0:08b}".format(int(i)) for i in sip.split('.')])[0:mask]
+    print "Checking %s vs %s" % (ip, src_ip)
+    if ip == src_ip:
+      return True
+  return False
 
 #get data
 data = sys.stdin.read()
