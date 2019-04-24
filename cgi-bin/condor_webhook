@@ -30,7 +30,7 @@ if not check_ip():
   print "Invalid IP"
   exit()
 
-if 'schedd_name' not in payload: payload['schedd_name'] = ""
+if 'schedd_name' not in payload: payload['schedd_name'] = "bigbird15.cern.ch"
 xparam = []
 for k in ['work_dir', 'condor_job_id', 'labels', 'status', 'schedd_name']:
   if k not in payload:
