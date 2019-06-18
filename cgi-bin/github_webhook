@@ -33,12 +33,13 @@ def check_event(data):
     if not branch.startswith("refs/heads/"): return False, event
     if not ok_event:
       if not get_repository_hooks(full_name,"Jenkins_Github_Hook_Push"): return False,event
-    branch = branch.replace("refs/heads/","")
-    if branch=="master": return True, event
-    repo = data['repository']['name']
-    if (repo in ['cmssw']) and branch.startswith("CMSSW_"): return True, event
-    if (repo in ['cmsdist']) and branch.startswith("IB/CMSSW_"): return True, event
-    return False, event
+    return True, event
+    #branch = branch.replace("refs/heads/","")
+    #if branch=="master": return True, event
+    #repo = data['repository']['name']
+    #if (repo in ['cmssw']) and branch.startswith("CMSSW_"): return True, event
+    #if (repo in ['cmsdist']) and branch.startswith("IB/CMSSW_"): return True, event
+    #return False, event
   if (not ok_event) and (not get_repository_hooks(full_name,"Jenkins_Github_Hook")): return False,event
   if (event == 'pull_request'): return True,event
   elif (event == 'issues') and (not data['action'] in ['opened']): return False,event
