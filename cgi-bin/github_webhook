@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-print "Content-Type: text/html\n"
-
-import os , sys , cgi , json , pycurl , hmac, re
+from __future__ import print_function
 from hashlib import sha1
-import urllib2, urllib
+from _py2with3compatibility import Request, urlopen, urlencode
+import os, sys, json, hmac, re
 
+print("Content-Type: text/html\n")
 BASE_DIRECTORY = "/data"
 
 def check_event(data):
@@ -23,7 +23,7 @@ def check_event(data):
           ok_event = True
           break
       if not ok_event:
-        print "ERROR: No web hook matched the event",event
+        print("ERROR: No web hook matched the event",event)
         return False,event
   except: pass
   full_name = data['repository']['full_name']
@@ -73,10 +73,10 @@ def check_signature(data, repo_config):
     try:
       secret = open(secret_file).read().split('\n')[0].strip()
     except Exception as e:
-      print "Unable to read secret file"
+      print("Unable to read secret file")
       return False
   mac = hmac.new(str(secret), msg=data, digestmod=sha1)
-  print str(mac.hexdigest()) , str(signature)
+  print(str(mac.hexdigest()) , str(signature))
   return str(mac.hexdigest()) == str(signature)
 
 #check source ip in white list fucntion
@@ -84,13 +84,13 @@ def check_ip():
   sip = os.environ['REMOTE_ADDR']
   if 'HTTP_X_FORWARDED_FOR' in os.environ and os.environ['HTTP_X_FORWARDED_FOR']!='':
     sip = os.environ['HTTP_X_FORWARDED_FOR']
-  print "GH IP",sip
+  print("GH IP",sip)
   for ip_net in [i.strip() for i in open(BASE_DIRECTORY+'/sdt/github-hook-meta.txt').readlines()]:
     ip, mask = ip_net.split('/')
     mask = int(mask)
     ip = ''.join(["{0:08b}".format(int(i)) for i in ip.split('.') ])[0:mask]
     src_ip = ''.join([ "{0:08b}".format(int(i)) for i in sip.split('.')])[0:mask]
-    print "Checking %s vs %s" % (ip, src_ip)
+    print("Checking %s vs %s" % (ip, src_ip))
     if ip == src_ip:
       return True
   return False
@@ -100,7 +100,7 @@ data = sys.stdin.read()
 try:
   payload = json.loads(data)
 except Exception as e:
-  print "Invalid data, can not read json input"
+  print("Invalid data, can not read json input")
   sys.exit()
 repo_name = payload["repository"]["full_name"]
 sys.path.insert(0,os.path.join(BASE_DIRECTORY,"sdt/cms-bot"))
@@ -110,9 +110,9 @@ from github_hooks_config import get_repository_hooks, is_valid_gh_repo
 
 #check valid data, ip and signature of source
 valid, event = check_event(payload)
-print valid, event
+print(valid, event)
 if (not valid) or (not check_ip()) or (not check_signature(data, repo_config)):
-  print "Invalid or wrong signatures"
+  print("Invalid or wrong signatures")
   sys.exit()
 
 xparam = []
@@ -121,7 +121,7 @@ xparam.append({"name":"EVENT","value":event})
 try: xparam.append({"name":"ACTION","value":payload['action']})
 except: xparam.append({"name":"ACTION","value":""})
 if ("labeled" in xparam[-1]["value"]) and (not repo_name.startswith("cms-sw/")):
-  print "Ignored Event/Action:", xparam
+  print("Ignored Event/Action:", xparam)
   sys.exit()
 
 etype=""
@@ -143,14 +143,14 @@ for x in [(json.dumps({"parameter":xparam}),"github-webhook")]:
   jenkins_parameters, job = x
   if not job: continue
   url = repo_config.JENKINS_SERVER+'/job/'+ job + '/build'
-  print jenkins_parameters,job
+  print(jenkins_parameters,job)
   data = {
               "json": jenkins_parameters,
               "Submit": "Build"
          }
   try:
-    data=urllib.urlencode(data)
-    req = urllib2.Request(url=url,data=data,headers={"ADFS_LOGIN" : "cmssdt"})
-    content = urllib2.urlopen(req).read()
+    data = urlencode(data)
+    req = Request(url=url,data=data,headers={"ADFS_LOGIN" : "cmssdt"})
+    content = urlopen(req).read()
   except Exception as e:
-    print "Unable to start jenkins job:",e
+    print("Unable to start jenkins job:",e)
