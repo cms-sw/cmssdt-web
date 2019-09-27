@@ -78,7 +78,7 @@ class GetPath(object) :
 
     def writePickleData(self,data,pFile):
         from pickle import Pickler
-        outFile = open(pFile, 'w')
+        outFile = open(pFile, 'wb')
         pklFile = Pickler(outFile)
         pklFile.dump(data)
         outFile.close()
@@ -86,7 +86,7 @@ class GetPath(object) :
 	
     def readPickleData(self,pFile):
         import  pickle
-        return pickle.load(open(pFile,'r'))
+        return pickle.load(open(pFile,'rb'))
 
     def MakeLog(self) :
         if not os.path.isdir( config.siteInfo['OutPath']+'/'+self.release) :

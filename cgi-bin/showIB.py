@@ -245,7 +245,7 @@ class BuildViewer(object):
         data = None
         if os.path.exists(summPath) and (os.stat(summDir).st_mtime <= os.stat(summPath).st_mtime):
             try:
-                data = pickle.load( open(summPath,'r') )
+                data = pickle.load( open(summPath,'rb') )
             except:
                 pass
             return data
@@ -254,7 +254,7 @@ class BuildViewer(object):
         logWarns = 0
         for rvLogFileName in glob(rvLogDir+'/runTheMatrixMsgs.pkl*'):
             try:
-              logData = pickle.load( open(rvLogFileName,'r') )
+              logData = pickle.load( open(rvLogFileName,'rb') )
               for wf in logData.keys():
                 for x in range(0,4):
                   evt = logData[wf]['events'][x]

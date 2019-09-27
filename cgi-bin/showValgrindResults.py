@@ -23,7 +23,7 @@ def readSummFile(basePath, part='1of2'):
         errMapNew = {}
         rel = 'unknown' ; arch = 'unknown'
         for file in glob.glob(basePath+'/valgrindSummary-*of*.pkl'):
-            summFile = open(file, 'r')
+            summFile = open(file, 'rb')
             rel, arch = pickle.load(summFile)
             errMap = pickle.load(summFile)
             summFile.close()

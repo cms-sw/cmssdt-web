@@ -32,7 +32,7 @@ class LogViewer(object):
         self.LogMessages = {}
         import pickle
 	for fileName in glob(path+"/runTheMatrixMsgs.pkl*"):
-          self.LogMessages.update(pickle.load( open(fileName,'r') ))
+          self.LogMessages.update(pickle.load( open(fileName,'rb') ))
         return
     
     # --------------------------------------------------------------------------------

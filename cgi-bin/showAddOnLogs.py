@@ -56,7 +56,7 @@ class LogViewer(object):
             return
 
         import pickle
-        self.commands = pickle.load( open(dbPath,'r') )
+        self.commands = pickle.load( open(dbPath,'rb') )
 
         # print self.commands
 
