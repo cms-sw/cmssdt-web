@@ -483,13 +483,13 @@ class BuildViewer(object):
 
         summFile = ""
         try:
-            summFile = open(fileName, 'r')
+            summFile = open(fileName, 'rb')
         except IOError:
             # print "ERROR opening ",bDir + '/unitTestResults.pkl'
             return None, None
         
         pklr = Unpickler(summFile)
-        utErrs = pklr.load()        
+        utErrs = pklr.load()
         summFile.close()
 
         partErrs = 0
