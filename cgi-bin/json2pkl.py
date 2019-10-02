@@ -15,8 +15,8 @@ def json2pkl(inFile, outFile=None):
     data = json.load(jF)
     jF.close()
 
-    pF = open(outFile, 'w')
-    pklr = Pickler(pF)
+    pF = open(outFile, 'wb')
+    pklr = Pickler(pF, protocol=2)
     pklr.dump(data)
     	    	    
     pF.close()

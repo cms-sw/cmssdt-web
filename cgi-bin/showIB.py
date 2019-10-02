@@ -295,8 +295,8 @@ class BuildViewer(object):
 
         from pickle import Pickler
         try:
-            outFile = open(summPath, 'w')
-            pklFile = Pickler(outFile)
+            outFile = open(summPath, 'wb')
+            pklFile = Pickler(outFile, protocol=2)
             pklFile.dump(data)
             outFile.close()
         except:

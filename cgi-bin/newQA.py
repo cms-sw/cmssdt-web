@@ -79,7 +79,7 @@ class GetPath(object) :
     def writePickleData(self,data,pFile):
         from pickle import Pickler
         outFile = open(pFile, 'wb')
-        pklFile = Pickler(outFile)
+        pklFile = Pickler(outFile, protocol=2)
         pklFile.dump(data)
         outFile.close()
         return
@@ -225,8 +225,8 @@ class InfoMaker(object):
     	        allFound = allFound and (ddErr[0]>-1) and (ddErr[1]>-1) and (ddErr[2]>-1) and (ddErr[3]>-1)
             else:
                 if fwliteBS==-1: fwliteBS=3
-            summFile = open(path+'/qaSummary.pkl', 'w')
-            pklr = Pickler(summFile)
+            summFile = open(path+'/qaSummary.pkl', 'wb')
+            pklr = Pickler(summFile, , protocol=2)
             pklr.dump(vgErrs)
             pklr.dump(igErrs)
             pklr.dump(ddErr)
