@@ -226,7 +226,7 @@ class InfoMaker(object):
             else:
                 if fwliteBS==-1: fwliteBS=3
             summFile = open(path+'/qaSummary.pkl', 'wb')
-            pklr = Pickler(summFile, , protocol=2)
+            pklr = Pickler(summFile, protocol=2)
             pklr.dump(vgErrs)
             pklr.dump(igErrs)
             pklr.dump(ddErr)
