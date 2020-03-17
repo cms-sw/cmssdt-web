@@ -10,6 +10,7 @@ def send_error(msg):
 try:
   data = sys.stdin.read()
   payload = json.loads(data)
+  es7 = payload.pop('es-cmssdt7',False)
   api_type = payload.pop('api','/_search')
   if not api_type in ["/_search", "/_cat", "/_mapping", "/_template"]: send_error ("Invalid api type: %s" % api_type)
   index = payload.pop('index','')
@@ -29,6 +30,7 @@ try:
   if api_type == "/_cat": api_type="/_cat/indices"
   if prefix: url = "%s/%s/%s" % (ES_CERN_URL, api_type, index)
   else: url = "%s/%s%s" % (ES_CERN_URL, index, api_type)
+  if es7: url = url.replace("//es-cmssdt.cern.ch","//es-cmssdt7.cern.ch:")
   passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
   passman.add_password(None, url, es_user, es_pass)
   auth_handler = urllib2.HTTPBasicAuthHandler(passman)
