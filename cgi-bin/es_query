@@ -30,8 +30,8 @@ try:
       index = ""
       api_type = "/_search/scroll"
   if api_type == "/_cat": api_type="/_cat/indices"
-  if prefix: url = "%s/%s/%s" % (ES_CERN_URL, api_type, index)
-  if es7: url = url.replace("//es-cmssdt.cern.ch","//es-cmssdt7.cern.ch:")
+  if prefix: url = "%s/%s/%s" % (es_ser, api_type, index)
+  else: url = "%s/%s%s" % (es_ser, index, api_type)
   passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
   passman.add_password(None, url, es_user, es_pass)
   auth_handler = urllib2.HTTPBasicAuthHandler(passman)
