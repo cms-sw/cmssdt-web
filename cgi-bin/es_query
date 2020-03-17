@@ -36,11 +36,12 @@ try:
   passman.add_password(None, url, es_user, es_pass)
   auth_handler = urllib2.HTTPBasicAuthHandler(passman)
   opener = urllib2.build_opener(auth_handler)
+  header = {"Content-Type": "application/json"}
   try:
     urllib2.install_opener(opener)
-    if 'query' in payload: content = urllib2.urlopen(url,payload['query'])
-    else: content = urllib2.urlopen(url)
-    print content.read()
+    if 'query' in payload: request = urllib2.Request(url, payload['query'], header)
+    else: request = urllib2.Request(url)
+    print urllib2.urlopen(request).read()
   except Exception as e:
     send_error("Couldn't send data to elastic search: %s\nurl:%s\nquery:%s" % (str(e),url, query))
 except Exception as e:
