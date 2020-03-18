@@ -10,6 +10,7 @@ def send_error(msg):
 try:
   data = sys.stdin.read()
   payload = json.loads(data)
+  query = payload.pop('query','')
   es_ser = payload.pop('es_server',ES_CERN_URL)
   if not re.match("^https://es-cms(sdt|)([0-9]+|).cern.ch(:|/).+",es_ser):
     es_ser = ES_CERN_URL
@@ -39,7 +40,7 @@ try:
   header = {"Content-Type": "application/json"}
   try:
     urllib2.install_opener(opener)
-    if 'query' in payload: request = urllib2.Request(url, payload['query'], header)
+    if query: request = urllib2.Request(url, query, header)
     else: request = urllib2.Request(url)
     print urllib2.urlopen(request).read()
   except Exception as e:
