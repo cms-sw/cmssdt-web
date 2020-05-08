@@ -21,8 +21,8 @@ try:
   if index:
     if not index.startswith("cmssdt-"): index = 'cmssdt-'+index
     if not re.match('^cmssdt-[*a-zA-Z0-9_/-]+$',index): send_error ("Invalid index name: %s" % index)
-  es_user = "cmssdt"
-  es_pass = open('/data/secrets/apache-cmssdt-es-secret','r').read().strip()
+  es_user = "cmssdt_ro"
+  es_pass = open('/data/secrets/apache-cmssdt-es-secret_ro','r').read().strip()
   prefix = payload.pop('prefix',False)
   if api_type.startswith('/_search'):
     scroll = payload.pop('scroll',0)
