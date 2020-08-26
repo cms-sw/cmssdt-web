@@ -1,0 +1,59 @@
+/* GENERAL HTML ELEMENTS */
+
+html body {
+	background-color:#fdfaf3;
+	color:#252b37;
+}
+hr {
+	color:#e5e8ed;
+	background-color:#e5e8ed;
+}
+pre, code, tt {
+	color:#669;
+}
+blockquote {
+	background-color:#edeff4;
+	border-color:#d7dbe4;
+}
+h1, h2, h3, h4, h5, h6 {
+	color:#f60;
+}
+
+h2 {
+	text-align:center;
+	background-color:#FDFAF3;
+	border-color:#E2DCC8;
+	color:#FF0000;
+}
+
+.info { 
+	display: none; 
+	background-color:#ffa875;
+}
+
+.infoTable {
+	background-color:#ffa875;
+}
+.infoList {
+	background-color:#ffa875;
+}
+
+h3.hwhite  { border-left: 5px solid white; padding-left: 5px;}
+h3.hunknown { border-left: 5px solid #888888; padding-left: 5px;}
+h3.hfailed { border-left: 5px solid red; padding-left: 5px;}
+h3.hpassed { border-left: 5px solid green; padding-left: 5px;}
+h3.hskipped { border-left: 5px solid #001aff; padding-left: 5px;}
+h3.hwarning { border-left: 5px solid #ffff00; padding-left: 5px;}
+
+a.awhite   { border-left: 5px solid white; padding-left: 5px;}
+a.aunknown { border-left: 5px solid #888888; padding-left: 5px;}
+a.afailed  { border-left: 5px solid red; padding-left: 5px;}
+a.apassed  { border-left: 5px solid green; padding-left: 5px;}
+a.askipped { border-left: 5px solid #001aff; padding-left: 5px;}
+a.awarning { border-left: 5px solid #ffff00; padding-left: 5px;}
+
+/*
+a:link, a:visited{
+	color:#f60;
+}
+*/

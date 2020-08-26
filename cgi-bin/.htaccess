@@ -1,0 +1,4 @@
+# implement minimal caching during site development
+<FilesMatch "\.(log)$">
+	Header set Content-Type "text/plain"
+</FilesMatch>

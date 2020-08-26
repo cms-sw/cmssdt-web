@@ -1,0 +1,2222 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+   <div class="container-fluid">
+    <div class="row-fluid">
+      <div style="text-align: center; class="span9">
+        <br /><h1 id="Welcome-to-jenkins-reports"><b> CMS Jenkins Projects </b></h1>
+        <p>This page displays a summary of all CMS Jenkins projects , their sub projects , upstream projects <br /> and downstream   	projects. To see the deatil and confgiuration of a project in Jenkins , click on project name. </p><br />
+      </div>
+    </div>
+  </div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="abort-jenkins-job"><a href="https://cmssdt.cern.ch/jenkins/job/abort-jenkins-job"><b>ABORT-JENKINS-JOB</b></a></li><br />
+<p> Kill a running job (by default it is 'ib-any-integration'). 
+
+The idea is that if pull reguest was updated, all the test should be restarted. This job will kill all the running jobs for that
+PR and matching parameters. It will ignore given job ID - the ID of upstream job that started this job. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#run-pr-code-checks">run-pr-code-checks</a> <a href="#abort-pr-tests">abort-pr-tests</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="abort-pr-tests"><a href="https://cmssdt.cern.ch/jenkins/job/abort-pr-tests"><b>ABORT-PR-TESTS</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#abort-jenkins-job">abort-jenkins-job</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#abort-jenkins-job">abort-jenkins-job</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#cms-bot">cms-bot</a> <a href="#ib-run-pr-tests">ib-run-pr-tests</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="abort-release"><a href="https://cmssdt.cern.ch/jenkins/job/abort-release"><b>ABORT-RELEASE</b></a></li><br />
+<p> Aborts and kills a release building process. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#kill-build-release">kill-build-release</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#kill-build-release">kill-build-release</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#query-build-release-issues">query-build-release-issues</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="auto-forward-port"><a href="https://cmssdt.cern.ch/jenkins/job/auto-forward-port"><b>AUTO-FORWARD-PORT</b></a></li><br />
+<p> This is triggered by github webhook for each cmssw/cmsdist branch merge event.
+This is just a place holder job to trigger one sub-job per destionation branch for which the forward porting should be done. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#auto-forward-port-branch">auto-forward-port-branch</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#auto-forward-port-branch">auto-forward-port-branch</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#github-push-hook">github-push-hook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="auto-forward-port-branch"><a href="https://cmssdt.cern.ch/jenkins/job/auto-forward-port-branch"><b>AUTO-FORWARD-PORT-BRANCH</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#auto-forward-port">auto-forward-port</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="auto-forward-ports-old"><a href="https://cmssdt.cern.ch/jenkins/job/auto-forward-ports-old"><b>AUTO-FORWARD-PORTS-OLD</b></a></li><br />
+<p> This is triggered by github webhook for each cmssw/cmsdist branch merge event.
+this forward port changes from source branch to target branch. Mapping between soruce and destination branches are available in cms-bot.
+
+<ul>
+  <li>
+    <b>Q:</b> Job failed do to merge conflict.
+  </li>
+  <li>
+    <b>A:</b> It comonly fails when merging diferences on `root.spec` files. 
+    If we known that we want to keep our changes on merge conflict, we can a) manually run
+    `auto-update-git-branches` with `-X ours` option and push changes, b) re-run job with 
+    KEEP_OURS value set to True.<br>
+    Due only when we are sure about changes. Otherwise, you have to resolve merge 
+    conflict manually.
+    
+  </li>
+</ul> </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="backport-pull-request"><a href="https://cmssdt.cern.ch/jenkins/job/backport-pull-request"><b>BACKPORT-PULL-REQUEST</b></a></li><br />
+<p> Manually executed job for backporting pull requests given the repo name, the branch for which the PR should be created and the PR to be backported </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="build-any-ib"><a href="https://cmssdt.cern.ch/jenkins/job/build-any-ib"><b>BUILD-ANY-IB</b></a></li><br />
+<p> This jobs starts an Integration Build(IB). Base on state of <a href="https://github.com/cms-sw/cmsdist">CMSDIST</a>/<a href="https://github.com/cms-sw/cmssw">CMSSW</a> git repositories, it builds either a full release or patch release.
+<br>Build Full IB if:
+
+<ul>
+  <li> There are changes in <a href="https://github.com/cms-sw/cmsdist">CMSDIST</a></li>
+  <li> There is no full IB available based on current <a href="https://github.com/cms-sw/cmsdist">CMSDIST</a></li>
+  <li> Previous full IB had build errors</li>
+</ul>
+
+Otherwise build a patch release.
+
+<br><br>
+<b>Q/A</b>
+
+<ul>
+  <li>
+    <b>Q:</b> The job is scheduled with a clock simbol. Jenkins also complains that there are not agents with labels THIS and THIS.
+  </li>
+  <li>
+    <b>A:</b> Jenkins should automaticly launch agents with specific labels for the job. However, for some reason it does not work for this job. For now, launch agent manually.
+  </li>
+</ul>
+
+<ul>
+  <li>
+    <b>Q:</b> How to manually build an IB?
+  </li>
+  <li>
+    <b>A:</b> Go to upstream job (ib-tag-and-schdule) and start a job.
+  </li>
+</ul> </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#build-fwlite-ib">build-fwlite-ib</a>  <a href="#ib-build-logs">ib-build-logs</a>  <a href="#ib-install-cvmfs">ib-install-cvmfs</a>  <a href="#ib-install-new-cvmfs">ib-install-new-cvmfs</a>  <a href="#process-external-elastic-stats">process-external-elastic-stats</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#ib-install-cvmfs">ib-install-cvmfs</a> <a href="#ib-build-logs,process-external-elastic-stats">ib-build-logs,process-external-elastic-stats</a> <a href="#build-fwlite-ib">build-fwlite-ib</a> <a href="#ib-install-new-cvmfs">ib-install-new-cvmfs</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-tag-and-schdule">ib-tag-and-schdule</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="build-docker-container"><a href="https://cmssdt.cern.ch/jenkins/job/build-docker-container"><b>BUILD-DOCKER-CONTAINER</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cms-containers-run-cmssw-test">cms-containers-run-cmssw-test</a>  <a href="#cvmfs-unpack-container">cvmfs-unpack-container</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cms-containers-run-cmssw-test">cms-containers-run-cmssw-test</a> <a href="#cvmfs-unpack-container">cvmfs-unpack-container</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#check-docker-container">check-docker-container</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="build-fwlite"><a href="https://cmssdt.cern.ch/jenkins/job/build-fwlite"><b>BUILD-FWLITE</b></a></li><br />
+<p> TO build a CMSSW_X_Y_Z_FWLITE release based on an existing CMSSW_X_Y_Z release. CMSSW_X_Y_Z should already be build/uploaded before building its FWLITE version. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#update-release-map">update-release-map</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="build-fwlite-ib"><a href="https://cmssdt.cern.ch/jenkins/job/build-fwlite-ib"><b>BUILD-FWLITE-IB</b></a></li><br />
+<p> This job is responsible for building FWLITE release for each Integration build(IB). 
+Results of this build can be seen via <a href="https://cmssdt.cern.ch/SDT/">CMSSDT</a> 
+<a href="https://cmssdt.cern.ch/SDT/html/cmssdt-ib">IB page</a> 
+<a href="https://cmssdt.cern.ch/SDT/html/showIB.html">(old page)</a>. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#ib-build-logs">ib-build-logs</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#ib-build-logs">ib-build-logs</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#build-any-ib">build-any-ib</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="build-release"><a href="https://cmssdt.cern.ch/jenkins/job/build-release"><b>BUILD-RELEASE</b></a></li><br />
+<p> This job actually builds a release.
+It is triggered by cms-bot after the <a href="https://github.com/cms-sw/cmssw/issues?q=label%3Arelease-notes-requested">Release build Issue</a> is approved by release manager. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#query-build-release-issues">query-build-release-issues</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="check-docker-container"><a href="https://cmssdt.cern.ch/jenkins/job/check-docker-container"><b>CHECK-DOCKER-CONTAINER</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#build-docker-container">build-docker-container</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#build-docker-container">build-docker-container</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#cms-auto-build-container">cms-auto-build-container</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cleanup-auto-build"><a href="https://cmssdt.cern.ch/jenkins/job/cleanup-auto-build"><b>CLEANUP-AUTO-BUILD</b></a></li><br />
+<p> This job deletes the relsease build areas after three days. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#query-build-release-issues">query-build-release-issues</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cleanup-cms-sw-io-history"><a href="https://cmssdt.cern.ch/jenkins/job/cleanup-cms-sw-io-history"><b>CLEANUP-CMS-SW-IO-HISTORY</b></a></li><br />
+<p> This job cleanup the cms-sw/cms-sw.github.io repository history. Specially the data and _data directories history.
+ </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#update-github-pages">update-github-pages</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#github-webhook">github-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cleanup-cmssdt"><a href="https://cmssdt.cern.ch/jenkins/job/cleanup-cmssdt"><b>CLEANUP-CMSSDT</b></a></li><br />
+<p> Clean up disk space on cmssdt </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cleanup-docker-tags"><a href="https://cmssdt.cern.ch/jenkins/job/cleanup-docker-tags"><b>CLEANUP-DOCKER-TAGS</b></a></li><br />
+<p> Removes outdated tags from docker repository. </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cleanup-tags"><a href="https://cmssdt.cern.ch/jenkins/job/cleanup-tags"><b>CLEANUP-TAGS</b></a></li><br />
+<p> Cleanup IB tags from the official CMSSW repository.
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cms-auto-build-container"><a href="https://cmssdt.cern.ch/jenkins/job/cms-auto-build-container"><b>CMS-AUTO-BUILD-CONTAINER</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#check-docker-container">check-docker-container</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#check-docker-container">check-docker-container</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cms-bot"><a href="https://cmssdt.cern.ch/jenkins/job/cms-bot"><b>CMS-BOT</b></a></li><br />
+<p> This is cms bot job which is triggered by github webhooks ( https://cmssdt.cern.ch/SDT/cgi-bin/github_webhook ) for every valid comment added to github PRs.
+
+Will kill a scheduled/running job acording to comments.
+
+<br><br>
+<b>Q/A</b>
+
+<ul>
+  <li>
+    <b>Q:</b> Job 'cms-sw/cmssw #****' failed. What to do?
+  </li>
+  <li>
+    <b>A:</b> If cause of failure is fixed (bug in cms-bot, github servers issue), job should be restarted. Otherwise PR will not be procesed unless someone retrigers it by writing a comment.
+  </li>
+</ul> </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#abort-pr-tests">abort-pr-tests</a>  <a href="#ib-schedule-pr-tests">ib-schedule-pr-tests</a>  <a href="#run-pr-code-checks">run-pr-code-checks</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#ib-schedule-pr-tests">ib-schedule-pr-tests</a> <a href="#abort-pr-tests ">abort-pr-tests </a> <a href="#run-pr-code-checks">run-pr-code-checks</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#github-webhook">github-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cms-containers-checks-tags"><a href="https://cmssdt.cern.ch/jenkins/job/cms-containers-checks-tags"><b>CMS-CONTAINERS-CHECKS-TAGS</b></a></li><br />
+<p> This project search for tags.yaml files in cms-sw/cms-docker repostory and create new image tags if needed </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cms-tag-container">cms-tag-container</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cms-tag-container">cms-tag-container</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#github-push-hook">github-push-hook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cms-containers-run-cmssw-test"><a href="https://cmssdt.cern.ch/jenkins/job/cms-containers-run-cmssw-test"><b>CMS-CONTAINERS-RUN-CMSSW-TEST</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#build-docker-container">build-docker-container</a> <a href="#cms-containers-schedule-cmssw-test">cms-containers-schedule-cmssw-test</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cms-containers-schedule-cmssw-test"><a href="https://cmssdt.cern.ch/jenkins/job/cms-containers-schedule-cmssw-test"><b>CMS-CONTAINERS-SCHEDULE-CMSSW-TEST</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cms-containers-run-cmssw-test">cms-containers-run-cmssw-test</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cms-containers-run-cmssw-test">cms-containers-run-cmssw-test</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cms-prs-cache"><a href="https://cmssdt.cern.ch/jenkins/job/cms-prs-cache"><b>CMS-PRS-CACHE</b></a></li><br />
+<p> This job collects metadata for pull requests since reading github directly when necessary might become time consuming or rejected by github
+on reached limit hits/hour grounds.  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cms-prs-cache">cms-prs-cache</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cms-prs-cache">cms-prs-cache</a> <a href="#cms-prs-cache">cms-prs-cache</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#cms-prs-cache">cms-prs-cache</a> <a href="#github-webhook">github-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cms-prs-files"><a href="https://cmssdt.cern.ch/jenkins/job/cms-prs-files"><b>CMS-PRS-FILES</b></a></li><br />
+<p> On every CMSSW PR, this job dumps list of files that are going to be modified by open PRs to files_changed_by_prs.json . </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#run-pr-code-checks">run-pr-code-checks</a> <a href="#github-webhook">github-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cms-tag-container"><a href="https://cmssdt.cern.ch/jenkins/job/cms-tag-container"><b>CMS-TAG-CONTAINER</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#cms-containers-checks-tags">cms-containers-checks-tags</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cmspkg-clone"><a href="https://cmssdt.cern.ch/jenkins/job/cmspkg-clone"><b>CMSPKG-CLONE</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#cmsrep-webhook">cmsrep-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cmspkg-test"><a href="https://cmssdt.cern.ch/jenkins/job/cmspkg-test"><b>CMSPKG-TEST</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cmsrep-webhook"><a href="https://cmssdt.cern.ch/jenkins/job/cmsrep-webhook"><b>CMSREP-WEBHOOK</b></a></li><br />
+<p> This is cms bot job which is triggered by github webhooks ( https://cmssdt.cern.ch/SDT/cgi-bin/github_webhook ) for every valid comment added to github PRs.
+Also it runsevery 30mins to make sure any webhooks were not missed.  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cmspkg-clone">cmspkg-clone</a>  <a href="#cvmfs-cms-install-COMP-python">cvmfs-cms-install-COMP-python</a>  <a href="#cvmfs-cms-install-COMP-xrootd">cvmfs-cms-install-COMP-xrootd</a>  <a href="#cvmfs-cms-install-cms">cvmfs-cms-install-cms</a>  <a href="#cvmfs-cms-install-common">cvmfs-cms-install-common</a>  <a href="#cvmfs-cms-install-crab3">cvmfs-cms-install-crab3</a>  <a href="#cvmfs-cms-install-phedex">cvmfs-cms-install-phedex</a>  <a href="#cvmfs-cms-install-spacemon-client">cvmfs-cms-install-spacemon-client</a>  <a href="#ib-install-cvmfs">ib-install-cvmfs</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cvmfs-cms-install-common">cvmfs-cms-install-common</a> <a href="#cmspkg-clone">cmspkg-clone</a> <a href="#cvmfs-cms-install-crab3">cvmfs-cms-install-crab3</a> <a href="#cvmfs-cms-install-phedex">cvmfs-cms-install-phedex</a> <a href="#cvmfs-cms-install-spacemon-client">cvmfs-cms-install-spacemon-client</a> <a href="#cvmfs-cms-install-cms">cvmfs-cms-install-cms</a> <a href="#cvmfs-cms-install-COMP-python">cvmfs-cms-install-COMP-python</a> <a href="#cvmfs-cms-install-COMP-xrootd">cvmfs-cms-install-COMP-xrootd</a> <a href="#ib-install-cvmfs">ib-install-cvmfs</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cmssw-container"><a href="https://cmssdt.cern.ch/jenkins/job/cmssw-container"><b>CMSSW-CONTAINER</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cmssw-doxygen"><a href="https://cmssdt.cern.ch/jenkins/job/cmssw-doxygen"><b>CMSSW-DOXYGEN</b></a></li><br />
+<p> Generate doxygen documentation for CMSSW project </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#update-release-map">update-release-map</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cmssw-to-stitched"><a href="https://cmssdt.cern.ch/jenkins/job/cmssw-to-stitched"><b>CMSSW-TO-STITCHED</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="comp-bot"><a href="https://cmssdt.cern.ch/jenkins/job/comp-bot"><b>COMP-BOT</b></a></li><br />
+<p> This is cms bot job which is triggered by github webhooks ( https://cmssdt.cern.ch/SDT/cgi-bin/github_webhook ) for every valid comment added to github PRs.
+This is to process bot commands for cmsdist comp branches </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#github-webhook">github-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="compare-material-budget"><a href="https://cmssdt.cern.ch/jenkins/job/compare-material-budget"><b>COMPARE-MATERIAL-BUDGET</b></a></li><br />
+<p> Comopare results of material budget of two releases using Validation/Geometry/test/TrackerMaterialBudgetComparison.C macro
+ </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-run-material-budget">ib-run-material-budget</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="compare-root-files-short-matrix"><a href="https://cmssdt.cern.ch/jenkins/job/compare-root-files-short-matrix"><b>COMPARE-ROOT-FILES-SHORT-MATRIX</b></a></li><br />
+<p> Download the files of the baseline IB and compare them with the results of the ones of a pull request </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-run-pr-tests">ib-run-pr-tests</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="create-json"><a href="https://cmssdt.cern.ch/jenkins/job/create-json"><b>CREATE-JSON</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cleanup-containers"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cleanup-containers"><b>CVMFS-CLEANUP-CONTAINERS</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-eos-list"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-eos-list"><b>CVMFS-CMS-EOS-LIST</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#cvmfs-cms-eos-sync">cvmfs-cms-eos-sync</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-eos-sync"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-eos-sync"><b>CVMFS-CMS-EOS-SYNC</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cvmfs-cms-eos-list">cvmfs-cms-eos-list</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cvmfs-cms-eos-list">cvmfs-cms-eos-list</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-eos-sync-dirs"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-eos-sync-dirs"><b>CVMFS-CMS-EOS-SYNC-DIRS</b></a></li><br />
+<p> Sync two folders with  cvmfs transaction.
+If the destination folder is on cvmfs, it gets published  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-install-cms"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-install-cms"><b>CVMFS-CMS-INSTALL-CMS</b></a></li><br />
+<p> Job to install (test) releases (and IBs) once the upload is completed.
+The job should be triggered by upstream job upload-release.
+It's purpose is to only trigger cms-install-package with the same argument
+it would get from upload-release job, but without using upload-release instance (it's just a trigger job for now) </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#update-release-map">update-release-map</a> <a href="#cmsrep-webhook">cmsrep-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-install-common"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-install-common"><b>CVMFS-CMS-INSTALL-COMMON</b></a></li><br />
+<p> Trigger the installation of new production architecture for CMS or reinstall cms-common new revision.<br/>
+- Production architecture if obtained via <a href="https://raw.githubusercontent.com/cms-sw/cms-bot/master/config.map">config.map</a><br/>
+This job is triggered by <a href="https://cmssdt.cern.ch/jenkins/job/cmsrep-webhook">cmsrep-webhook</a> which should pass the cms-common revision and architecture. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#cmsrep-webhook">cmsrep-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-install-COMP-python"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-install-COMP-python"><b>CVMFS-CMS-INSTALL-COMP-PYTHON</b></a></li><br />
+<p> Job to install python whenever there is a new version pushed on cmsrep.cern.ch <br>
+Install path is /cvmfs/${CVMFS_REPOSITORY} + COMP install dir (boostraped for comp) </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#cmsrep-webhook">cmsrep-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-install-COMP-xrootd"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-install-COMP-xrootd"><b>CVMFS-CMS-INSTALL-COMP-XROOTD</b></a></li><br />
+<p> Job to install xrootd whenever there is a new version pushed on cmsrep.cern.ch <br>
+Install path is /cvmfs/${CVMFS_REPOSITORY} + COMP install dir (boostraped for comp) </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#cmsrep-webhook">cmsrep-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-install-crab3"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-install-crab3"><b>CVMFS-CMS-INSTALL-CRAB3</b></a></li><br />
+<p> Job to install crab3 whenever there is a new version pushed on cmsrep.cern.ch <br>
+Install path is /cvmfs/${CVMFS_REPOSITORY} + crab3 install dir (boostraped for comp) </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#cmsrep-webhook">cmsrep-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-install-package"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-install-package"><b>CVMFS-CMS-INSTALL-PACKAGE</b></a></li><br />
+<p> This job installs packages using cmspkg tool
+To be used for - CRAB3, PHEDEX, spacemon-client, python, releases(cmssw), cms-common
+Triggered by webhook </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#cvmfs-cms-install-cms">cvmfs-cms-install-cms</a> <a href="#cvmfs-cms-install-common">cvmfs-cms-install-common</a> <a href="#cvmfs-cms-install-COMP-python">cvmfs-cms-install-COMP-python</a> <a href="#cvmfs-cms-install-COMP-xrootd">cvmfs-cms-install-COMP-xrootd</a> <a href="#cvmfs-cms-install-phedex">cvmfs-cms-install-phedex</a> <a href="#cvmfs-cms-install-spacemon-client">cvmfs-cms-install-spacemon-client</a> <a href="#cvmfs-cms-install-crab3">cvmfs-cms-install-crab3</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-install-phedex"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-install-phedex"><b>CVMFS-CMS-INSTALL-PHEDEX</b></a></li><br />
+<p> Job to install phedex whenever there is a new version pushed on cmsrep.cern.ch <br>
+Install path is /cvmfs/${CVMFS_REPOSITORY} + phedex install dir (boostraped for comp) </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#cmsrep-webhook">cmsrep-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-install-rucio"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-install-rucio"><b>CVMFS-CMS-INSTALL-RUCIO</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-install-spacemon-client"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-install-spacemon-client"><b>CVMFS-CMS-INSTALL-SPACEMON-CLIENT</b></a></li><br />
+<p> Job to install spacemonclient whenever there is a new version pushed on cmsrep.cern.ch <br>
+Install path is /cvmfs/${CVMFS_REPOSITORY} + spacemonclient install dir (boostraped for comp) </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cvmfs-cms-install-package">cvmfs-cms-install-package</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#cmsrep-webhook">cmsrep-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-stale-lock"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-stale-lock"><b>CVMFS-CMS-STALE-LOCK</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-test"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-test"><b>CVMFS-CMS-TEST</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-update-git-mirror"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-update-git-mirror"><b>CVMFS-CMS-UPDATE-GIT-MIRROR</b></a></li><br />
+<p> This job mirrors cmssw to cms.cern.ch as described here:
+
+https://github.com/bockjoo/cvmfs-cms-install-scripts/blob/master/update_cmssw_git_mirror.sh#L191
+Thats the only function that executes, as it exits right after:
+https://github.com/bockjoo/cvmfs-cms-install-scripts/blob/master/update_cmssw_git_mirror.sh#L50
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-update-gridpacks"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-update-gridpacks"><b>CVMFS-CMS-UPDATE-GRIDPACKS</b></a></li><br />
+<p> This job updates gridpacks on cvmfs as described here:
+<br> https://github.com/mrodozov/cvmfs-cms-install-scripts/blob/master/cron_rsync_generator_package_from_eos_individual.sh </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-update-lhapdf"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-update-lhapdf"><b>CVMFS-CMS-UPDATE-LHAPDF</b></a></li><br />
+<p> This job updates gridpacks on cvmfs as described here:
+<br> https://github.com/mrodozov/cvmfs-cms-install-scripts/blob/master/cron_rsync_generator_package_from_eos_individual.sh </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-cms-update-siteconf"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-cms-update-siteconf"><b>CVMFS-CMS-UPDATE-SITECONF</b></a></li><br />
+<p> This job updates SITECONF on cvmfs as described here:
+<br> https://github.com/mrodozov/cvmfs-cms-install-scripts/blob/master/cron_install_cmssw.sh#L562  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-deploy-baseline"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-deploy-baseline"><b>CVMFS-DEPLOY-BASELINE</b></a></li><br />
+<p> Copy baseline results from cmssdt for an IB </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cvmfs-publish-baseline">cvmfs-publish-baseline</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cvmfs-publish-baseline">cvmfs-publish-baseline</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-run-baseline">ib-run-baseline</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-gc"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-gc"><b>CVMFS-GC</b></a></li><br />
+<p> This runs CVMFS GC (once a week) </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-new-gc"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-new-gc"><b>CVMFS-NEW-GC</b></a></li><br />
+<p> This runs CVMFS GC (once a week) </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-publish-baseline"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-publish-baseline"><b>CVMFS-PUBLISH-BASELINE</b></a></li><br />
+<p> Copy baseline results from cmssdt for an IB and deploy them on cvmfs </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#cvmfs-deploy-baseline">cvmfs-deploy-baseline</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs-unpack-container"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs-unpack-container"><b>CVMFS-UNPACK-CONTAINER</b></a></li><br />
+<p> This jobs install an IB on /cvmfs/cms-ib.cern.ch. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cvmfs_publish_remote_dir">cvmfs_publish_remote_dir</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cvmfs_publish_remote_dir">cvmfs_publish_remote_dir</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#build-docker-container">build-docker-container</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="cvmfs_publish_remote_dir"><a href="https://cmssdt.cern.ch/jenkins/job/cvmfs_publish_remote_dir"><b>CVMFS_PUBLISH_REMOTE_DIR</b></a></li><br />
+<p> This jobs install an IB on /cvmfs/cms-ib.cern.ch. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#cvmfs-unpack-container">cvmfs-unpack-container</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="das-query"><a href="https://cmssdt.cern.ch/jenkins/job/das-query"><b>DAS-QUERY</b></a></li><br />
+<p> Job to run das client and cache the results in github to be used by IBs. </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="dataset-to-ibeos"><a href="https://cmssdt.cern.ch/jenkins/job/dataset-to-ibeos"><b>DATASET-TO-IBEOS</b></a></li><br />
+<p> Copies root files for a given dataset localy on eos to be used from local cache (eos) if they diasappear from the site where they resided.  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#update-ibeos-cache">update-ibeos-cache</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="deploy-cms-repo"><a href="https://cmssdt.cern.ch/jenkins/job/deploy-cms-repo"><b>DEPLOY-CMS-REPO</b></a></li><br />
+<p> Updates cms-bot clone on Jenkins master </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#github-push-hook">github-push-hook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="deploy-cmsdoxygen"><a href="https://cmssdt.cern.ch/jenkins/job/deploy-cmsdoxygen"><b>DEPLOY-CMSDOXYGEN</b></a></li><br />
+<p> This job deploys <a href="http://doxygen.org">doxygen</a> scripts to web server. 
+It is later used to serve <a href="http://cmsdoxygen.web.cern.ch/cmsdoxygen/">CMSSW documentation</a><br>
+<b>Could be automated by github hooks.<b> </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="docker-dmwm-CMSKubernetes"><a href="https://cmssdt.cern.ch/jenkins/job/docker-dmwm-CMSKubernetes"><b>DOCKER-DMWM-CMSKUBERNETES</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#github-webhook">github-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="docker-monitor-repos"><a href="https://cmssdt.cern.ch/jenkins/job/docker-monitor-repos"><b>DOCKER-MONITOR-REPOS</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="dockerhub_synchronization"><a href="https://cmssdt.cern.ch/jenkins/job/dockerhub_synchronization"><b>DOCKERHUB_SYNCHRONIZATION</b></a></li><br />
+<p> Synchronizes Docker Hub Organization's setup (repositories/teams/members/permissions) with docker configuration yaml file. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#github-webhook">github-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="dxr-cmssw-index"><a href="https://cmssdt.cern.ch/jenkins/job/dxr-cmssw-index"><b>DXR-CMSSW-INDEX</b></a></li><br />
+<p> Index <a href="https://cmssdt.cern.ch/dxr">CMSSW</a> documentation using DXR.  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="es-close-indexes"><a href="https://cmssdt.cern.ch/jenkins/job/es-close-indexes"><b>ES-CLOSE-INDEXES</b></a></li><br />
+<p> This job keeps last 6 weeks (1.5 months) of data in Elasticsearch open, and it closes older indexes (archive it).
+We do not care about older data. By doing it we make Elasticsearch faster.  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="es-open-indexes"><a href="https://cmssdt.cern.ch/jenkins/job/es-open-indexes"><b>ES-OPEN-INDEXES</b></a></li><br />
+<p> This job keeps last 4 weeks of data in Elasticsearch open, and it closes older indexes (archive it).
+We do not care about older data. By doing it we make Elasticsearch faster.  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="fix-backport-prs"><a href="https://cmssdt.cern.ch/jenkins/job/fix-backport-prs"><b>FIX-BACKPORT-PRS</b></a></li><br />
+<p> Periodicaly runs https://github.com/cms-sw/cms-bot/blob/master/fix-backport-labels.py to check if the PR on master, which backport has been requested, is merged.
+If the original PR has been merged, it changes all opened backport PRs of it from backport(blue) to backport-ok(green) </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="gh-teams"><a href="https://cmssdt.cern.ch/jenkins/job/gh-teams"><b>GH-TEAMS</b></a></li><br />
+<p> printing some python file	 </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="git-mirror-repository"><a href="https://cmssdt.cern.ch/jenkins/job/git-mirror-repository"><b>GIT-MIRROR-REPOSITORY</b></a></li><br />
+<p> Mirror one git repository.
+<br>
+<b>Q/A:</b>
+
+<ul>
+  <li>Q: Failed due to `remote: GitLab: Failed to authorize your Git request: internal API unreachable`</li>
+  <li>A: Problem with GitLab. Just file a ticket.</li>
+</ul> </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#github-push-hook">github-push-hook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="git-reference-cms-ib"><a href="https://cmssdt.cern.ch/jenkins/job/git-reference-cms-ib"><b>GIT-REFERENCE-CMS-IB</b></a></li><br />
+<p> Create GIT Reference for cms-sw/cmssw repository in /cvmfs/cms-ib.cern.ch/git/cms-sw.
+This is automatically triggered by "git push" to cmssw repo. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#github-push-hook">github-push-hook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="git-repo-size"><a href="https://cmssdt.cern.ch/jenkins/job/git-repo-size"><b>GIT-REPO-SIZE</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="github-hooks"><a href="https://cmssdt.cern.ch/jenkins/job/github-hooks"><b>GITHUB-HOOKS</b></a></li><br />
+<p> Adds and configures web hooks in github repositories. The web hooks are then used to send some events to a specified url
+and then a jenkins job is triggered based on the information passed from the web hook , as jenkins parameters.  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="github-labels"><a href="https://cmssdt.cern.ch/jenkins/job/github-labels"><b>GITHUB-LABELS</b></a></li><br />
+<p> Adds and configures web hooks in github repositories. The web hooks are then used to send some events to a specified url
+and then a jenkins job is triggered based on the information passed from the web hook , as jenkins parameters.  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="github-push-hook"><a href="https://cmssdt.cern.ch/jenkins/job/github-push-hook"><b>GITHUB-PUSH-HOOK</b></a></li><br />
+<p> Updates cms-bot clone on cmssdt.
+This job is also triggered via github web hook. Please do not add/remove any parameters of this job otherwise github web hooks will not be able to triiger the job </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#auto-forward-port">auto-forward-port</a>  <a href="#cms-containers-checks-tags">cms-containers-checks-tags</a>  <a href="#deploy-cms-repo">deploy-cms-repo</a>  <a href="#git-mirror-repository">git-mirror-repository</a>  <a href="#git-reference-cms-ib">git-reference-cms-ib</a>  <a href="#web-update-cmssdt-ib">web-update-cmssdt-ib</a>  <a href="#web-update-logReader">web-update-logReader</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#deploy-cms-repo">deploy-cms-repo</a> <a href="#auto-forward-port">auto-forward-port</a> <a href="#git-reference-cms-ib">git-reference-cms-ib</a> <a href="#git-mirror-repository">git-mirror-repository</a> <a href="#web-update-cmssdt-ib">web-update-cmssdt-ib</a> <a href="#cms-containers-checks-tags">cms-containers-checks-tags</a> <a href="#web-update-logReader">web-update-logReader</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#github-webhook">github-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="GitHub-refactor-cmssw"><a href="https://cmssdt.cern.ch/jenkins/job/GitHub-refactor-cmssw"><b>GITHUB-REFACTOR-CMSSW</b></a></li><br />
+<p> Refactors the CMSSW repo. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#GitHub-refactor-cmssw-module">GitHub-refactor-cmssw-module</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#GitHub-refactor-cmssw-module">GitHub-refactor-cmssw-module</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="GitHub-refactor-cmssw-module"><a href="https://cmssdt.cern.ch/jenkins/job/GitHub-refactor-cmssw-module"><b>GITHUB-REFACTOR-CMSSW-MODULE</b></a></li><br />
+<p> Refactors one module of CMSSW and makes an PR. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#GitHub-refactor-cmssw">GitHub-refactor-cmssw</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="github-webhook"><a href="https://cmssdt.cern.ch/jenkins/job/github-webhook"><b>GITHUB-WEBHOOK</b></a></li><br />
+<p> This is cms bot job which is triggered by github webhooks ( https://cmssdt.cern.ch/SDT/cgi-bin/github_webhook ) for every valid comment added to github PRs.
+Also it runsevery 30mins to make sure any webhooks were not missed.  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cleanup-cms-sw-io-history">cleanup-cms-sw-io-history</a>  <a href="#cms-bot">cms-bot</a>  <a href="#cms-prs-cache">cms-prs-cache</a>  <a href="#cms-prs-files">cms-prs-files</a>  <a href="#comp-bot">comp-bot</a>  <a href="#docker-dmwm-CMSKubernetes">docker-dmwm-CMSKubernetes</a>  <a href="#dockerhub_synchronization">dockerhub_synchronization</a>  <a href="#github-push-hook">github-push-hook</a>  <a href="#query-build-release-issues">query-build-release-issues</a>  <a href="#update-data-tag-on-pr-merge">update-data-tag-on-pr-merge</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#comp-bot">comp-bot</a> <a href="#github-push-hook">github-push-hook</a> <a href="#cms-prs-cache">cms-prs-cache</a> <a href="#query-build-release-issues">query-build-release-issues</a> <a href="#cms-bot">cms-bot</a> <a href="#dockerhub_synchronization">dockerhub_synchronization</a> <a href="#docker-dmwm-CMSKubernetes">docker-dmwm-CMSKubernetes</a> <a href="#cms-prs-files">cms-prs-files</a> <a href="#update-data-tag-on-pr-merge">update-data-tag-on-pr-merge</a> <a href="#cleanup-cms-sw-io-history">cleanup-cms-sw-io-history</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="grid-check-jobs"><a href="https://cmssdt.cern.ch/jenkins/job/grid-check-jobs"><b>GRID-CHECK-JOBS</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="grid-check-nodes"><a href="https://cmssdt.cern.ch/jenkins/job/grid-check-nodes"><b>GRID-CHECK-NODES</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#grid-keep-node-busy">grid-keep-node-busy</a>  <a href="#grid-webhook">grid-webhook</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#grid-webhook">grid-webhook</a> <a href="#grid-keep-node-busy">grid-keep-node-busy</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="grid-create-gpu-node"><a href="https://cmssdt.cern.ch/jenkins/job/grid-create-gpu-node"><b>GRID-CREATE-GPU-NODE</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="grid-create-node"><a href="https://cmssdt.cern.ch/jenkins/job/grid-create-node"><b>GRID-CREATE-NODE</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#grid-webhook">grid-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="grid-keep-node-busy"><a href="https://cmssdt.cern.ch/jenkins/job/grid-keep-node-busy"><b>GRID-KEEP-NODE-BUSY</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#grid-check-nodes">grid-check-nodes</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="grid-make-node-available"><a href="https://cmssdt.cern.ch/jenkins/job/grid-make-node-available"><b>GRID-MAKE-NODE-AVAILABLE</b></a></li><br />
+<p> Check if there are jobs queued for condor nodes, and if so kill placeholder job. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#jenkins-kill-job">jenkins-kill-job</a>  <a href="#jenkins-trigger-dynamic-job">jenkins-trigger-dynamic-job</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#jenkins-kill-job">jenkins-kill-job</a> <a href="#jenkins-trigger-dynamic-job">jenkins-trigger-dynamic-job</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="grid-shutdown-node"><a href="https://cmssdt.cern.ch/jenkins/job/grid-shutdown-node"><b>GRID-SHUTDOWN-NODE</b></a></li><br />
+<p> shutdowns condor job.
+
+TODO: needs to check if manuall deletion is working. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#grid-shutdown-node">grid-shutdown-node</a>  <a href="#jenkins-delete-node">jenkins-delete-node</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#grid-shutdown-node">grid-shutdown-node</a> <a href="#jenkins-delete-node">jenkins-delete-node</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#grid-webhook">grid-webhook</a> <a href="#grid-shutdown-node">grid-shutdown-node</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="grid-test-gpu"><a href="https://cmssdt.cern.ch/jenkins/job/grid-test-gpu"><b>GRID-TEST-GPU</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="grid-test-submit"><a href="https://cmssdt.cern.ch/jenkins/job/grid-test-submit"><b>GRID-TEST-SUBMIT</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="grid-webhook"><a href="https://cmssdt.cern.ch/jenkins/job/grid-webhook"><b>GRID-WEBHOOK</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#grid-create-node">grid-create-node</a>  <a href="#grid-shutdown-node">grid-shutdown-node</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#grid-shutdown-node">grid-shutdown-node</a> <a href="#grid-create-node">grid-create-node</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#grid-check-nodes">grid-check-nodes</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-build-logs"><a href="https://cmssdt.cern.ch/jenkins/job/ib-build-logs"><b>IB-BUILD-LOGS</b></a></li><br />
+<p> It is build periodically (H/30 * * * *). Runs on cmssdt. Projects to build: update-github-pages </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#update-github-pages">update-github-pages</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#build-any-ib">build-any-ib</a> <a href="#build-fwlite-ib">build-fwlite-ib</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-cache-to-eos"><a href="https://cmssdt.cern.ch/jenkins/job/ib-cache-to-eos"><b>IB-CACHE-TO-EOS</b></a></li><br />
+<p> Job to run das client and cache the results in github to be used by IBs. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#update-ibeos-cache">update-ibeos-cache</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#update-ibeos-cache">update-ibeos-cache</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-install-cvmfs"><a href="https://cmssdt.cern.ch/jenkins/job/ib-install-cvmfs"><b>IB-INSTALL-CVMFS</b></a></li><br />
+<p> This jobs install an IB on /cvmfs/cms-ib.cern.ch. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#ib-validation">ib-validation</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#build-any-ib">build-any-ib</a> <a href="#ib-tag-and-schdule">ib-tag-and-schdule</a> <a href="#cmsrep-webhook">cmsrep-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-install-new-cvmfs"><a href="https://cmssdt.cern.ch/jenkins/job/ib-install-new-cvmfs"><b>IB-INSTALL-NEW-CVMFS</b></a></li><br />
+<p> This jobs install an IB on /cvmfs/cms-ib.cern.ch. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#build-any-ib">build-any-ib</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-additional-tests"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-additional-tests"><b>IB-RUN-ADDITIONAL-TESTS</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>Sub Projects:</b>  <a href="#ib-run-${ADDITIONAL_TEST_NAME}">ib-run-${ADDITIONAL_TEST_NAME}</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-schedule-additional-tests">ib-schedule-additional-tests</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-addons"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-addons"><b>IB-RUN-ADDONS</b></a></li><br />
+<p> Runs addons test on IB. Results are shown as "Other test" in the 
+<a href="https://cmssdt.cern.ch/SDT/html/cmssdt-ib/">IB page</a> for the IB.   </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-validation">ib-validation</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-baseline"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-baseline"><b>IB-RUN-BASELINE</b></a></li><br />
+<p> This job runs a few tests only for the IB, for comparison with those ran by the pull request.
+
+<p><b> Latest failures.</b></p>
+<ul>
+  <li>
+    Failed due to RelVal Error. The problem was that RelVal nr. 
+    10224 was unable to download a randomly chosen sample file 
+    (file is stored somewhere on the GRID and then must be fetched using a client). 
+    The file is inaccessible, it should not appear on the list, but it does. 
+    Restarting the job did the trick since another file, that actually exist was selected. 
+  </li>
+</ul> </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#cvmfs-deploy-baseline">cvmfs-deploy-baseline</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#cvmfs-deploy-baseline">cvmfs-deploy-baseline</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-cfipython"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-cfipython"><b>IB-RUN-CFIPYTHON</b></a></li><br />
+<p> This job gets the cfipython files for a cmssw release and push the changes to cms-sw/cmssw-cfipython repo. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#update-release-map">update-release-map</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-check-headers"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-check-headers"><b>IB-RUN-CHECK-HEADERS</b></a></li><br />
+<p> Check for missing headers and parse the log for all errors (clang modules) </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-flawfinder"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-flawfinder"><b>IB-RUN-FLAWFINDER</b></a></li><br />
+<p> Runs <a href="https://www.dwheeler.com/flawfinder/"> Flawfinder</a> test on IB. </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-geometry"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-geometry"><b>IB-RUN-GEOMETRY</b></a></li><br />
+<p> Runs geometry comparison tests for each IB </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-gpu"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-gpu"><b>IB-RUN-GPU</b></a></li><br />
+<p> Runs Quality Assurance (QA) test on IB. Rezulst are available at 
+<a href="https://cmssdt.cern.ch/SDT/html/cmssdt-ib/">IB page's</a> Q/A section. </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-HLT"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-HLT"><b>IB-RUN-HLT</b></a></li><br />
+<p> Appends job's time out information into jenkins.log file. </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-igprof"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-igprof"><b>IB-RUN-IGPROF</b></a></li><br />
+<p> Runs <a href="https://igprof.org/">IgProf</a> on IB.
+Results are available on <a href="https://cmssdt.cern.ch/SDT/html/cmssdt-ib">IB page</a>. 
+
+<br>
+run-ib-igprof is executed with `pp` flag for `performance profiling`.
+
+<br><br>
+
+<b>Q/a:</b>
+
+<ul>
+  <li>
+    Q: Error: near line 63: unrecognized token: "" 
+  </li>  
+  <li>
+    A: Igprof has a bug that from time to time it returns unrecognizable character which fails the job. There is no easy fix, so we glance over it.
+  	However, job will execute all steps and then fail.
+  </li>
+</ul>
+
+
+<ul>
+  <li>
+    Q: `IOError: [Errno 2] No such file or directory: 'runall-report-step123-.log'`
+  </li>  
+  <li>
+    A: No idea... Yet.
+  </li>
+</ul>
+
+
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-invalid-includes"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-invalid-includes"><b>IB-RUN-INVALID-INCLUDES</b></a></li><br />
+<p> Runs iwyu logs parsing for each IB </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-iwyu"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-iwyu"><b>IB-RUN-IWYU</b></a></li><br />
+<p> Runs iwyu logs parsing for each IB </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-lizard"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-lizard"><b>IB-RUN-LIZARD</b></a></li><br />
+<p> Runs <a href="https://github.com/terryyin/lizard">Lizard</a>, a Cyclomatic Complexity Analyzer, on IB.
+Results are available on <a href="https://cmssdt.cern.ch/SDT/html/cmssdt-ib">IB page</a>. 
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-material-budget"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-material-budget"><b>IB-RUN-MATERIAL-BUDGET</b></a></li><br />
+<p> Runs Validation/Geometry/test/runP_Tracker_cfg.py and MaterialBudget.C for an IB </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#compare-material-budget">compare-material-budget</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-pr-tests"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-pr-tests"><b>IB-RUN-PR-TESTS</b></a></li><br />
+<p> Build mutiple  a pull requests. 
+Same puprose as `ib-any-integration`, just different script is called.
+
+
+ </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#abort-pr-tests">abort-pr-tests</a>  <a href="#compare-root-files-short-matrix">compare-root-files-short-matrix</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#abort-pr-tests">abort-pr-tests</a> <a href="#compare-root-files-short-matrix">compare-root-files-short-matrix</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-schedule-pr-tests">ib-schedule-pr-tests</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-profiling"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-profiling"><b>IB-RUN-PROFILING</b></a></li><br />
+<p> Runs <a href="https://igprof.org/">IgProf</a> on IB.
+
+
+
+
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-python3"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-python3"><b>IB-RUN-PYTHON3</b></a></li><br />
+<p> Runs iwyu logs parsing for each IB </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-qa"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-qa"><b>IB-RUN-QA</b></a></li><br />
+<p> Runs Quality Assurance (QA) test on IB. Rezulst are available at 
+<a href="https://cmssdt.cern.ch/SDT/html/cmssdt-ib/">IB page's</a> Q/A section. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-validation">ib-validation</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-relvals"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-relvals"><b>IB-RUN-RELVALS</b></a></li><br />
+<p> The job runs release validations, as validations are separated on pieces (1of6 2of6 etc) </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#process-relval-logs">process-relval-logs</a>  <a href="#update-das-queries">update-das-queries</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#update-das-queries">update-das-queries</a> <a href="#process-relval-logs">process-relval-logs</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-validation">ib-validation</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-static-checks"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-static-checks"><b>IB-RUN-STATIC-CHECKS</b></a></li><br />
+<p> Runs a few tests only for the IB, for comparison with those ran by the pull request. </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-run-valgrind"><a href="https://cmssdt.cern.ch/jenkins/job/ib-run-valgrind"><b>IB-RUN-VALGRIND</b></a></li><br />
+<p> This job runs valgrind tool for selected IBs when build IB job is complete.    </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-schedule"><a href="https://cmssdt.cern.ch/jenkins/job/ib-schedule"><b>IB-SCHEDULE</b></a></li><br />
+<p> This is a warpper job which runs daily at 11h and 23h (except no IB at 23h Sat & 11h Sun but a special IB at Sun 00h) to triger 'ib-tag-and-schdule' sub-project.<br/>
+This was created to avoid the issue with <a href="https://wiki.jenkins.io/display/JENKINS/Dynamic+Parameter+Plug-in">Jenkins Dynamic Parameters</a>.
+ </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#ib-tag-and-schdule">ib-tag-and-schdule</a>  <a href="#sync-patatrack-branch">sync-patatrack-branch</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#sync-patatrack-branch">sync-patatrack-branch</a> <a href="#ib-tag-and-schdule">ib-tag-and-schdule</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-schedule-additional-tests"><a href="https://cmssdt.cern.ch/jenkins/job/ib-schedule-additional-tests"><b>IB-SCHEDULE-ADDITIONAL-TESTS</b></a></li><br />
+<p> Wrapper project to schedule aditonal test such as Flawfinder, Lizard, IgProf, etc. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#ib-run-additional-tests">ib-run-additional-tests</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#ib-run-additional-tests">ib-run-additional-tests</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-validation">ib-validation</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-schedule-pr-tests"><a href="https://cmssdt.cern.ch/jenkins/job/ib-schedule-pr-tests"><b>IB-SCHEDULE-PR-TESTS</b></a></li><br />
+<p> Build a pull request </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#ib-run-pr-tests">ib-run-pr-tests</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#ib-run-pr-tests">ib-run-pr-tests</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#cms-bot">cms-bot</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-tag-and-schdule"><a href="https://cmssdt.cern.ch/jenkins/job/ib-tag-and-schdule"><b>IB-TAG-AND-SCHDULE</b></a></li><br />
+<p> This job tags and schedules all the IBs.<br/>
+It reads the <a href="https://raw.githubusercontent.com/cms-sw/cms-bot/master/config.map">cms-bot/config.map</a> to find all available CMSSW release cycles and tag them in github.
+Once tags is done then it triggers 'build-any-ib' sub-job to actually build IBs for all possible architectures (mentioned in <a href="https://raw.githubusercontent.com/cms-sw/cms-bot/master/config.map">cms-bot/config.map</a>).
+For Developement IB, it also triggers the generation of <a href="https://cmssdt.cern.ch/lxr">LXR indexes</a>
+
+For Sunday's 00h IBs, it also resets the CMSREP weekly repositories by building a dummy package and uploading it to cms.weekN. It also 
+then triggers 'ib-install-cvmfs' sub-job to get the new cms.weekN deployed on the /cvmfs/cms-ib.cern.ch </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#build-any-ib">build-any-ib</a>  <a href="#ib-install-cvmfs">ib-install-cvmfs</a>  <a href="#lxr-checkout-version">lxr-checkout-version</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#build-any-ib">build-any-ib</a> <a href="#lxr-checkout-version">lxr-checkout-version</a> <a href="#ib-install-cvmfs">ib-install-cvmfs</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-schedule">ib-schedule</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="ib-validation"><a href="https://cmssdt.cern.ch/jenkins/job/ib-validation"><b>IB-VALIDATION</b></a></li><br />
+<p> Validates the integration builds. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#ib-run-addons">ib-run-addons</a>  <a href="#ib-run-qa">ib-run-qa</a>  <a href="#ib-run-relvals">ib-run-relvals</a>  <a href="#ib-schedule-additional-tests">ib-schedule-additional-tests</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#ib-run-addons">ib-run-addons</a> <a href="#ib-run-qa ">ib-run-qa </a> <a href="#ib-run-relvals ">ib-run-relvals </a> <a href="#ib-schedule-additional-tests">ib-schedule-additional-tests</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-install-cvmfs">ib-install-cvmfs</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="install-cvmfs-package"><a href="https://cmssdt.cern.ch/jenkins/job/install-cvmfs-package"><b>INSTALL-CVMFS-PACKAGE</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-add-job"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-add-job"><b>JENKINS-ADD-JOB</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-add-job-to-anthoer-server"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-add-job-to-anthoer-server"><b>JENKINS-ADD-JOB-TO-ANTHOER-SERVER</b></a></li><br />
+<p> This is a helper job to copy a Jenkins Project from this Jenkins master to another Jenkins master. </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-auto-label-nodes"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-auto-label-nodes"><b>JENKINS-AUTO-LABEL-NODES</b></a></li><br />
+<p> This job is to start those nodes which only has LABEL set to auto-label.<br/>
+This happens when jenkins is restart and labels are read from nodes/config.xml.<br/>
+We need to make a initial connection to the slave to get its labels assigned.
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-backup"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-backup"><b>JENKINS-BACKUP</b></a></li><br />
+<p> This job takes the backup of Jenkins master configuration (which includes projects, jenkins configuration, slaves, secrets etc.)
+Backups jenkins scripts on https://github.com/cms-sw/jenkins-backup.git </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-delete-node"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-delete-node"><b>JENKINS-DELETE-NODE</b></a></li><br />
+<p> Deletes nodes from jenkins and then deletes it on openstack. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#openstack-delete-vms">openstack-delete-vms</a> <a href="#grid-shutdown-node">grid-shutdown-node</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-disable-jobs"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-disable-jobs"><b>JENKINS-DISABLE-JOBS</b></a></li><br />
+<p> Disable all nodes that started with the provided wildcard string,
+example parameter
+cmsbuild* 
+would enable all cmsbuild machines found </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-disable-nodes"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-disable-nodes"><b>JENKINS-DISABLE-NODES</b></a></li><br />
+<p> Disable all jenkins slaves based on the slave wildcard filter. </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-download-rpm"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-download-rpm"><b>JENKINS-DOWNLOAD-RPM</b></a></li><br />
+<p> This downloads a jenkins RPM from https://pkg.jenkins.io/redhat-stable/ and 
+make it available via http://cmsrep.cern.ch/cmssw/download/jenkins
+for faster access to CMs internal jenkns servers </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-elasticsearch-monitor"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-elasticsearch-monitor"><b>JENKINS-ELASTICSEARCH-MONITOR</b></a></li><br />
+<p> This job runs a python script to push useful info from jenkins build logs to elasticsearch
+
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-enable-jobs"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-enable-jobs"><b>JENKINS-ENABLE-JOBS</b></a></li><br />
+<p> Enable all Jenkins projects based on the wildcard filter. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#jenkins-initialize">jenkins-initialize</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-enable-nodes"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-enable-nodes"><b>JENKINS-ENABLE-NODES</b></a></li><br />
+<p> Enables all nodes that started with the provided wildcard string,
+example parameter
+cmsbuild* 
+would enable all cmsbuild machines found </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-env"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-env"><b>JENKINS-ENV</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-initialize"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-initialize"><b>JENKINS-INITIALIZE</b></a></li><br />
+<p> This project is run once a new Jenkins instance is setup or upgrated to a new version.
+This runs some sub-projects to check if basic functionality of jenkins is working. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#jenkins-enable-jobs">jenkins-enable-jobs</a>  <a href="#jenkins-installation-cli-test">jenkins-installation-cli-test</a>  <a href="#jenkins-installation-trigger-test">jenkins-installation-trigger-test</a>  <a href="#jenkins-webhook">jenkins-webhook</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#jenkins-enable-jobs">jenkins-enable-jobs</a> <a href="#jenkins-installation-trigger-test">jenkins-installation-trigger-test</a> <a href="#jenkins-installation-trigger-test">jenkins-installation-trigger-test</a> <a href="#jenkins-installation-trigger-test">jenkins-installation-trigger-test</a> <a href="#jenkins-webhook">jenkins-webhook</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-installation-cli-test"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-installation-cli-test"><b>JENKINS-INSTALLATION-CLI-TEST</b></a></li><br />
+<p> This is Jenkins installation tests project. It tests if various Jenkins Command-line interface service are working. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#jenkins-initialize">jenkins-initialize</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-installation-trigger-cli"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-installation-trigger-cli"><b>JENKINS-INSTALLATION-TRIGGER-CLI</b></a></li><br />
+<p> Jenkins installaton test job to test the triggering of a sub-project via Command-line-interface. </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-installation-trigger-test"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-installation-trigger-test"><b>JENKINS-INSTALLATION-TRIGGER-TEST</b></a></li><br />
+<p> This is Jenkins installation test project. This tests the triggering of a sub-project. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#jenkins-initialize">jenkins-initialize</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-kill-job"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-kill-job"><b>JENKINS-KILL-JOB</b></a></li><br />
+<p> Kill a <b>specific</b> running job. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#grid-make-node-available">grid-make-node-available</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-projects-report"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-projects-report"><b>JENKINS-PROJECTS-REPORT</b></a></li><br />
+<p> This job runs a groovy script to dump jenkins
+projects info , which is further read by python to 
+display it in html form. The current page you are viewing is generated and updated by this job.
+
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-projects-wiki-update"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-projects-wiki-update"><b>JENKINS-PROJECTS-WIKI-UPDATE</b></a></li><br />
+<p> This job runs a groovy script to dump jenkinsprojects info , which is further read by python to 
+display it in markdown form. It is later imported to CMSSDT wiki.
+
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-restart-slaves"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-restart-slaves"><b>JENKINS-RESTART-SLAVES</b></a></li><br />
+<p> This jobs looks for jenkins slaves which went offline due to job failures
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-search-release-build"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-search-release-build"><b>JENKINS-SEARCH-RELEASE-BUILD</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#jenkins-search-release-build">jenkins-search-release-build</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#jenkins-search-release-build">jenkins-search-release-build</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#jenkins-search-release-build">jenkins-search-release-build</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-buggy-node"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-buggy-node"><b>JENKINS-TEST-BUGGY-NODE</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-build-any-ib"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-build-any-ib"><b>JENKINS-TEST-BUILD-ANY-IB</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-code-format"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-code-format"><b>JENKINS-TEST-CODE-FORMAT</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-command-on-slave"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-command-on-slave"><b>JENKINS-TEST-COMMAND-ON-SLAVE</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-container"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-container"><b>JENKINS-TEST-CONTAINER</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-gpu"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-gpu"><b>JENKINS-TEST-GPU</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-groovy-labels"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-groovy-labels"><b>JENKINS-TEST-GROOVY-LABELS</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-indirect-slave"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-indirect-slave"><b>JENKINS-TEST-INDIRECT-SLAVE</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-install-rucio"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-install-rucio"><b>JENKINS-TEST-INSTALL-RUCIO</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-job1"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-job1"><b>JENKINS-TEST-JOB1</b></a></li><br />
+<p> Jenkins installation test job 1 to check for the parameters passed from a parent job. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#jenkins-test-ws-trigger-job">jenkins-test-ws-trigger-job</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-job2"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-job2"><b>JENKINS-TEST-JOB2</b></a></li><br />
+<p> Jenkins tests Project to test jenkins functionality. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#jenkins-test-ws-trigger-job">jenkins-test-ws-trigger-job</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-kerberos"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-kerberos"><b>JENKINS-TEST-KERBEROS</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#jenkins-test-slaves">jenkins-test-slaves</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-localcli"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-localcli"><b>JENKINS-TEST-LOCALCLI</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-lxplus-future"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-lxplus-future"><b>JENKINS-TEST-LXPLUS-FUTURE</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-patch-checkout"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-patch-checkout"><b>JENKINS-TEST-PATCH-CHECKOUT</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-shared-node"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-shared-node"><b>JENKINS-TEST-SHARED-NODE</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-singularity-slave"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-singularity-slave"><b>JENKINS-TEST-SINGULARITY-SLAVE</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-slave"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-slave"><b>JENKINS-TEST-SLAVE</b></a></li><br />
+<p> This Jenkins project test various CMS Jenkins slaves and makes sure that various communication channels 
+between Jenkins Master/slave  and slave and various services are working. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#jenkins-test-slaves">jenkins-test-slaves</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-slaves"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-slaves"><b>JENKINS-TEST-SLAVES</b></a></li><br />
+<p> Jenkins project to trigger the jenkins slave test job for each selected slave </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#jenkins-test-kerberos">jenkins-test-kerberos</a>  <a href="#jenkins-test-slave">jenkins-test-slave</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#jenkins-test-slave">jenkins-test-slave</a> <a href="#jenkins-test-kerberos">jenkins-test-kerberos</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-workspace"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-workspace"><b>JENKINS-TEST-WORKSPACE</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-test-ws-trigger-job"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-test-ws-trigger-job"><b>JENKINS-TEST-WS-TRIGGER-JOB</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#jenkins-test-job1">jenkins-test-job1</a>  <a href="#jenkins-test-job2">jenkins-test-job2</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#jenkins-test-job1">jenkins-test-job1</a> <a href="#jenkins-test-job2">jenkins-test-job2</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-trigger-dynamic-job"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-trigger-dynamic-job"><b>JENKINS-TRIGGER-DYNAMIC-JOB</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>Sub Projects:</b>  <a href="#${JENKINS_DYNAMIC_JOB_NAME}">${JENKINS_DYNAMIC_JOB_NAME}</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#grid-make-node-available">grid-make-node-available</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="jenkins-webhook"><a href="https://cmssdt.cern.ch/jenkins/job/jenkins-webhook"><b>JENKINS-WEBHOOK</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#jenkins-initialize">jenkins-initialize</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="kill-build-release"><a href="https://cmssdt.cern.ch/jenkins/job/kill-build-release"><b>KILL-BUILD-RELEASE</b></a></li><br />
+<p> Aborts and kills a release building process.  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#abort-release">abort-release</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="kill-hanging-jobs"><a href="https://cmssdt.cern.ch/jenkins/job/kill-hanging-jobs"><b>KILL-HANGING-JOBS</b></a></li><br />
+<p> This project checks all selected host for process running longer then set treshold (default 2 days) and kill them. 
+<br><br>
+<b>Q/A:</b>
+
+<ul>
+  <li>
+    <b>Q:</b> The job is taken more time then is supposed to (status bar becomes red).
+  </li>
+  <li>
+    <b>A:</b> Most likely one of the machine is in a weird state (last time it was issues with CMSFS) and job hangs when connecting to it.
+    IF it is a cmsbuildXX machine, just delete it and restart the job.
+  </li>
+</ul>
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="lfn-to-ibeos"><a href="https://cmssdt.cern.ch/jenkins/job/lfn-to-ibeos"><b>LFN-TO-IBEOS</b></a></li><br />
+<p> Job to run das client and cache the results in github to be used by IBs. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#lfn-to-ibeos">lfn-to-ibeos</a>  <a href="#update-ibeos-cache">update-ibeos-cache</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#update-ibeos-cache">update-ibeos-cache</a> <a href="#lfn-to-ibeos">lfn-to-ibeos</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#lfn-to-ibeos">lfn-to-ibeos</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="lxr-check"><a href="https://cmssdt.cern.ch/jenkins/job/lxr-check"><b>LXR-CHECK</b></a></li><br />
+<p> This job checks if https://cmssdt.cern.ch/lxr/ is acessable and if not, starts <a href="https://cmssdt.cern.ch/jenkins/view/All/job/lxr-run-container/">lxr-run-container<a/> job to restart the service. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#lxr-run-container">lxr-run-container</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#lxr-run-container">lxr-run-container</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="lxr-checkout-version"><a href="https://cmssdt.cern.ch/jenkins/job/lxr-checkout-version"><b>LXR-CHECKOUT-VERSION</b></a></li><br />
+<p> This job sets modification timestamp of CMSSW source code according to commit history before 
+indexing it using LXR.<br>
+
+
+LXR index files based on modification timestamp. `<code>git clone</code>` ,however, sets files timestamps 
+to command's execution time. Without it, LXR would index every file, increasing jobs execution duration 
+and database size. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#lxr-generate-index">lxr-generate-index</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#lxr-generate-index">lxr-generate-index</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-tag-and-schdule">ib-tag-and-schdule</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="lxr-generate-index"><a href="https://cmssdt.cern.ch/jenkins/job/lxr-generate-index"><b>LXR-GENERATE-INDEX</b></a></li><br />
+<p> Generates CMSSW index using LXR tool.  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#lxr-checkout-version">lxr-checkout-version</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="lxr-remove-index"><a href="https://cmssdt.cern.ch/jenkins/job/lxr-remove-index"><b>LXR-REMOVE-INDEX</b></a></li><br />
+<p> Deletes index of of IB's older then treshold on LXR ( default 14 days).
+If specified, it also deletes Release index. </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="lxr-run-container"><a href="https://cmssdt.cern.ch/jenkins/job/lxr-run-container"><b>LXR-RUN-CONTAINER</b></a></li><br />
+<p> This job stops and deletes old docker contaner of LXR service and starts new one. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#lxr-check">lxr-check</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="material-budget-ref"><a href="https://cmssdt.cern.ch/jenkins/job/material-budget-ref"><b>MATERIAL-BUDGET-REF</b></a></li><br />
+<p> Runs Validation/Geometry/test/runP_Tracker_cfg.py and MaterialBudget.C for an IB </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="monitor-openstack-vms"><a href="https://cmssdt.cern.ch/jenkins/job/monitor-openstack-vms"><b>MONITOR-OPENSTACK-VMS</b></a></li><br />
+<p> This job run periodically to monitor the running state of vms in openstack , if stopped , creates an email alert. </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="openstack-add-jenkins-slave"><a href="https://cmssdt.cern.ch/jenkins/job/openstack-add-jenkins-slave"><b>OPENSTACK-ADD-JENKINS-SLAVE</b></a></li><br />
+<p> Find all hosts in an hostgroup and add them to jenkins </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#openstack-check-jenkins-slaves">openstack-check-jenkins-slaves</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="openstack-check-jenkins-slaves"><a href="https://cmssdt.cern.ch/jenkins/job/openstack-check-jenkins-slaves"><b>OPENSTACK-CHECK-JENKINS-SLAVES</b></a></li><br />
+<p> Find all hosts in an hostgroup and add then to jenkins </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#openstack-add-jenkins-slave">openstack-add-jenkins-slave</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#openstack-add-jenkins-slave">openstack-add-jenkins-slave</a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="openstack-create-vms"><a href="https://cmssdt.cern.ch/jenkins/job/openstack-create-vms"><b>OPENSTACK-CREATE-VMS</b></a></li><br />
+<p> Create Openstack VMs for a selected hostgroup. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#openstack-create-vms">openstack-create-vms</a>  <a href="#openstack-delete-vms">openstack-delete-vms</a>  <a href="#openstack-delete-volume">openstack-delete-volume</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#openstack-create-vms">openstack-create-vms</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#openstack-create-vms">openstack-create-vms</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="openstack-create-volume"><a href="https://cmssdt.cern.ch/jenkins/job/openstack-create-volume"><b>OPENSTACK-CREATE-VOLUME</b></a></li><br />
+<p> Job to delete openstack instances providing only the name </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="openstack-delete-vm-foreman"><a href="https://cmssdt.cern.ch/jenkins/job/openstack-delete-vm-foreman"><b>OPENSTACK-DELETE-VM-FOREMAN</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#openstack-delete-vms">openstack-delete-vms</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="openstack-delete-vms"><a href="https://cmssdt.cern.ch/jenkins/job/openstack-delete-vms"><b>OPENSTACK-DELETE-VMS</b></a></li><br />
+<p> Job to delete openstack instances providing only the name.
+<b>Only kills builder nodes (cmsbuild)</b> </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#jenkins-delete-node">jenkins-delete-node</a>  <a href="#openstack-delete-vm-foreman">openstack-delete-vm-foreman</a>  <a href="#openstack-delete-vms">openstack-delete-vms</a>  <a href="#openstack-delete-volume">openstack-delete-volume</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#openstack-delete-vms">openstack-delete-vms</a> <a href="#openstack-delete-volume">openstack-delete-volume</a> <a href="#openstack-delete-vm-foreman ">openstack-delete-vm-foreman </a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#openstack-create-vms">openstack-create-vms</a> <a href="#openstack-delete-vms">openstack-delete-vms</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="openstack-delete-volume"><a href="https://cmssdt.cern.ch/jenkins/job/openstack-delete-volume"><b>OPENSTACK-DELETE-VOLUME</b></a></li><br />
+<p> Job to delete openstack instances providing only the name </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#openstack-create-vms">openstack-create-vms</a> <a href="#openstack-delete-vms">openstack-delete-vms</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="process-deprecate-releases"><a href="https://cmssdt.cern.ch/jenkins/job/process-deprecate-releases"><b>PROCESS-DEPRECATE-RELEASES</b></a></li><br />
+<p> This job marks selected realeases depricated in realease map. Grid jobs will not use depricated release and posibly uninstall it.
+This is useful if a specific release contains and needs to be removed.
+
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="process-external-elastic-stats"><a href="https://cmssdt.cern.ch/jenkins/job/process-external-elastic-stats"><b>PROCESS-EXTERNAL-ELASTIC-STATS</b></a></li><br />
+<p> This job process resource metrics jsons for externals </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#build-any-ib">build-any-ib</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="process-relval-logs"><a href="https://cmssdt.cern.ch/jenkins/job/process-relval-logs"><b>PROCESS-RELVAL-LOGS</b></a></li><br />
+<p> This job process partial logs of Relvals and place files accordingly.  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#update-github-pages">update-github-pages</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#update-github-pages">update-github-pages</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-run-relvals">ib-run-relvals</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="query-build-release-issues"><a href="https://cmssdt.cern.ch/jenkins/job/query-build-release-issues"><b>QUERY-BUILD-RELEASE-ISSUES</b></a></li><br />
+<p> Processes a github issue to check if it is requesting the build of a new release.
+If the issue is not requesting any release, it ignores it.  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#abort-release">abort-release</a>  <a href="#build-release">build-release</a>  <a href="#cleanup-auto-build">cleanup-auto-build</a>  <a href="#release-produce-changelog">release-produce-changelog</a>  <a href="#upload-release-setup">upload-release-setup</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#build-release">build-release</a> <a href="#upload-release-setup">upload-release-setup</a> <a href="#cleanup-auto-build">cleanup-auto-build</a> <a href="#release-produce-changelog">release-produce-changelog</a> <a href="#abort-release">abort-release</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#github-webhook">github-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="refresh-cmssdt"><a href="https://cmssdt.cern.ch/jenkins/job/refresh-cmssdt"><b>REFRESH-CMSSDT</b></a></li><br />
+<p> This job updates the cmssw IB page on cmssdt. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#update-github-pages">update-github-pages</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="reindex-elasticsearch-indexes"><a href="https://cmssdt.cern.ch/jenkins/job/reindex-elasticsearch-indexes"><b>REINDEX-ELASTICSEARCH-INDEXES</b></a></li><br />
+<p> Job to reindex existing indexes whenever the template schema is changed or for whatever other reason
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="release-produce-changelog"><a href="https://cmssdt.cern.ch/jenkins/job/release-produce-changelog"><b>RELEASE-PRODUCE-CHANGELOG</b></a></li><br />
+<p> Posts a message in the github issue that triggered the build. Structure of the message depends on the option used.
+ </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#update-release-notes-collection">update-release-notes-collection</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#update-release-notes-collection">update-release-notes-collection</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#query-build-release-issues">query-build-release-issues</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="run-cvmfs-commands"><a href="https://cmssdt.cern.ch/jenkins/job/run-cvmfs-commands"><b>RUN-CVMFS-COMMANDS</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="run-pr-code-checks"><a href="https://cmssdt.cern.ch/jenkins/job/run-pr-code-checks"><b>RUN-PR-CODE-CHECKS</b></a></li><br />
+<p> This run "scram build code-checks" for a cmssw PR to find out if it comply with cmssw code checks.
+In a CMSSW dev area, it runs 
+  git cms-merge-topic -u PR
+  scram build code-checks </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#abort-jenkins-job">abort-jenkins-job</a>  <a href="#cms-prs-files">cms-prs-files</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#abort-jenkins-job">abort-jenkins-job</a> <a href="#cms-prs-files">cms-prs-files</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#cms-bot">cms-bot</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="schedule-docker-build"><a href="https://cmssdt.cern.ch/jenkins/job/schedule-docker-build"><b>SCHEDULE-DOCKER-BUILD</b></a></li><br />
+<p> A glue job to connect github-webhook with build-container. 
+Should check only folder containing *EXECUTE_BUILD.sh   </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="slaves-checks"><a href="https://cmssdt.cern.ch/jenkins/job/slaves-checks"><b>SLAVES-CHECKS</b></a></li><br />
+<p> A wrapper project that starts a 
+<a href="https://cmssdt.cern.ch/jenkins/job/workspace-cleanup-slave/">workspace-cleanup-slave</a>
+and <a href="https://cmssdt.cern.ch/jenkins/job/test-docker">test-docker</a> jobs on selected slaves.  </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#test-docker">test-docker</a>  <a href="#workspace-cleanup-slave">workspace-cleanup-slave</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#workspace-cleanup-slave">workspace-cleanup-slave</a> <a href="#test-docker ">test-docker </a> <br />
+</li>
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="summary-of-merged-prs"><a href="https://cmssdt.cern.ch/jenkins/job/summary-of-merged-prs"><b>SUMMARY-OF-MERGED-PRS</b></a></li><br />
+<p> Generates statistics for each IB ( merged pull request since last IB, test result summary, .etc)
+as well as structure of release que and stores it in .json files. It then push it to <b>cms-sw.github.io</b> repo as well
+as deploys on the web server. It is used to generate <a href="https://cmssdt.cern.ch/SDT/html/cmssdt-ib">IB page</a>.
+
+
+<br><br>
+<b>Q/A</b>
+
+<ul>
+  <li>
+    <b>Q:</b> The job failed.
+  </li>
+  <li>
+    <b>A:</b> Most likely Github rejected push request because other job pushed after `git pull --rebase`
+	. Do not worry - job builds quite ofthen and next build shouls be succesful.
+  </li>
+</ul> </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#update-github-pages">update-github-pages</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="sync-patatrack-branch"><a href="https://cmssdt.cern.ch/jenkins/job/sync-patatrack-branch"><b>SYNC-PATATRACK-BRANCH</b></a></li><br />
+<p>  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-schedule">ib-schedule</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="test-build-periodic"><a href="https://cmssdt.cern.ch/jenkins/job/test-build-periodic"><b>TEST-BUILD-PERIODIC</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="test-docker"><a href="https://cmssdt.cern.ch/jenkins/job/test-docker"><b>TEST-DOCKER</b></a></li><br />
+<p> Connects to the slave and checks if docker service is runable. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#slaves-checks">slaves-checks</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="update-categories-page"><a href="https://cmssdt.cern.ch/jenkins/job/update-categories-page"><b>UPDATE-CATEGORIES-PAGE</b></a></li><br />
+<p> Generates categories.json file and uploads it to this <a href="https://github.com/cms-sw/cms-sw.github.io">github repo</a>. 
+<br>
+The date is later used to generate <a href="http://cms-sw.github.io/categories.html">this page</a>.
+ </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="update-config-guess"><a href="https://cmssdt.cern.ch/jenkins/job/update-config-guess"><b>UPDATE-CONFIG-GUESS</b></a></li><br />
+<p>  </p><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="update-das-queries"><a href="https://cmssdt.cern.ch/jenkins/job/update-das-queries"><b>UPDATE-DAS-QUERIES</b></a></li><br />
+<p> Job to run das client and cache the results in github to be used by IBs. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-run-relvals">ib-run-relvals</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="update-data-tag-on-pr-merge"><a href="https://cmssdt.cern.ch/jenkins/job/update-data-tag-on-pr-merge"><b>UPDATE-DATA-TAG-ON-PR-MERGE</b></a></li><br />
+<p> This job creates new release and tag it on cms-data PR merge.
+It also creates cmsdist PR with the new release tag  </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#github-webhook">github-webhook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="update-github-pages"><a href="https://cmssdt.cern.ch/jenkins/job/update-github-pages"><b>UPDATE-GITHUB-PAGES</b></a></li><br />
+<p> This job update contents of the "data" directory in cms-sw.github.io </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#refresh-cmssdt">refresh-cmssdt</a>  <a href="#summary-of-merged-prs">summary-of-merged-prs</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#process-relval-logs">process-relval-logs</a> <a href="#cleanup-cms-sw-io-history">cleanup-cms-sw-io-history</a> <a href="#ib-build-logs">ib-build-logs</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="update-ibeos-cache"><a href="https://cmssdt.cern.ch/jenkins/job/update-ibeos-cache"><b>UPDATE-IBEOS-CACHE</b></a></li><br />
+<p> Job to run das client and cache the results in github to be used by IBs. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#ib-cache-to-eos">ib-cache-to-eos</a> <a href="#dataset-to-ibeos">dataset-to-ibeos</a> <a href="#lfn-to-ibeos">lfn-to-ibeos</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="update-release-map"><a href="https://cmssdt.cern.ch/jenkins/job/update-release-map"><b>UPDATE-RELEASE-MAP</b></a></li><br />
+<p> This project adds the release information in <a href="https://cmssdt.cern.ch/SDT/releases.map">cms-bot/releases.map</a> file.
+CVMFS installation is started once a release is available in this file. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#build-fwlite">build-fwlite</a>  <a href="#cmssw-doxygen">cmssw-doxygen</a>  <a href="#cvmfs-cms-install-cms">cvmfs-cms-install-cms</a>  <a href="#ib-run-cfipython">ib-run-cfipython</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#upload-release">upload-release</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="update-release-notes-collection"><a href="https://cmssdt.cern.ch/jenkins/job/update-release-notes-collection"><b>UPDATE-RELEASE-NOTES-COLLECTION</b></a></li><br />
+<p> Generates <a href="https://cmssdt.cern.ch/SDT/ReleaseNotes/">CMSSW release notes</a> using Jekyll. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#release-produce-changelog">release-produce-changelog</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="upload-release"><a href="https://cmssdt.cern.ch/jenkins/job/upload-release"><b>UPLOAD-RELEASE</b></a></li><br />
+<p> This job uploads a release on cmsrep server once approved by release manager. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#update-release-map">update-release-map</a> <br />
+</li>
+<li>
+<b>Sub Projects:</b>  <a href="#update-release-map">update-release-map</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#upload-release-setup">upload-release-setup</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="upload-release-setup"><a href="https://cmssdt.cern.ch/jenkins/job/upload-release-setup"><b>UPLOAD-RELEASE-SETUP</b></a></li><br />
+<p> This job uploads a release on cmsrep server once approved by release manager. </p><br />
+<li>
+<b>DownStream Projects:</b>  <a href="#upload-release">upload-release</a> <br />
+</li>
+<li>
+<b>UpStream Projects:</b>  <a href="#query-build-release-issues">query-build-release-issues</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="web-update-cmssdt-ib"><a href="https://cmssdt.cern.ch/jenkins/job/web-update-cmssdt-ib"><b>WEB-UPDATE-CMSSDT-IB</b></a></li><br />
+<p> Job used to transpile cmssdt ib page from ECMAscript6 to regular javascript and push changes to github. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#github-push-hook">github-push-hook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="web-update-logReader"><a href="https://cmssdt.cern.ch/jenkins/job/web-update-logReader"><b>WEB-UPDATE-LOGREADER</b></a></li><br />
+<p> Transpiles <a href="https://github.com/cms-sw/logreader">Logreader</a> to pure js/html/css and deploys to 
+<a href="https://cmssdt.cern.ch/SDT/">cmssdt-web</a>. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#github-push-hook">github-push-hook</a> <br />
+</li><br />
+ </ul>
+</div>
+<div class="container">
+<ul class="nav nav-pills nav-stacked">
+<li class="active" id="workspace-cleanup-slave"><a href="https://cmssdt.cern.ch/jenkins/job/workspace-cleanup-slave"><b>WORKSPACE-CLEANUP-SLAVE</b></a></li><br />
+<p> Connect to selected slave and cleans (deletes) workspace. </p><br />
+<li>
+<b>UpStream Projects:</b>  <a href="#slaves-checks">slaves-checks</a> <br />
+</li><br />
+ </ul>
+</div>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span4"></div>
+      <div style="text-align: center; padding-top: 50px;" class="span4"><a style="font-size: 80%;" href="http://copyright.web.cern.ch">Copyright 1954-2015 CERN <br />Last Updated: 2020-08-26 10:51</a></div>
+      <div class="span4"></div>
+    </div>
+  </div>
+</body>
+</html>
