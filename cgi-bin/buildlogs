@@ -41,7 +41,7 @@ def unitTest(architecture, release, subsystem, package):
 @route('/raw/<architecture>/<release>/unitTestLogs/<subsystem>/<package>')
 def unitTestRaw(architecture, release, subsystem, package):
   response.set_header('Content-Type', 'text/plain')
-  return extractFile(architecture, release, 'unitTestLogs', '', format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),False)
+  return extractFile(architecture, release, 'unitTestLogs', '', format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),True)
 
 #----- GPUunitTest
 @route('/<architecture>/<release>/GPUunitTestLogs/<subsystem>/<package>')
@@ -52,7 +52,7 @@ def unitTest(architecture, release, subsystem, package):
 @route('/raw/<architecture>/<release>/GPUunitTestLogs/<subsystem>/<package>')
 def unitTestRaw(architecture, release, subsystem, package):
   response.set_header('Content-Type', 'text/plain')
-  return extractFile(architecture, release, 'GPU/unitTestLogs', 'GPU', format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),False)
+  return extractFile(architecture, release, 'GPU/unitTestLogs', 'GPU', format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),True)
 
 # to get display configs
 @route('/raw_read_config/<architecture>/<release>/unitTestLogs/<subsystem>/<package>')
@@ -70,7 +70,7 @@ def addOnTests(architecture, release, filename):
 def addOnTestsRaw(architecture, release, filename):
   import urllib
   response.set_header('Content-Type', 'text/plain')
-  return extractFile(architecture, release, 'addOnTests', 'addOnTests/logs', sanitize(urllib.unquote(filename)),False)
+  return extractFile(architecture, release, 'addOnTests', 'addOnTests/logs', sanitize(urllib.unquote(filename)),True)
 
 # to get display configs
 @route('/raw_read_config/<architecture>/<release>/addOnTests/logs/<filename>')
@@ -89,7 +89,7 @@ def relValTests(architecture, release, workflow, filename):
 def relValTestsRaw(architecture, release, workflow, filename):
   import urllib
   response.set_header('Content-Type', 'text/plain')
-  return extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(urllib.unquote(workflow))+'/'+sanitize(urllib.unquote(filename)),False)
+  return extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(urllib.unquote(workflow))+'/'+sanitize(urllib.unquote(filename)),True)
 
 @route('/raw_read_config/<architecture>/<release>/pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
 def relValTestsRawConfig(architecture, release, workflow, filename):
