@@ -18,7 +18,7 @@ def check_ip():
     ip_net = open(BASE_DIRECTORY+'/sdt/cmsrep.txt','r').read().split('\n')[0].strip()
   except Exception as e:
     print "Unable to read cmsrep hook meta information, using hard coded value"
-    ip_net ="128.142.142.109/32"
+    ip_net ="188.184.102.160/32"
 
   ip, mask = ip_net.split('/')
   mask = int(mask)
