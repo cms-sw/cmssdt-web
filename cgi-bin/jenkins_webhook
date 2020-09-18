@@ -42,7 +42,7 @@ for x in [(json.dumps({"parameter":xparam}),"jenkins-webhook")]:
     headers[crumb['crumbRequestField']] = crumb['crumb']
     print ("OK crumbRequest")
   except HTTPError as e:
-    print ("Running without Crumb Issuer:",e)
+    print ("Running without Crumb Issuer: %s" % e)
     pass
   print ("Triggering Jenkins Job: ",x)
   url = payload['JENKINS_SERVER']+'/job/'+ job + '/build'
@@ -57,5 +57,5 @@ for x in [(json.dumps({"parameter":xparam}),"jenkins-webhook")]:
     content = urlopen(req).read()
     print ("ALL OK")
   except Exception as e:
-    print ("Unable to start jenkins job:",e)
+    print ("Unable to start jenkins job: %s" % e)
 

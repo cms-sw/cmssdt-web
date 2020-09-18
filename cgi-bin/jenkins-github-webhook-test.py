@@ -27,7 +27,7 @@ try:
   headers[crumb['crumbRequestField']] = crumb['crumb']
   print ("OK crumbRequest")
 except HTTPError as e:
-  print ("Running without Crumb Issuer: %s"% e)
+  print ("Running without Crumb Issuer: %s" % e)
   pass
 
 try:
