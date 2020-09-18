@@ -29,7 +29,7 @@ try:
   headers[crumb['crumbRequestField']] = crumb['crumb']
   print "OK crumbRequest"
 except urllib2.HTTPError as e:
-  print "Running without Crumb Issuer"
+  print "Running without Crumb Issuer:",e
   pass
 
 try:
@@ -37,5 +37,5 @@ try:
   req = urllib2.Request(url=url,data=data,headers=headers)
   content = urllib2.urlopen(req).read()
 except Exception as e:
-  print "Unable to start jenkins job"
+  print "Unable to start jenkins job:", e
 
