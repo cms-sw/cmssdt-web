@@ -42,6 +42,7 @@ for x in [(json.dumps({"parameter":xparam}),"jenkins-webhook")]:
     req = urllib2.Request(url=payload['JENKINS_SERVER']+'/crumbIssuer/api/json', headers=headers)
     crumb = json.loads(urllib2.urlopen(req).read())
     headers[crumb['crumbRequestField']] = crumb['crumb']
+    print "OK crumbRequest"
   except urllib2.HTTPError as e:
     print "Running without Crumb Issuer"
     pass
