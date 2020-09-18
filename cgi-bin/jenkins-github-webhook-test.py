@@ -13,7 +13,7 @@ params.append({"name":"JOB_PARAM1","value":"cmssdt1"})
 params.append({"name":"JOB_PARAM2","value":"cmssdt2"})
 url = jenkins_server+'/job/'+job+'/build'
 jenkins_parameters = json.dumps({"parameter":params})
-print jenkins_parameters,job
+print (jenkins_parameters,job)
 data = {
   "json": jenkins_parameters,
    "Submit": "Build"
@@ -25,15 +25,16 @@ try:
   req = Request(url=jenkins_server+'/crumbIssuer/api/json', headers=headers)
   crumb = json.loads(urlopen(req).read())
   headers[crumb['crumbRequestField']] = crumb['crumb']
-  print "OK crumbRequest"
+  print ("OK crumbRequest")
 except HTTPError as e:
-  print "Running without Crumb Issuer:",e
+  print ("Running without Crumb Issuer: %s"% e)
   pass
 
 try:
   data=urlencode(data)
   req=Request(url=url,data=data,headers=headers)
   content=urlopen(req).read()
+  print ("ALL_OK")
 except Exception as e:
-  print "Unable to start jenkins job:", e
+  print ("Unable to start jenkins job: %s" % e)
 

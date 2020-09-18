@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-print "Content-Type: text/html\n"
+print ("Content-Type: text/html\n")
 
 from _py2with3compatibility import Request, urlopen, urlencode, build_opener, install_opener, CookieJar, HTTPCookieProcessor, HTTPError
 import os , sys , cgi , json , re
@@ -9,17 +9,17 @@ data = sys.stdin.read()
 try:
   payload = json.loads(data)
 except Exception as e:
-  print "Invalid data, can not read json input"
+  print ("Invalid data, can not read json input")
   sys.exit(0)
 
 if (not 'DATA' in payload) or (not re.match('^[a-zA-Z0-9_-]+:[0-9]+$',payload['DATA'])):
-  print "Invalid Data: ",data
+  print ("Invalid Data: ",data)
   sys.exit(0)
 if (not 'JENKINS_SERVER' in payload) or (not re.match('^http://[a-z][a-z0-9_-]+\.cern\.ch(:[0-9]+|)(/[a-z_-]+|)$',payload['JENKINS_SERVER'])):
-  print "Invalid Data: ",data
+  print ("Invalid Data: ",data)
   sys.exit(0)
 if (not 'JENKINS_USER' in payload) or (not re.match('^[a-z0-9]+$',payload['JENKINS_USER'])):
-  print "Invalid Data: ",data
+  print ("Invalid Data: ",data)
   sys.exit(0)
 if ('USER_HEADER' not in payload): payload['USER_HEADER']="ADFS_LOGIN"
 
@@ -40,11 +40,11 @@ for x in [(json.dumps({"parameter":xparam}),"jenkins-webhook")]:
     req = Request(url=payload['JENKINS_SERVER']+'/crumbIssuer/api/json', headers=headers)
     crumb = json.loads(urlopen(req).read())
     headers[crumb['crumbRequestField']] = crumb['crumb']
-    print "OK crumbRequest"
+    print ("OK crumbRequest")
   except HTTPError as e:
-    print "Running without Crumb Issuer:",e
+    print ("Running without Crumb Issuer:",e)
     pass
-  print "Triggering Jenkins Job: ",x
+  print ("Triggering Jenkins Job: ",x)
   url = payload['JENKINS_SERVER']+'/job/'+ job + '/build'
   print jenkins_parameters,job
   data = {
@@ -55,7 +55,7 @@ for x in [(json.dumps({"parameter":xparam}),"jenkins-webhook")]:
     data=urlencode(data)
     req=Request(url=url,data=data,headers=headers)
     content = urlopen(req).read()
-    print "ALL OK"
+    print ("ALL OK")
   except Exception as e:
-    print "Unable to start jenkins job:",e
+    print ("Unable to start jenkins job:",e)
 
