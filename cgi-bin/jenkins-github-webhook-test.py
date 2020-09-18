@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys, json
-import urllib2, urllib, cookielib
+from _py2with3compatibility import Request, urlopen, urlencode, build_opener, install_opener, CookieJar, HTTPCookieProcessor, HTTPError
 
 try: jenkins_server=sys.argv[1]
 except: jenkins_server="http://cmsjenkins03.cern.ch:8080/jenkins"
@@ -19,23 +19,21 @@ data = {
    "Submit": "Build"
 }
 
-cookie_jar = cookielib.CookieJar()
-opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie_jar))
-urllib2.install_opener(opener)
+install_opener(build_opener(HTTPCookieProcessor(CookieJar())))
 headers = {login_key : "cmssdt"}
 try:
-  req = urllib2.Request(url=jenkins_server+'/crumbIssuer/api/json', headers=headers)
-  crumb = json.loads(urllib2.urlopen(req).read())
+  req = Request(url=jenkins_server+'/crumbIssuer/api/json', headers=headers)
+  crumb = json.loads(urlopen(req).read())
   headers[crumb['crumbRequestField']] = crumb['crumb']
   print "OK crumbRequest"
-except urllib2.HTTPError as e:
+except HTTPError as e:
   print "Running without Crumb Issuer:",e
   pass
 
 try:
-  data=urllib.urlencode(data)
-  req = urllib2.Request(url=url,data=data,headers=headers)
-  content = urllib2.urlopen(req).read()
+  data=urlencode(data)
+  req=Request(url=url,data=data,headers=headers)
+  content=urlopen(req).read()
 except Exception as e:
   print "Unable to start jenkins job:", e
 
