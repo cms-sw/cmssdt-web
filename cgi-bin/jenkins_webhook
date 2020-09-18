@@ -20,6 +20,7 @@ if (not 'JENKINS_SERVER' in payload) or (not re.match('^http://[a-z][a-z0-9_-]+\
 if (not 'JENKINS_USER' in payload) or (not re.match('^[a-z0-9]+$',payload['JENKINS_USER'])):
   print "Invalid Data: ",data
   sys.exit(0)
+if ('USER_HEADER' not in payload): payload['USER_HEADER']="ADFS_LOGIN"
 
 xparam = []
 henv = 'REMOTE_ADDR'
@@ -40,7 +41,7 @@ for x in [(json.dumps({"parameter":xparam}),"jenkins-webhook")]:
          }
   try:
     data=urllib.urlencode(data)
-    req = urllib2.Request(url=url,data=data,headers={"ADFS_LOGIN" : payload['JENKINS_USER']})
+    req = urllib2.Request(url=url,data=data,headers={payload['USER_HEADER'] : payload['JENKINS_USER']})
     content = urllib2.urlopen(req).read()
   except Exception as e:
     print "Unable to start jenkins job:",e
