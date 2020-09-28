@@ -4,7 +4,7 @@ print "Content-Type: text/html\n"
 from json import loads, dumps
 from sys import exit, stdin
 import cgi
-import urllib2, urllib
+from _py2with3compatibility import Request, urlopen, urlencode, build_opener, install_opener, CookieJar, HTTPCookieProcessor, HTTPError
 
 BASE_DIRECTORY = '/data'
 
@@ -48,9 +48,19 @@ if not check_signature(payload):
   exit()
 
 #trigger jenkins job
+install_opener(build_opener(HTTPCookieProcessor(CookieJar())))
 for x in [(dumps({"parameter":xparam}),"grid-webhook")]:
   jenkins_parameters, job = x
   if not job: continue
+  headers = {"ADFS_LOGIN" : "cmssdt"}
+  try:
+    req = Request(url=payload['jenkins_url']+'/crumbIssuer/api/json', headers=headers)
+    crumb = json.loads(urlopen(req).read())
+    headers[crumb['crumbRequestField']] = crumb['crumb']
+    print ("OK crumbRequest")
+  except HTTPError as e:
+    print ("Running without Crumb Issuer:%s " % e)
+    pass
   print "Triggering Jenkins Job: ",x
   url = payload['jenkins_url']+'/job/'+ job + '/build'
   print jenkins_parameters,job
@@ -59,8 +69,8 @@ for x in [(dumps({"parameter":xparam}),"grid-webhook")]:
               "Submit": "Build"
          }
   try:
-    data=urllib.urlencode(data)
-    req = urllib2.Request(url=url,data=data,headers={"ADFS_LOGIN" : "cmssdt"})
-    content = urllib2.urlopen(req).read()
+    data = urlencode(data)
+    req = Request(url=url,data=data,headers=headers)
+    content = urlopen(req).read()
   except Exception as e:
-    print "Unable to start jenkins job:",e
+    print ("Unable to start jenkins job: %s" % e)
