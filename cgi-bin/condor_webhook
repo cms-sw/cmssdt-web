@@ -2,8 +2,7 @@
 from __future__ import print_function
 from json import loads, dumps
 from sys import exit, stdin
-import cgi
-from _py2with3compatibility import Request, urlopen, urlencode, build_opener, install_opener, CookieJar, HTTPCookieProcessor, HTTPError
+from jenkins_callback import build_jobs
 
 print ("Content-Type: text/html\n")
 BASE_DIRECTORY = '/data'
@@ -47,30 +46,4 @@ if not check_signature(payload):
   print ("Invalid or wrong signatures")
   exit()
 
-#trigger jenkins job
-install_opener(build_opener(HTTPCookieProcessor(CookieJar())))
-for x in [(dumps({"parameter":xparam}),"grid-webhook")]:
-  jenkins_parameters, job = x
-  if not job: continue
-  headers = {"ADFS_LOGIN" : "cmssdt"}
-  try:
-    req = Request(url=payload['jenkins_url']+'/crumbIssuer/api/json', headers=headers)
-    crumb = loads(urlopen(req).read())
-    headers[crumb['crumbRequestField']] = crumb['crumb']
-    print ("OK crumbRequest")
-  except HTTPError as e:
-    print ("Running without Crumb Issuer:%s " % e)
-    pass
-  print ("Triggering Jenkins Job: %s" % job)
-  url = payload['jenkins_url']+'/job/'+ job + '/build'
-  print (jenkins_parameters,job)
-  data = {
-              "json": jenkins_parameters,
-              "Submit": "Build"
-         }
-  try:
-    data = urlencode(data)
-    req = Request(url=url,data=data,headers=headers)
-    content = urlopen(req).read()
-  except Exception as e:
-    print ("Unable to start jenkins job: %s" % e)
+build_jobs(payload['jenkins_url'], [(dumps({"parameter":xparam}),"grid-webhook")])
