@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 print ("Content-Type: text/html\n")
 
-from _py2with3compatibility import Request, urlopen, urlencode, build_opener, install_opener, CookieJar, HTTPCookieProcessor, HTTPError
+from jenkins_callback import build_jobs
 import os , sys , cgi , json , re
 
 
@@ -29,33 +29,5 @@ if 'HTTP_X_FORWARDED_FOR' in os.environ and os.environ['HTTP_X_FORWARDED_FOR']!=
 xparam.append({'name':'HOST', 'value': os.environ[henv]})
 xparam.append({'name':'DATA', 'value': payload['DATA']})
 
-install_opener(build_opener(HTTPCookieProcessor(CookieJar())))
-
-#trigger jenkins job
-for x in [(json.dumps({"parameter":xparam}),"jenkins-webhook")]:
-  jenkins_parameters, job = x
-  if not job: continue
-  headers = {payload['USER_HEADER'] : payload['JENKINS_USER']}
-  try:
-    req = Request(url=payload['JENKINS_SERVER']+'/crumbIssuer/api/json', headers=headers)
-    crumb = json.loads(urlopen(req).read())
-    headers[crumb['crumbRequestField']] = crumb['crumb']
-    print ("OK crumbRequest")
-  except HTTPError as e:
-    print ("Running without Crumb Issuer: %s" % e)
-    pass
-  print ("Triggering Jenkins Job: ",x)
-  url = payload['JENKINS_SERVER']+'/job/'+ job + '/build'
-  print jenkins_parameters,job
-  data = {
-              "json": jenkins_parameters,
-              "Submit": "Build"
-         }
-  try:
-    data=urlencode(data)
-    req=Request(url=url,data=data,headers=headers)
-    content = urlopen(req).read()
-    print ("ALL OK")
-  except Exception as e:
-    print ("Unable to start jenkins job: %s" % e)
-
+headers = {payload['USER_HEADER'] : payload['JENKINS_USER']}
+build_jobs(payload['JENKINS_SERVER'], [(json.dumps({"parameter":xparam}),"jenkins-webhook")], headers=headers)
