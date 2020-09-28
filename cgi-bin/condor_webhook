@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-print "Content-Type: text/html\n"
-
+from __future__ import print_function
 from json import loads, dumps
 from sys import exit, stdin
 import cgi
 from _py2with3compatibility import Request, urlopen, urlencode, build_opener, install_opener, CookieJar, HTTPCookieProcessor, HTTPError
 
+print ("Content-Type: text/html\n")
 BASE_DIRECTORY = '/data'
 
 #check signature function
@@ -23,28 +23,28 @@ def check_ip():
 try:
   payload = loads(stdin.read())
 except Exception as e:
-  print "Invalid data, can not read json input"
+  print ("Invalid data, can not read json input")
   exit()
 
 if not check_ip():
-  print "Invalid IP"
+  print ("Invalid IP")
   exit()
 
 if 'schedd_name' not in payload: payload['schedd_name'] = "bigbird15.cern.ch"
 xparam = []
 for k in ['work_dir', 'condor_job_id', 'labels', 'status', 'schedd_name']:
   if k not in payload:
-    print "Invalid data: Missing key %s" % k
+    print ("Invalid data: Missing key %s" % k)
     exit()
   xparam.append({"name":k.upper(),  "value":payload[k]})
 
 for k in ['signature', 'jenkins_url']:
   if k in payload: continue
-  print "Invalid data: Missing key %s" % k
+  print ("Invalid data: Missing key %s" % k)
   exit()
 
 if not check_signature(payload):
-  print "Invalid or wrong signatures"
+  print ("Invalid or wrong signatures")
   exit()
 
 #trigger jenkins job
@@ -55,15 +55,15 @@ for x in [(dumps({"parameter":xparam}),"grid-webhook")]:
   headers = {"ADFS_LOGIN" : "cmssdt"}
   try:
     req = Request(url=payload['jenkins_url']+'/crumbIssuer/api/json', headers=headers)
-    crumb = json.loads(urlopen(req).read())
+    crumb = loads(urlopen(req).read())
     headers[crumb['crumbRequestField']] = crumb['crumb']
     print ("OK crumbRequest")
   except HTTPError as e:
     print ("Running without Crumb Issuer:%s " % e)
     pass
-  print "Triggering Jenkins Job: ",x
+  print ("Triggering Jenkins Job: %s" % job)
   url = payload['jenkins_url']+'/job/'+ job + '/build'
-  print jenkins_parameters,job
+  print (jenkins_parameters,job)
   data = {
               "json": jenkins_parameters,
               "Submit": "Build"
