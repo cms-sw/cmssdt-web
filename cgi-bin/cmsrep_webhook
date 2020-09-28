@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-print "Content-Type: text/html\n"
-
-import os , sys , cgi , json , pycurl , hmac, re
-from hashlib import sha1
-import urllib2, urllib
+from __future__ import print_function
+import os , sys , json
 from tempfile import mkstemp
+from jenkins_callback import build_jobs
+
+print ("Content-Type: text/html\n")
 
 BASE_DIRECTORY = "/data"
 
@@ -17,7 +17,7 @@ def check_ip():
   try:
     ip_net = open(BASE_DIRECTORY+'/sdt/cmsrep.txt','r').read().split('\n')[0].strip()
   except Exception as e:
-    print "Unable to read cmsrep hook meta information, using hard coded value"
+    print ("Unable to read cmsrep hook meta information, using hard coded value")
     ip_net ="188.184.102.160/32"
 
   ip, mask = ip_net.split('/')
@@ -33,41 +33,25 @@ data = sys.stdin.read()
 try:
   payload = json.loads(data)
 except Exception as e:
-  print "Invalid data, can not read json input"
+  print ("Invalid data, can not read json input")
   sys.exit()
 
 if not check_ip():
-  print "Invalid IP"
+  print ("Invalid IP")
   sys.exit()
 
 sys.path.insert(0,os.path.join(BASE_DIRECTORY,"sdt/cms-bot"))
 import repo_config
 
 if not check_signature(data, repo_config):
-  print "Invalid or wrong signatures"
+  print ("Invalid or wrong signatures")
   sys.exit()
 
 xparam = []
 for k in ["repository", "architecture", "payload_uri"]:
   if not k in payload:
-    print "Invalid data: Missing key %s" % k
+    print ("Invalid data: Missing key %s" % k)
     sys.exit()
   xparam.append({"name":k.upper(),  "value":payload[k]})
 
-#trigger jenkins job
-for x in [(json.dumps({"parameter":xparam}),"cmsrep-webhook")]:
-  jenkins_parameters, job = x
-  if not job: continue
-  print "Triggering Jenkins Job: ",x
-  url = repo_config.JENKINS_SERVER+'/job/'+ job + '/build'
-  print jenkins_parameters,job
-  data = {
-              "json": jenkins_parameters,
-              "Submit": "Build"
-         }
-  try:
-    data=urllib.urlencode(data)
-    req = urllib2.Request(url=url,data=data,headers={"ADFS_LOGIN" : "cmssdt"})
-    content = urllib2.urlopen(req).read()
-  except Exception as e:
-    print "Unable to start jenkins job:",e
+build_jobs(repo_config.JENKINS_SERVER, [(json.dumps({"parameter":xparam}),"cmsrep-webhook")])
