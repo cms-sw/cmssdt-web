@@ -1,0 +1,6 @@
+#!/bin/bash
+echo -e "Content-type:text/plain\n"
+if [ $(echo ${PATH_INFO} | grep '/testsResults.txt$' | wc -l) -gt 0 ] ; then
+  path=$(echo ${SCRIPT_URL} | sed "s|${SCRIPT_NAME}|/SDT|;s|/testsResults.txt$|/testsResults*.txt|")
+  cat ${DOCUMENT_ROOT}/${path}
+fi
