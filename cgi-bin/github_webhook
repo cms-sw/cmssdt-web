@@ -10,7 +10,7 @@ BASE_DIRECTORY = "/data"
 def check_event(data):
   if not 'HTTP_X_GITHUB_EVENT' in os.environ: return False,''
   event = os.environ['HTTP_X_GITHUB_EVENT']
-  if not event in ['issues', 'issue_comment', 'pull_request' , 'push']: return False,event
+  if not event in ['issues', 'issue_comment', 'pull_request' , 'push', "release"]: return False,event
   ok_event = False
   try:
     try:
@@ -56,6 +56,8 @@ def check_event(data):
         return isValidWebHook(data), "comp_issue_comment"
       except Exception as e: pass
       return False, event
+  elif (event == 'release') and (data['action'] not in ["created"]):
+    return False, event
   return True, event
 
 #check signature function
