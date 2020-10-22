@@ -2,5 +2,5 @@
 echo -e "Content-type:text/plain\n"
 if [ $(echo ${PATH_INFO} | grep '/summary.html$' | wc -l) -gt 0 ] ; then
   dir=${DOCUMENT_ROOT}/$(echo ${SCRIPT_URL} | sed "s|${SCRIPT_NAME}|/SDT|;s|/summary.html$||")
-  cat ${dir}/testsResults.txt ${dir}/testsResults-*.txt 2>/dev/null || true
+  cat ${dir}/testsResults.txt ${dir}/testsResults/*.txt 2>/dev/null || true
 fi
