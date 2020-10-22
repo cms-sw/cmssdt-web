@@ -92,7 +92,7 @@ def check_ip():
     mask = int(mask)
     ip = ''.join(["{0:08b}".format(int(i)) for i in ip.split('.') ])[0:mask]
     src_ip = ''.join([ "{0:08b}".format(int(i)) for i in sip.split('.')])[0:mask]
-    print("Checking %s vs %s" % (ip, src_ip))
+    print("Checking %s vs %s: %s" % (ip, src_ip, ip == src_ip))
     if ip == src_ip:
       return True
   return False
