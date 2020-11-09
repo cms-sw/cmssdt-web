@@ -10,7 +10,7 @@ BASE_DIRECTORY = "/data"
 def check_event(data):
   if not 'HTTP_X_GITHUB_EVENT' in os.environ: return False,''
   event = os.environ['HTTP_X_GITHUB_EVENT']
-  if not event in ['issues', 'issue_comment', 'pull_request' , 'push', "release", "status"]: return False,event
+  if not event in ['issues', 'issue_comment', 'pull_request' , 'push', "release"]: return False,event
   ok_event = False
   try:
     try:
@@ -41,7 +41,7 @@ def check_event(data):
     #if (repo in ['cmsdist']) and branch.startswith("IB/CMSSW_"): return True, event
     #return False, event
   if (not ok_event) and (not get_repository_hooks(full_name,"Jenkins_Github_Hook")): return False,event
-  if (event in ['pull_request', 'status']): return True,event
+  if (event == 'pull_request'): return True,event
   elif (event == 'issues') and (not data['action'] in ['opened']): return False,event
   elif (event == 'issue_comment'):
     #if (not data['action'] in ['created','edited','deleted']): return False,event
@@ -127,7 +127,7 @@ if ("labeled" in xparam[-1]["value"]) and (not repo_name.startswith("cms-sw/")):
   sys.exit()
 
 etype=""
-if   event in ['pull_request','status']:etype="pull_request"
+if   event in ['pull_request']:etype="pull_request"
 elif event in ['issues', 'issue_comment','comp_issue_comment']: etype="issue"
 try: xparam.append({"name":"ISSUE_NUMBER","value":payload[etype]["number"]})
 except: xparam.append({"name":"ISSUE_NUMBER","value":""})
