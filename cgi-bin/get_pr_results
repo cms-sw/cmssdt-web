@@ -3,4 +3,15 @@ echo -e "Content-type:text/plain\n"
 if [ $(echo ${PATH_INFO} | grep '/summary.html$' | wc -l) -gt 0 ] ; then
   dir=${DOCUMENT_ROOT}/$(echo ${SCRIPT_URL} | sed "s|${SCRIPT_NAME}|/SDT|;s|/summary.html$||")
   cat ${dir}/testsResults.txt ${dir}/testsResults/*.txt 2>/dev/null || true
+elif [ $(echo ${PATH_INFO} | grep '/pr-result$' | wc -l) -gt 0 ] ; then
+  dir=${DOCUMENT_ROOT}/$(echo ${SCRIPT_URL} | sed "s|${SCRIPT_NAME}|/SDT|;s|/pr-result$||")
+  if [ $(ls -d ${dir}/*-failed.txt 2>/dev/null | wc -l) -gt 0 ] ; then
+    echo "-1"
+    echo "Failed Tests: $(cat ${dir}/*-failed.txt | tr '\n' ' ')"
+  else
+    echo "+1"
+  fi
+  if [ $(ls -d ${dir}/*-report.txt 2>/dev/null | wc -l) -gt 0 ] ; then
+    cat ${dir}/*-report.txt
+  fi
 fi
