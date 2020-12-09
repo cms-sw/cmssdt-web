@@ -6,10 +6,7 @@ if [ $(echo ${PATH_INFO} | grep '/summary.html$' | wc -l) -gt 0 ] ; then
 elif [ $(echo ${PATH_INFO} | grep '/pr-result$' | wc -l) -gt 0 ] ; then
   dir=${DOCUMENT_ROOT}/$(echo ${SCRIPT_URL} | sed "s|${SCRIPT_NAME}|/SDT|;s|/pr-result$||")/testsResults
   if [ $(ls -d ${dir}/*-failed.res 2>/dev/null | wc -l) -gt 0 ] ; then
-    echo "-1"
-    echo "Failed Tests: $(cat ${dir}/*-failed.res | tr '\n' ' ')"
-  else
-    echo "+1"
+    echo "**Failed Tests**: $(cat ${dir}/*-failed.res | tr '\n' ' ')"
   fi
   if [ $(ls -d ${dir}/*-report.res 2>/dev/null | wc -l) -gt 0 ] ; then
     cat ${dir}/*-report.res
