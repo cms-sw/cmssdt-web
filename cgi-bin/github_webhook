@@ -10,7 +10,7 @@ BASE_DIRECTORY = "/data"
 def check_event(data):
   if not 'HTTP_X_GITHUB_EVENT' in os.environ: return False,''
   event = os.environ['HTTP_X_GITHUB_EVENT']
-  if not event in ['issues', 'issue_comment', 'pull_request' , 'push', "release"]: return False,event
+  if not event in ['issues', 'issue_comment', 'pull_request' , 'push', "release", "status"]: return False,event
   ok_event = False
   try:
     try:
@@ -28,6 +28,13 @@ def check_event(data):
   except: pass
   full_name = data['repository']['full_name']
   if (not ok_event) and (not is_valid_gh_repo(full_name)): return False,event
+  if (event == "status"):
+    cxt = data["context"].split("/")
+    if (len(cxt)<2) or (cxt[0] not in ["bot", "cms"]) or (not re.match('^[1-9][0-9]*$', cxt[1])):
+      return False,event
+    event = "issue_comment"
+    data["issue"]["number"] = cxt[1]
+    return True, event
   if (event == 'push'):
     branch = data["ref"]
     if not branch.startswith("refs/heads/"): return False, event
