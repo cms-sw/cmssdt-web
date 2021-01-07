@@ -33,7 +33,7 @@ def check_event(data):
     if (len(cxt)<2) or (cxt[0] not in ["bot", "cms"]) or (not re.match('^[1-9][0-9]*$', cxt[1])):
       return False,event
     event = "issue_comment"
-    data["issue"]["number"] = cxt[1]
+    data["issue"] = {"number": cxt[1]}
     return True, event
   if (event == 'push'):
     branch = data["ref"]
