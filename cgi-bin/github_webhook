@@ -10,7 +10,7 @@ BASE_DIRECTORY = "/data"
 def check_event(data):
   if not 'HTTP_X_GITHUB_EVENT' in os.environ: return False,''
   event = os.environ['HTTP_X_GITHUB_EVENT']
-  if not event in ['issues', 'issue_comment', 'pull_request' , 'push', "release", "status"]: return False,event
+  if not event in ['issues', 'issue_comment', 'pull_request' , 'push', "release", "status", "workflow_dispatch"]: return False,event
   ok_event = False
   try:
     try:
