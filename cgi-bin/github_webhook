@@ -143,5 +143,9 @@ except:
   except: xparam.append({"name":"BRANCH","value":""})
 if 'commits' in payload: xparam.append({"name":"COMMITS","value":' '.join([str(c['id']) for c in payload['commits']])})
 else: xparam.append({"name":"COMMITS","value":""})
+try:
+  if repo_config.WEBHOOK_PAYLOAD:
+    xparam.append({"name":"PAYLOAD","value":json.dumps(payload)})
+except: pass
 
 build_jobs(repo_config.JENKINS_SERVER, [(json.dumps({"parameter":xparam}),"github-webhook")])
