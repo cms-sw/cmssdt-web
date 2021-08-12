@@ -416,7 +416,11 @@ class InfoMaker(object):
                 dfsNum   = '('+str( dfsErrDir )+','+str(dfsErrFil)+')'
     	formatter.write('<p><a href="#dirAndFileSize" class="a'+dfsStyle+'">Directory and File size checks</a></p>')
 
-        crvErrs = self.getCRVErrors(prodArch, wkDay, stamp, release)
+        crvErrs = -1
+        try:
+            crvErrs = self.getCRVErrors(prodArch, wkDay, stamp, release)
+        except:
+            pass
         crvStyle = 'unknown'
         crvNum   = 'No'
         if crvErrs > -1 :
