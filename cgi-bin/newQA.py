@@ -346,7 +346,7 @@ class InfoMaker(object):
     	OutRel  = config.siteInfo['OutHtml']+'/'+release
     	OutArch = config.siteInfo['OutHtml']+'/'+release+'/'+arch
     	formatter.writeH1("CMSSW Integration Build QA Info")
-    	backToPortal = ' -- <a href="'+config.siteInfo['CgiHtmlPath']+'showIB.py">Back to IB portal</a>'
+        backToPortal = ' -- <a href="https://cmssdt.cern.ch/SDT/html/cmssdt-ib/">Back to IB portal</a>'
     	formatter.writeH3('Integration Build '+ release + ' for architecture '+arch+backToPortal)
     	
     	# --------------------------------------------------------------------------------

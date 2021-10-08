@@ -498,7 +498,7 @@ class BuildLogDisplay(object):
             except KeyError:
                self.styleClass[key] = 'compErr'
 
-        backToPortal = ' -- <a href="'+config.siteInfo['CgiHtmlPath']+'showIB.py">Back to IB portal</a>'
+        backToPortal = ' -- <a href="https://cmssdt.cern.ch/SDT/html/cmssdt-ib/">Back to IB portal</a>'
         self.formatter.writeH3('Summary for ' + ib + ' IB on platform ' + plat + backToPortal)
 
         totErr = 0
