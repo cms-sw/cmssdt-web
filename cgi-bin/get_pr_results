@@ -1,16 +1,19 @@
 #!/bin/bash
 echo -e "Content-type:text/plain\n"
-export PATH_INFO=$(echo "${PATH_INFO}" | tr ' ;' '\n\n'   | head -1 | grep '^[/][a-zA-Z0-9_/.-]*$')
+export PATH_INFO=$(echo "${PATH_INFO}"   | tr ' ;' '\n\n' | head -1 | grep '^[/][a-zA-Z0-9_/.-]*$')
 export SCRIPT_URL=$(echo "${SCRIPT_URL}" | tr ' ;' '\n\n' | head -1 | grep '^[/][a-zA-Z0-9_/.-]*$')
 if [ $(echo "${PATH_INFO}" | grep '/summary.html$' | wc -l) -gt 0 ] ; then
   dir=${DOCUMENT_ROOT}/$(echo "${SCRIPT_URL}" | sed "s|${SCRIPT_NAME}|/SDT|;s|/summary.html$||")/testsResults
-  cat ${dir}.txt ${dir}/*.txt 2>/dev/null || true
+  if [ -f "${dir}.txt" ] ; then cat "${dir}.txt" ; fi
+  if [ -d "${dir}" ]     ; then cat "${dir}"/*.txt 2>/dev/null || true ; fi
 elif [ $(echo "${PATH_INFO}" | grep '/pr-result$' | wc -l) -gt 0 ] ; then
   dir=${DOCUMENT_ROOT}/$(echo "${SCRIPT_URL}" | sed "s|${SCRIPT_NAME}|/SDT|;s|/pr-result$||")/testsResults
-  if [ $(ls -d ${dir}/*-failed.res 2>/dev/null | wc -l) -gt 0 ] ; then
-    echo "**Failed Tests**: $(cat ${dir}/*-failed.res | tr '\n' ' ')"
-  fi
-  if [ $(ls -d ${dir}/*-report.res 2>/dev/null | wc -l) -gt 0 ] ; then
-    cat ${dir}/*-report.res
+  if [ -d "$dir" ] ; then
+    if [ $(ls -d "${dir}"/*-failed.res 2>/dev/null | wc -l) -gt 0 ] ; then
+      echo "**Failed Tests**: $(cat ${dir}/*-failed.res | tr '\n' ' ')"
+    fi
+    if [ $(ls -d "${dir}"/*-report.res 2>/dev/null | wc -l) -gt 0 ] ; then
+      cat "${dir}"/*-report.res
+    fi
   fi
 fi
