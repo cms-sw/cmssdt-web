@@ -1,6 +1,7 @@
 #!/bin/bash
-export PATH_INFO=$(echo "${PATH_INFO}" | tr ' ;' '\n\n'   | head -1 | grep '^[/][a-zA-Z0-9_/-]*$')
-export SCRIPT_URL=$(echo "${SCRIPT_URL}" | tr ' ;' '\n\n' | head -1 | grep '^[/][a-zA-Z0-9_/-]*$')
+echo -e "Content-type:text/plain\n"
+export PATH_INFO=$(echo "${PATH_INFO}" | tr ' ;' '\n\n'   | head -1 | grep '^[/][a-zA-Z0-9_/.-]*$')
+export SCRIPT_URL=$(echo "${SCRIPT_URL}" | tr ' ;' '\n\n' | head -1 | grep '^[/][a-zA-Z0-9_/.-]*$')
 if [ $(echo "${PATH_INFO}" | grep '/summary.html$' | wc -l) -gt 0 ] ; then
   dir=${DOCUMENT_ROOT}/$(echo "${SCRIPT_URL}" | sed "s|${SCRIPT_NAME}|/SDT|;s|/summary.html$||")/testsResults
   cat ${dir}.txt ${dir}/*.txt 2>/dev/null || true
