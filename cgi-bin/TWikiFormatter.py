@@ -241,7 +241,7 @@ way to fit your requirements.
 		@import "%s/jsExt/dataTables/media/css/demo_table.css";
 	</style>
 
-    <script type="text/javascript" src="%s/js/libs/jquery.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 
     <script type="text/javascript" src="%s/js/igpSummary.js"></script>
 
@@ -265,7 +265,7 @@ way to fit your requirements.
     </script>
 
 
-""" % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath']) )
+""" % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath']) )
     
 	    self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'css/colors.css">\n')
             self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'css/intbld.css">\n')

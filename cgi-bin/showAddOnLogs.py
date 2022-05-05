@@ -324,7 +324,7 @@ def main():
 
     style = """
     <!-- bootstrap style -->
-    <link rel="stylesheet" type="text/css" href="%s/css/libs/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="%s/css/intbld.css">
     
     <link rel="stylesheet" type="text/css" href="%s/css/intbld.css">\n
@@ -339,9 +339,9 @@ def main():
     </style>  
 
     <!-- jQuery library -->
-    <script type="text/javascript" src="%s/js/libs/jquery.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <!-- bootstrap library -->
-    <script type="text/javascript" src="%s/js/libs/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     
     <script>
     function showHide(obj){
@@ -350,7 +350,7 @@ def main():
         $(".info[name='"+myname+"']").toggle();
     }
     </script>
-    """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'])
+    """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'])
 
     fmtr = Formatter.SimpleHTMLFormatter(title="Add-On Test Logs from CMSSW Integration Build", style=style)
 

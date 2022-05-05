@@ -841,7 +841,7 @@ def main():
     style = """
     
     <!-- bootstrap style -->
-    <link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="%s/css/intbld.css">
     <style type="text/css">  
     // @import url(css.css);  
@@ -851,9 +851,9 @@ def main():
     </style>  
     
     <!-- jQuery library -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js""></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js""></script>
     <!-- bootstrap library -->
-    <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     
     <script>
     function showHide(obj){

@@ -843,7 +843,7 @@ def main():
     .showOld { font-size: 18; text-decoration: underline; padding: 20px}
     </style>  
 
-    <script type="text/javascript" src="%s/js/libs/jquery.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 
     <!-- 
     <script type="text/javascript" src="%s/jsExt/dataTables.js"></script>
@@ -882,7 +882,7 @@ def main():
     });
     </script>
 
-    """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'])
+    """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'])
 
     fmtr = Formatter.SimpleHTMLFormatter(title="CMSSW integration builds", style=style)
 
