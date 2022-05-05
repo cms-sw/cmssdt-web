@@ -841,7 +841,7 @@ def main():
     style = """
     
     <!-- bootstrap style -->
-    <link rel="stylesheet" type="text/css" href="%s/css/libs/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="%s/css/intbld.css">
     <style type="text/css">  
     // @import url(css.css);  
@@ -851,9 +851,9 @@ def main():
     </style>  
     
     <!-- jQuery library -->
-    <script type="text/javascript" src="%s/js/libs/jquery.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js""></script>
     <!-- bootstrap library -->
-    <script type="text/javascript" src="%s/js/libs/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     
     <script>
     function showHide(obj){
@@ -876,7 +876,7 @@ def main():
     });
     </script>
 
-    """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'])
+    """ % (config.siteInfo['HtmlPath'])
 
     fmtr = Formatter.SimpleHTMLFormatter(title="CMSSW Integration Build Info", style=style)
 
