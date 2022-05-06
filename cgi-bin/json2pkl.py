@@ -1,8 +1,8 @@
-#!/usr/bin/env python2.6
+#!/usr/bin/env python
 
 import os, sys
 
-import json  # this needs 2.6 !
+import json 
 
 from pickle import Pickler
 
