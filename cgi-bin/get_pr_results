@@ -10,7 +10,10 @@ elif [ $(echo "${PATH_INFO}" | grep '/pr-result$' | wc -l) -gt 0 ] ; then
   dir=${DOCUMENT_ROOT}/$(echo "${SCRIPT_URL}" | sed "s|${SCRIPT_NAME}|/SDT|;s|/pr-result$||")/testsResults
   if [ -d "$dir" ] ; then
     if [ $(ls -d "${dir}"/*-failed.res 2>/dev/null | wc -l) -gt 0 ] ; then
-      echo "**Failed Tests**: $(cat ${dir}/*-failed.res | tr '\n' ' ')"
+      FTESTS="$(cat ${dir}/*-failed.res | tr '\n' ' '| grep -v '^ *$')"
+      if [ "${FTESTS}" != "" ] ; then
+        echo "**Failed Tests**: ${FTESTS}"
+      fi
     fi
     if [ $(ls -d "${dir}"/*-report.res 2>/dev/null | wc -l) -gt 0 ] ; then
       cat "${dir}"/*-report.res
