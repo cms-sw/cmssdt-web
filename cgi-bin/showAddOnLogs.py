@@ -111,7 +111,7 @@ class LogViewer(object):
             # formatter.writeH3( "ERROR opening or reading logFile: "+logFileName )
             return passed, failed, timeout, notrun, stepOK, stepFail
         
-        logRe = re.compile('(cmsRun|cmsDriver.py)\s+(.*?)\s:\s([PF].*?D)\s.*')
+        logRe = re.compile('.*(cmsRun|cmsDriver.py)\s+(.*?)\s:\s([PF].*?D)\s.*')
 
         for line in lines:
 
@@ -259,10 +259,15 @@ class LogViewer(object):
 		    styleClass = xRest[dirName+':'+str(i)]
 		except:
 		    continue
+
                 cmd = cmdList[i]
-                lfPart = cmd.replace("'",'').replace('/','_').replace(' ',"_")
-                logFileName = 'cmsDriver-'+dirName+'_'+'%s.log' % lfPart
-                logFileName = self.findLogFile(logFileName)
+
+                logFileName = self.findLogFile('cmsDriver-'+dirName+'_'+'step%s.log' % (i+1))
+                # if no match, look for old-style naming of addOnTests logs
+                if not logFileName:
+                  lfPart = cmd.replace("'",'').replace('/','_').replace(' ',"_")
+                  logFileName = 'cmsDriver-'+dirName+'_'+'%s.log' % lfPart
+                  logFileName = self.findLogFile(logFileName)
 
                 outLine = '<a href="'+topCgiLogString+logFileName+'">'
                 if newStyle:

@@ -350,7 +350,7 @@ class BuildViewer(object):
         passed = 0
         failed = 0
 
-        logRe = re.compile('(cmsRun|cmsDriver.py)\s+(.*?)\s:\s([PF].*?D)\s.*')
+        logRe = re.compile('.*(cmsRun|cmsDriver.py)\s+(.*?)\s:\s([PF].*?D)\s.*')
 
         for line in lines:
 
