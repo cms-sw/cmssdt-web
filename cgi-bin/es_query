@@ -2,7 +2,8 @@
 import sys, json, re, base64
 from urllib2 import Request, urlopen
 print "Content-Type: application/json\n"
-ES_CERN_URL = "https://es-cmssdt.cern.ch:9203"
+ES7_CERN_URL = "https://es-cmssdt.cern.ch:9203"
+ES_CERN_URL = "https://es-cmssdt1.cern.ch/es"
 
 def send_error(msg):
   print '{"proxy-error":"%s"}' % msg
@@ -14,7 +15,7 @@ try:
   query = payload.pop('query',None)
   method = payload.pop('method','POST')
   es_ser = payload.pop('es_server',ES_CERN_URL)
-  if not re.match("^https://es-cms(sdt|)([0-9]+|).cern.ch(:|/).+",es_ser):
+  if not re.match("^https://es-cms(sdt|)([0-9]+|).cern.ch(:|/).*",es_ser):
     es_ser = ES_CERN_URL
   api_type = payload.pop('api','/_search')
   if not api_type in ["/_search", "/_cat", "/_mapping", "/_template"]: send_error ("Invalid api type: %s" % api_type)
