@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import sys, json, re, base64
+import sys, json, re, base64, ssl
 from urllib2 import Request, urlopen
 print "Content-Type: application/json\n"
 ES7_CERN_URL = "https://es-cmssdt.cern.ch:9203"
@@ -45,7 +45,9 @@ try:
   try:
     request = Request(url, query, header)
     request.get_method = lambda: method
-    print urlopen(request).read()
+    try: sslcon = ssl._create_unverified_context()
+    except Exception as e: sslcon =  None
+    print urlopen(request, context=sslcon).read()
   except Exception as e:
     send_error("Couldn't send data to elastic search: %s\nurl:%s\nquery:%s" % (str(e),url, query))
 except Exception as e:
