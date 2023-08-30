@@ -47,14 +47,8 @@ def check_event(data):
   elif (event == 'issue_comment'):
     #if (not data['action'] in ['created','edited','deleted']): return False,event
     if not full_name in ['cms-sw/cmsdist','cms-sw/cmssw']: return True,event
-    l2 = set([])
-    try: from categories import USERS_TO_TRIGGER_HOOKS as l2
-    except:
-      try: l2 = repo_config.USERS_TO_TRIGGER_HOOKS
-      except: pass
-    managers = set([])
-    try: from releases import USERS_TO_TRIGGER_HOOKS as managers
-    except: pass
+    from categories import USERS_TO_TRIGGER_HOOKS as l2
+    from releases import USERS_TO_TRIGGER_HOOKS as managers
     extra_testers = set([lab['name'][6:] for lab in data['issue']['labels'] if lab['name'].startswith('allow-')])
     valid_admins = l2 | managers | extra_testers
     if not data['comment']['user']['login'] in valid_admins:
