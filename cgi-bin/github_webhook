@@ -49,8 +49,8 @@ def check_event(data):
     if not full_name in ['cms-sw/cmsdist','cms-sw/cmssw']: return True,event
     try:
       from cmsdist_merge_permissions import isValidWebHook
-      return isValidWebHook(data), "comp_issue_comment"
-    except Exception as e: pass    
+      if isValidWebHook(data): return True, "comp_issue_comment"
+    except Exception as e: pass
     from categories import USERS_TO_TRIGGER_HOOKS as l2
     from releases import USERS_TO_TRIGGER_HOOKS as managers
     extra_testers = set([ data['comment']['user']['login'] ]+[lab['name'][6:] for lab in data['issue']['labels'] if lab['name'].startswith('allow-')])
