@@ -45,6 +45,7 @@ def check_event(data):
   if (event == 'pull_request'): return True,event
   elif (event == 'issues') and (not data['action'] in ['opened']): return False,event
   elif (event == 'issue_comment'):
+    if data["action"] == "edited" and (data['comment']['user']['login'] == "cmsbuild"): return False, event
     #if (not data['action'] in ['created','edited','deleted']): return False,event
     if not full_name in ['cms-sw/cmsdist','cms-sw/cmssw']: return True,event
     try:
