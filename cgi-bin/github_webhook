@@ -8,6 +8,8 @@ print("Content-Type: text/html\n")
 BASE_DIRECTORY = "/data"
 
 def check_event(data):
+  try: cmsbuild_user =  repo_config.CMSBUILD_USER
+  except: cmsbuild_user = "cmsbuild"
   if not 'HTTP_X_GITHUB_EVENT' in os.environ: return False,''
   event = os.environ['HTTP_X_GITHUB_EVENT']
   if not event in ['issues', 'issue_comment', 'pull_request' , 'push', "release", "status", "workflow_dispatch"]: return False,event
@@ -45,6 +47,7 @@ def check_event(data):
   if (event == 'pull_request'): return True,event
   elif (event == 'issues') and (not data['action'] in ['opened']): return False,event
   elif (event == 'issue_comment'):
+    if data["action"] == "edited" and (data['comment']['user']['login'] == cmsbuild_user): return False, event
     #if (not data['action'] in ['created','edited','deleted']): return False,event
     if not full_name in ['cms-sw/cmsdist','cms-sw/cmssw']: return True,event
     try:
