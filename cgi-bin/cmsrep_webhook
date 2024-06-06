@@ -18,15 +18,17 @@ def check_ip():
     ip_net = open(BASE_DIRECTORY+'/sdt/cmsrep.txt','r').read().split('\n')[0].strip()
   except Exception as e:
     print ("Unable to read cmsrep hook meta information, using hard coded value")
-    ip_net ="188.184.102.160/32"
+    ip_net ="188.185.6.249/32"
 
   ip, mask = ip_net.split('/')
   mask = int(mask)
   ip = ''.join(["{0:08b}".format(int(i)) for i in ip.split('.') ])[0:mask]
-  if 'HTTP_X_FORWARDED_FOR' in os.environ and os.environ['HTTP_X_FORWARDED_FOR']!='':
+  if 'REMOTE_ADDR' in os.environ and os.environ['REMOTE_ADDR']!='':
+    src_ip = ''.join([ "{0:08b}".format(int(i)) for i in os.environ['REMOTE_ADDR'].split('.')])[0:mask]
+  elif 'HTTP_X_FORWARDED_FOR' in os.environ and os.environ['HTTP_X_FORWARDED_FOR']!='':
     src_ip = ''.join([ "{0:08b}".format(int(i)) for i in os.environ['HTTP_X_FORWARDED_FOR'].split('.')])[0:mask]
   else:
-    src_ip = ''.join([ "{0:08b}".format(int(i)) for i in os.environ['REMOTE_ADDR'].split('.')])[0:mask]
+    src_ip = ''
   return ip == src_ip
 
 data = sys.stdin.read()
