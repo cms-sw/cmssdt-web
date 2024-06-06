@@ -15,21 +15,16 @@ def check_signature(data, repo_config):
 #check source ip in white list fucntion
 def check_ip():
   try:
-    ip_net = open(BASE_DIRECTORY+'/sdt/cmsrep.txt','r').read().split('\n')[0].strip()
+    ip_net = open(BASE_DIRECTORY+'/sdt/cmsrep.txt','r').read().split('\n')
   except Exception as e:
-    print ("Unable to read cmsrep hook meta information, using hard coded value")
-    ip_net ="188.185.6.249/32"
+    ip_net = ["188.185.6.249", "2001:1458:d00:62::100:284"]
 
-  ip, mask = ip_net.split('/')
-  mask = int(mask)
-  ip = ''.join(["{0:08b}".format(int(i)) for i in ip.split('.') ])[0:mask]
-  if 'REMOTE_ADDR' in os.environ and os.environ['REMOTE_ADDR']!='':
-    src_ip = ''.join([ "{0:08b}".format(int(i)) for i in os.environ['REMOTE_ADDR'].split('.')])[0:mask]
-  elif 'HTTP_X_FORWARDED_FOR' in os.environ and os.environ['HTTP_X_FORWARDED_FOR']!='':
-    src_ip = ''.join([ "{0:08b}".format(int(i)) for i in os.environ['HTTP_X_FORWARDED_FOR'].split('.')])[0:mask]
-  else:
-    src_ip = ''
-  return ip == src_ip
+  for x in ["HTTP_X_FORWARDED_FOR", "REMOTE_ADDR"]:
+    if (x in os.environ) and (os.environ[x]!=''):
+      if os.environ[x] in ip_net:
+        return True
+  print("IP match matched to one of:",ip_net)
+  return False
 
 data = sys.stdin.read()
 try:
