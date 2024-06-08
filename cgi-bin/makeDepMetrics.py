@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import re, os
 
@@ -175,7 +175,7 @@ if __name__=="__main__" :
     file = open("sample.html",'w')
     mkDM= mkDepMetrics(file, 'slc5_amd64_gcc434','CMSSW_4_2_X_2011-01-28-1300')
     summary = mkDM.makeSummary()
-    print summary
+    print (summary)
     pkglist = mkDM.packlist()
     outputlist = mkDM.repack(pkglist)
     mkDM.dropdown(outputlist)
