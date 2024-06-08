@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 """
 untitled.py
@@ -116,10 +116,10 @@ class BuildLogDisplay(object):
           unitTestResults = pklr.load()
           summFile.close()
         except IOError, e:
-          # print "IO ERROR reading unitTestResuls.pkl file from ", path, str(e)
+          # print ("IO ERROR reading unitTestResuls.pkl file from ", path, str(e))
           pass
         except Exception, e:
-          print "ERROR got exception when trying to load unitTestResults.pkl", str(e)
+          print ("ERROR got exception when trying to load unitTestResults.pkl", str(e))
 
         return unitTestResults
       
@@ -138,7 +138,7 @@ class BuildLogDisplay(object):
               elif "'src/"       in line: pkg_parts=line.split("'src/",1)[-1].split("/",2)[:2]
               if pkg_parts: self.Python3["/".join(pkg_parts)]=1
         except Exception, e:
-          print "ERROR got exception when trying to read python3.html", str(e)
+          print ("ERROR got exception when trying to read python3.html", str(e))
         return
 
     # --------------------------------------------------------------------------------
@@ -152,7 +152,7 @@ class BuildLogDisplay(object):
             with open(stats) as sfile:    
               self.IWYU = load(sfile)
         except Exception, e:
-          print "ERROR got exception when trying to load stats.json", str(e)
+          print ("ERROR got exception when trying to load stats.json", str(e))
         return
 
     # --------------------------------------------------------------------------------
@@ -166,7 +166,7 @@ class BuildLogDisplay(object):
             with open(stats) as sfile:
               self.InvalidIncludes = load(sfile)
         except Exception, e:
-          print "ERROR got exception when trying to load summary.json", str(e)
+          print ("ERROR got exception when trying to load summary.json", str(e))
         return
     # --------------------------------------------------------------------------------
 
@@ -217,11 +217,11 @@ class BuildLogDisplay(object):
             results = pklr.load()
             summFile.close()
         except IOError, e:
-            # print "IO ERROR reading depViolationSummary.pkl file from ", path, str(e)
+            # print ("IO ERROR reading depViolationSummary.pkl file from ", path, str(e))
             self.depViolResults = {}
             return
         except Exception, e:
-            print "ERROR got exception when trying to load depViolationSummary.pkl", str(e)
+            print ("ERROR got exception when trying to load depViolationSummary.pkl", str(e))
 
         for k,v in results.items():
             pkg = '/'.join( k.split('/')[0:2] )
@@ -488,7 +488,7 @@ class BuildLogDisplay(object):
         self.sa.analyzeLogFile(linesScram)
         
         if rel != ib:
-            print "Error : found ", rel, 'when expecting ', ib
+            print ("Error : found ", rel, 'when expecting ', ib)
 
         keyList = errorKeys
         #Make sure we have styleClass for keys if not then set then to error
