@@ -115,10 +115,10 @@ class BuildLogDisplay(object):
           pklr = Unpickler(summFile)
           unitTestResults = pklr.load()
           summFile.close()
-        except IOError, e:
+        except IOError as e:
           # print ("IO ERROR reading unitTestResuls.pkl file from ", path, str(e))
           pass
-        except Exception, e:
+        except Exception as e:
           print ("ERROR got exception when trying to load unitTestResults.pkl", str(e))
 
         return unitTestResults
@@ -137,7 +137,7 @@ class BuildLogDisplay(object):
               elif "'python/"    in line: pkg_parts=line.split("'python/",1)[-1].split("/",2)[:2]
               elif "'src/"       in line: pkg_parts=line.split("'src/",1)[-1].split("/",2)[:2]
               if pkg_parts: self.Python3["/".join(pkg_parts)]=1
-        except Exception, e:
+        except Exception as e:
           print ("ERROR got exception when trying to read python3.html", str(e))
         return
 
@@ -151,7 +151,7 @@ class BuildLogDisplay(object):
             from json import load
             with open(stats) as sfile:    
               self.IWYU = load(sfile)
-        except Exception, e:
+        except Exception as e:
           print ("ERROR got exception when trying to load stats.json", str(e))
         return
 
@@ -165,7 +165,7 @@ class BuildLogDisplay(object):
             from json import load
             with open(stats) as sfile:
               self.InvalidIncludes = load(sfile)
-        except Exception, e:
+        except Exception as e:
           print ("ERROR got exception when trying to load summary.json", str(e))
         return
     # --------------------------------------------------------------------------------
@@ -216,11 +216,11 @@ class BuildLogDisplay(object):
             pklr = Unpickler(summFile)
             results = pklr.load()
             summFile.close()
-        except IOError, e:
+        except IOError as e:
             # print ("IO ERROR reading depViolationSummary.pkl file from ", path, str(e))
             self.depViolResults = {}
             return
-        except Exception, e:
+        except Exception as e:
             print ("ERROR got exception when trying to load depViolationSummary.pkl", str(e))
 
         for k,v in results.items():
@@ -471,7 +471,7 @@ class BuildLogDisplay(object):
           except IOError:
             # self.formatter.write("ERROR : could not find/read libchecker info")
             self.libChkErrMap = {}
-          except Exception, e:
+          except Exception as e:
             self.formatter.write("ERROR : unknown error reading libchecker info : "+str(e))
             self.libChkErrMap = {}
             
