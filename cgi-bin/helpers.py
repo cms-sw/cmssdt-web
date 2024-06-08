@@ -103,7 +103,7 @@ def getWallClockTimes(ib, arch=None):
             wallClockTimes [items[3].replace('_','/')] = items[-1]
         except:
             errLines.append('error converting/filling'+items)
-            print "ERROR converting/filling: ", items 
+            print ("ERROR converting/filling: ", items)
             pass
         
     return wallClockTimes, errLines
