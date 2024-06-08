@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # make sure this is first to trap also problems in includes later
 import cgitb; cgitb.enable() ## cgitb.enable(display=0, logdir=os.getcwd()+"/../cgi-logs/")
@@ -173,12 +173,12 @@ class LogViewer(object):
             pass
 
         newStyle = True
-	if pathReq.endswith("&new"):
-	    newStyle = True
-	    pathReq = pathReq[:-4]
-	elif pathReq.endswith("&old"):
-	    newStyle = False
-	    pathReq = pathReq[:-4]
+        if pathReq.endswith("&new"):
+            newStyle = True
+            pathReq = pathReq[:-4]
+        elif pathReq.endswith("&old"):
+            newStyle = False
+            pathReq = pathReq[:-4]
 
         self.formatter.writeAnchor(ref='top')
         self.formatter.writeH2("CMSSW Integration Build Add-On Test log viewer")
@@ -203,12 +203,12 @@ class LogViewer(object):
             self.formatter.writeH3("Test logs not yet available")
             return
 
-	stepRes = [[0,0,0,0],[0,0,0,0]]
-	actualSteps = 0
+        stepRes = [[0,0,0,0],[0,0,0,0]]
+        actualSteps = 0
 
         xRest = {}
         for dirName, cmdList in self.commands.items():
-	    step = -1
+            step = -1
             for i in range(0,len(stepRes[0])):
                 try:
                     cmd = cmdList[i]
@@ -220,17 +220,17 @@ class LogViewer(object):
                 if cmdx in notrun:
                     continue
                 step += 1
-		res = 'passed'
+                res = 'passed'
                 if cmdx in failed:
                    stepRes[1][step]=stepRes[1][step]+1
-		   res = 'failed'
+                   res = 'failed'
                 else:
                     stepRes[0][step]=stepRes[0][step]+1
-		xRest[dirName+':'+str(i)] = res
+                xRest[dirName+':'+str(i)] = res
                 if actualSteps<step: actualSteps = step
 
         self.formatter.startTable ( [15, 15, 15, 15, 15], ['Step','total', 'passed', 'failed'])
-	for i in range(0,actualSteps+1):
+        for i in range(0,actualSteps+1):
           self.formatter.writeRow(['step'+str(i+1)  , str(stepRes[0][i]+stepRes[1][i]), str(stepRes[0][i]), str(stepRes[1][i])])
         self.formatter.endTable()
 
@@ -254,11 +254,11 @@ class LogViewer(object):
         for dirName, cmdList in self.commands.items():
             step = 0
             for i in range(0,len(stepRes[0])):
-	        styleClass = 'passed'
-		try:
-		    styleClass = xRest[dirName+':'+str(i)]
-		except:
-		    continue
+                styleClass = 'passed'
+                try:
+                    styleClass = xRest[dirName+':'+str(i)]
+                except:
+                    continue
 
                 cmd = cmdList[i]
 
@@ -301,15 +301,15 @@ class LogViewer(object):
             num += 1
             row = [ str(num) ]
             rowStyles = ['']
-	    if newStyle:
-	        style = "passed"
-		rdata = sample
-		for x in styles[sample]:
-		    if styles[sample][x] == "failed":
-		        style = "failed"
-			break
-		row.append( sample )
-		rowStyles.append('"'+style+' '+'left"')   
+            if newStyle:
+                style = "passed"
+                rdata = sample
+                for x in styles[sample]:
+                    if styles[sample][x] == "failed":
+                        style = "failed"
+                        break
+                row.append( sample )
+                rowStyles.append('"'+style+' '+'left"')   
             for step in range(0,3):
                 try:
                     row.append( rows[sample][step] )
