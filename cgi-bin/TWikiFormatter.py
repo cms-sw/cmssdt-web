@@ -16,7 +16,7 @@ class TWikiFormatter :
         self.style = style
         self.outFile = outFile
         self.format = ""
-	self.raw = 0
+        self.raw = 0
 
         self.ib = release
 
@@ -75,12 +75,13 @@ class TWikiFormatter :
         return
 
     def startUl(self) :
-	self.headers()
-	self.outFile.write( "<ul>"+'\n')
+        self.headers()
+        self.outFile.write( "<ul>"+'\n')
+
     def writeLi(self, args) :
-	self.outFile.write( "<li>"+args+"</li>"+'\n')
+        self.outFile.write( "<li>"+args+"</li>"+'\n')
     def endUl(self) :
-	self.outFile.write("</ul>"+'\n')
+        self.outFile.write("</ul>"+'\n')
     
     def writeAnchor(self, ref="") :
         self.headers()
@@ -139,11 +140,11 @@ class TWikiFormatter :
                 
     # --------------------------------------------------------------------------------
     def headers(self) :
-	import config
+        import config
         # make sure to write the headers only once ...
         if not self.headersDone :
-	    self.outFile.write( "Content-Type: text/html" + '\n')     # HTML is following
-	    self.outFile.write("""
+            self.outFile.write( "Content-Type: text/html" + '\n')     # HTML is following
+            self.outFile.write("""
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
@@ -155,7 +156,7 @@ class TWikiFormatter :
                 self.outFile.write( self.style + '\n')
             
             self.outFile.write( "<TITLE>" + self.title + "</TITLE>" + '\n')
-	    self.outFile.write( """
+            self.outFile.write( """
 <script type="text/javascript">
 function enlarge(el) {
 	el.width *= 2;
@@ -267,9 +268,9 @@ way to fit your requirements.
 
 """ % (config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath'], config.siteInfo['HtmlPath']) )
     
-	    self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'css/colors.css">\n')
+            self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'css/colors.css">\n')
             self.outFile.write('	<link rel="stylesheet" type="text/css" href="'+config.siteInfo['HtmlPath']+'css/intbld.css">\n')
-	    self.outFile.write("""
+            self.outFile.write("""
 <TITLE> CMSSW Integration Build Scram Info</TITLE>
 </head>
 <body>
