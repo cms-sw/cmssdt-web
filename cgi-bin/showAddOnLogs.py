@@ -137,7 +137,7 @@ class LogViewer(object):
         self.logFiles = []
         logArch1 = addOnDir+"/addOnTests.zip"
         logArch = addOnDir+"/addOnTests.tgz"
-        from commands import getstatusoutput
+        from subprocess import getstatusoutput
         if os.path.exists(logArch1):
             err, out = getstatusoutput("unzip -l "+logArch1+" | grep '.log$' | sed s'|.* ||'")
             for log in out.split("\n"):
