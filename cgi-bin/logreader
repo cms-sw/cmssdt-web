@@ -1,8 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import bottle, os, re, string
 from os.path import exists
 from bottle import route, debug, abort, request, redirect
-from commands import getstatusoutput
+from subprocess import getstatusoutput
 from time import strptime
 
 app = bottle.default_app()
