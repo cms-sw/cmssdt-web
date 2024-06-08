@@ -52,7 +52,7 @@ class LogViewer(object):
         # print "reading commands from ", dbPath
         
         if not os.path.exists( dbPath ):
-            print "ERROR: pkl file "+dbPath+"does not exist"
+            print ("ERROR: pkl file "+dbPath+"does not exist")
             return
 
         import pickle
@@ -68,7 +68,7 @@ class LogViewer(object):
     
     def showCommands(self):
 
-        print "found ", len(self.commands), ' commands:'
+        print ("found ", len(self.commands), ' commands:')
 
         n1 = 0
         n2 = 0
@@ -76,17 +76,17 @@ class LogViewer(object):
         maxLen = 50
         for dirName, cmdList in self.commands.items():
             n1+=1
-            print "%-10s  [1]: %s ..." % (dirName, cmdList[0])
+            print ("%-10s  [1]: %s ..." % (dirName, cmdList[0]))
             if len(cmdList) > 1:
                 n2+=1
-                print "       [2]: %s ..." % (  "".join(cmdList[1]))
+                print ("       [2]: %s ..." % (  "".join(cmdList[1])))
                 if len(cmdList) > 2:
                     n3+=1
-                    print "        [3]: %s ..." % ( ' '.join( cmdList[3]) )
+                    print ("        [3]: %s ..." % ( ' '.join( cmdList[3]) ))
 
-        print n1, 'commands with  one  step,'
-        print n2, 'commands with  two  steps'
-        print n3, 'commands with three steps'
+        print (n1, 'commands with  one  step,')
+        print (n2, 'commands with  two  steps')
+        print (n3, 'commands with three steps')
 
         return
     
