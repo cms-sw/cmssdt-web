@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # make sure this is first to trap also problems in includes later
 import cgitb; cgitb.enable() ## cgitb.enable(display=0, logdir=os.getcwd()+"/../cgi-logs/")
@@ -41,8 +41,8 @@ class ScramAnalyzer(object):
                      }
         self.errPkg  = {}
         self.warnPkg = {}
-	self.errEx = 0
-	self.warnEx = 0
+        self.errEx = 0
+        self.warnEx = 0
         startFound = False
         for line in lines:
             if not startFound:
@@ -62,7 +62,7 @@ class ScramAnalyzer(object):
                     else:
                         pkg = res.group(1)
                         if stype == 'error':
-			    if pkg not in self.errPkg : self.errPkg[pkg]=[]
+                            if pkg not in self.errPkg : self.errPkg[pkg]=[]
                             self.errPkg[pkg].append(line)
                         elif stype == 'warning':
                             if pkg not in self.warnPkg : self.warnPkg[pkg]=[]

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # encoding: utf-8
 """
 untitled.py
@@ -111,7 +111,7 @@ class BuildLogDisplay(object):
         try:
           wwwFile = path+'/unitTestResults.pkl'
           if not os.path.exists(wwwFile): wwwFile=path.replace('www/','')+'/unitTestResults.pkl'
-          summFile = open(wwwFile, 'r')
+          summFile = open(wwwFile, 'rb')
           pklr = Unpickler(summFile)
           unitTestResults = pklr.load()
           summFile.close()
@@ -212,7 +212,7 @@ class BuildLogDisplay(object):
         try:
             wwwFile = path+'/testLogs/depViolationSummary.pkl'
             if not os.path.exists(wwwFile): path.replace('www/','')+'/testLogs/depViolationSummary.pkl'
-            summFile = open(wwwFile, 'r')
+            summFile = open(wwwFile, 'rb')
             pklr = Unpickler(summFile)
             results = pklr.load()
             summFile.close()
@@ -434,7 +434,7 @@ class BuildLogDisplay(object):
         # read back all info also as pkl files so we can re-use it:
 
         try:
-            summFile = open(self.normPath+'/'+newdir+'/logAnalysis.pkl','r')
+            summFile = open(self.normPath+'/'+newdir+'/logAnalysis.pkl','rb')
         except:
             self.formatter.writeH3("ERROR could not open results from logAnalysis")
             # if this happens, don't bother to continue
