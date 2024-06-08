@@ -11,22 +11,22 @@ class makeScramInfo(object):
 
     def __init__(self, logfile, outpath ):
         import config
-	self.scramInfo = None
-	self.logfile = logfile
-	self.outPath = outpath
+        self.scramInfo = None
+        self.logfile = logfile
+        self.outPath = outpath
 
     def closeFile(self):
         if self.scramInfo:
-	    self.scramInfo.write('</body>\n</html>\n')
-	    self.scramInfo.close()
+            self.scramInfo.write('</body>\n</html>\n')
+            self.scramInfo.close()
     
     # --------------------------------------------------------------------------------
 
     def AnalyzeLog(self):
-	self.scramInfo = open(self.outPath+'/scramInfo.html','w')
-	self.scramInfo.write('\n')
-	self.scramInfo.write('<html>\n<head>\n<link rel="stylesheet" type="text/css" href="http://cern.ch/cms-sdt/css/intbld.css"><Title>SCRAM Infomation</Title></head><body>\n')
-	lines = []
+        self.scramInfo = open(self.outPath+'/scramInfo.html','w')
+        self.scramInfo.write('\n')
+        self.scramInfo.write('<html>\n<head>\n<link rel="stylesheet" type="text/css" href="http://cern.ch/cms-sdt/css/intbld.css"><Title>SCRAM Infomation</Title></head><body>\n')
+        lines = []
         try:
             page = open(self.logfile)
         except:
@@ -91,11 +91,11 @@ class makeScramInfo(object):
             pkgList.sort()
             for pkg in pkgList:
                 err = errPkg[pkg]
-		if pkg==prepkg :
-			self.scramInfo.write('|  ^  |  '+str(err)+'  |\n')
-		else :
-                	self.scramInfo.write('|  !'+pkg+'  |  '+ str(err)+'  |\n')
-		prepkg=pkg
+                if pkg==prepkg :
+                        self.scramInfo.write('|  ^  |  '+str(err)+'  |\n')
+                else :
+                        self.scramInfo.write('|  !'+pkg+'  |  '+ str(err)+'  |\n')
+                prepkg=pkg
         else:
             self.scramInfo.write('<h1>No SCRAM errors found in build.</h1>\n')
 
@@ -106,18 +106,18 @@ class makeScramInfo(object):
             pkgList.sort()
             for pkg in pkgList:
                 warn = warnPkg[pkg]
-		if pkg == prepkg :
-			self.scramInfo.write('|  ^  |  '+str(warn)+'  |\n')
-		else :
-                	self.scramInfo.write('|  !'+pkg+'  |  '+ str(warn)+'  |\n')
-		prepkg=pkg
+                if pkg == prepkg :
+                        self.scramInfo.write('|  ^  |  '+str(warn)+'  |\n')
+                else :
+                        self.scramInfo.write('|  !'+pkg+'  |  '+ str(warn)+'  |\n')
+                prepkg=pkg
         else:
             self.scramInfo.write('<h1>No SCRAM warnings found in build.</h1>\n')
 
         return errPkg, warnPkg
 
 if __name__ == '__main__' :
-	pass 
+        pass 
 
  
 
