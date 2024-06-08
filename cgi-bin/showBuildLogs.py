@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding: utf-8
 """
 untitled.py
@@ -14,7 +14,7 @@ import os, sys, cgi, time, re
 from pickle import Unpickler
         
 import Formatter
-
+from functools import cmp_to_key
 import config
 
 def cleanPath(path):
@@ -23,8 +23,10 @@ def cleanPath(path):
 import getopt
 
 def pkgCmp(a,b):
-    if a.subsys == b.subsys: return cmp(a.pkg, b.pkg)
-    else: return cmp(a.subsys, b.subsys)
+    def cmpx(a, b):
+        return (a > b) - (a < b)
+    if a.subsys == b.subsys: return cmpx(a.pkg, b.pkg)
+    else: return cmpx(a.subsys, b.subsys)
 
 # ================================================================================
 
@@ -624,7 +626,7 @@ class BuildLogDisplay(object):
             if (key in ignoreKeys) or (key in emptyKeys): 
                 for pkg in pkgList: pkgOK.append(pkg)
                 continue
-            pkgList.sort(pkgCmp)
+            pkgList = sorted(pkgList, key=cmp_to_key(pkgCmp))
             
             for pkg in pkgList:
                 allErrPkgs[pkg.name()]=1
@@ -686,7 +688,7 @@ class BuildLogDisplay(object):
             x= PackageInfo(s[0],s[1])
             pkgOK.append(x)
         pkgList = pkgOK
-        pkgList.sort(pkgCmp)
+        pkgList = sorted(pkgList, key=cmp_to_key(pkgCmp))
         newOK = []
         libChkOnly = []
         for pkg in pkgList:
@@ -738,7 +740,7 @@ class BuildLogDisplay(object):
 
         # here we have the packages which have _only_ a libcheck error
         pkgList = libChkOnly
-        pkgList.sort(pkgCmp)
+        pkgList = sorted(pkgList, key=cmp_to_key(pkgCmp))
         for pkg in pkgList:
             self.addRow = False
             link = pkg.name()
@@ -787,7 +789,7 @@ class BuildLogDisplay(object):
 
         # here we have the really OK packages
         pkgList = newOK
-        pkgList.sort(pkgCmp)
+        pkgList = sorted(pkgList, key=cmp_to_key(pkgCmp))
         for pkg in pkgList:
             self.addRow = False
             # skip these, they were treated above ...
