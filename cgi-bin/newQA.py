@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-import os, sys, time, re, urllib, cgi, httplib, glob
-from commands import getstatusoutput
+import os, sys, time, re, urllib, cgi, glob
+from subprocess import getstatusoutput
 import cgitb; cgitb.enable() ## cgitb.enable(display=0, logdir=os.getcwd()+"/../cgi-logs/")
 
 scriptPath = '/var/www/cgi-bin/'
@@ -83,7 +83,7 @@ class GetPath(object) :
         pklFile.dump(data)
         outFile.close()
         return
-	
+
     def readPickleData(self,pFile):
         import  pickle
         return pickle.load(open(pFile,'rb'))
@@ -139,14 +139,14 @@ class InfoMaker(object):
 
         errList = {}
         for pklFileName in pklFiles:
-            pklIn = open(pklFileName,'r')
+            pklIn = open(pklFileName,'rb')
             from pickle import Unpickler
             upklr = Unpickler(pklIn)
             data = upklr.load() # { file : [lines] }
             pklIn.close()
             errList[pklFileName] = len(data.keys())
             nErr += len(data.keys())
-    	return nErr
+        return nErr
 
     # --------------------------------------------------------------------------------
     
@@ -177,8 +177,8 @@ class InfoMaker(object):
                         avg = int(re.sub("\s*s\s*$",'',re.sub("^Average time per workflow:\s*",'',line)))
                     elif re.match("^CMSSW_.+-Workflow.xml:\s*.+$",line): count += 1
                 xFile.close()
-            except Exception, e:
-                print 'ERROR during '+timingFile+' file : ' + str(e)
+            except Exception as e:
+                print ('ERROR during '+timingFile+' file : ' + str(e))
 
         return count,avg
     
@@ -200,19 +200,19 @@ class InfoMaker(object):
                 elif status == 'warning': info[0]=1
                 elif status == 'error':   info[0]=2
                 elif status == 'skip':    info[0]=3
-	
+
         return info
-    
+
     # --------------------------------------------------------------------------------
     
     def writeSummary(self, path, vgErrs, igErrs, ddErr, cfgInfo, dfsErr, prodErr, fwliteBS):
 
-    	try:
+        try:
             from pickle import Pickler
             diffTime = 0
             if not os.path.exists(path+'/timestamp'):
-	        if not os.path.exists(path):
-		    err, out = getstatusoutput("mkdir -p "+path)
+                if not os.path.exists(path):
+                    err, out = getstatusoutput("mkdir -p "+path)
                 tsFile = open(path+'/timestamp', 'w')
                 tsFile.close()
             else: diffTime = time.time() - os.path.getmtime(path+'/timestamp')
@@ -221,8 +221,8 @@ class InfoMaker(object):
             # Or too much time has passed
             allFound = True
             if (diffTime<86400):
-    	        allFound = (igErrs > -1) and (fwliteBS>-1)
-    	        allFound = allFound and (ddErr[0]>-1) and (ddErr[1]>-1) and (ddErr[2]>-1) and (ddErr[3]>-1)
+                allFound = (igErrs > -1) and (fwliteBS>-1)
+                allFound = allFound and (ddErr[0]>-1) and (ddErr[1]>-1) and (ddErr[2]>-1) and (ddErr[3]>-1)
             else:
                 if fwliteBS==-1: fwliteBS=3
             summFile = open(path+'/qaSummary.pkl', 'wb')
@@ -236,12 +236,12 @@ class InfoMaker(object):
             pklr.dump(prodErr)
             pklr.dump(fwliteBS)
 
-    	    summFile.close()
-    	    print "Successfully pickled summary ",'<br/>'
-    	except Exception, e:
-    	    print "ERROR during pickling summary : " + str(e)
-    	
-    	return
+            summFile.close()
+            print ("Successfully pickled summary ",'<br/>')
+        except Exception as e:
+            print ("ERROR during pickling summary : " + str(e))
+
+        return
 
     # --------------------------------------------------------------------------------
     
@@ -260,15 +260,14 @@ class InfoMaker(object):
 
             pklFileName = config.siteInfo['qaPath']+'/qaInfo/'+release+'-treeInfo-IBsrc.pkl'
             if not os.path.exists(pklFileName):
-	        try:
-		    thisPath = os.path.dirname(os.path.abspath(__file__))
-		except Exception, e:
-		    thisPath = scriptPath
+                try:
+                    thisPath = os.path.dirname(os.path.abspath(__file__))
+                except Exception as e:
+                    thisPath = scriptPath
                 cmd  = 'export PATH=/usr/local/bin/:$PATH;'
                 cmd += thisPath+'/json2pkl.py ' + jsonFile + ' '+pklFileName
                 cmd += ' >/tmp/json2pkl.log 2>&1'
                 ret = os.system(cmd)
-                # print "conversion gave: ", ret
 
             if os.path.exists(pklFileName): # continue only if conversion is OK
                 pklIn = open(pklFileName,'r')
@@ -276,7 +275,6 @@ class InfoMaker(object):
                 upklr = Unpickler(pklIn)
                 data = upklr.load()
                 pklIn.close()
-                # print data
 
                 from operator import itemgetter
                 self.topDirs  = sorted(data[1].items(), key=itemgetter(1), reverse=True)
@@ -289,11 +287,9 @@ class InfoMaker(object):
                 errFilSize = 0
                 for i in range(10):
                     if float(self.topFiles[i][1]) > filSizeMax*MByte : errFilSize += 1
-            #else:
-            #    print "pkl file not found",pklFileName
                 
-        except Exception, e:
-            print "Error processing dirfilesize info:", str(e),'<br/>'
+        except Exception as e:
+            print ("Error processing dirfilesize info:", str(e),'<br/>')
             pass
             
         return errDirSize, errFilSize, dirSizeMax, filSizeMax
@@ -313,50 +309,51 @@ class InfoMaker(object):
         from  TWikiFormatter import TWikiFormatter
 
         rel = None
-    	form = cgi.FieldStorage()
-    	release=''
-    	arch=''
-    	prodArch='slc5_amd64_gcc434'
-    	if "release" in form and "arch" in form :
-    	    release = os.path.basename(form["release"].value)
-    	    arch = os.path.basename(form["arch"].value)
-    	    
-    	    if not isValidPlat(arch) or not isValidRelease(release):
+        form = cgi.FieldStorage()
+        release=''
+        arch=''
+        prodArch='slc5_amd64_gcc434'
+        formatter = TWikiFormatter('CMSSW Integration Build QA page',"")
+        if "release" in form and "arch" in form :
+            release = os.path.basename(form["release"].value)
+            arch = os.path.basename(form["arch"].value)
+
+            if not isValidPlat(arch) or not isValidRelease(release):
                 formatter = TWikiFormatter('CMSSW Integration Build QA page',"")
-    	        formatter.writeH3( "ERROR: Illegal arch ("+arch+") and/or release ("+release+") given. Aborting." )
-    	        return
-    	else :
-    	    formatter.writeH3( "ERROR: no arch ("+arch+") or release ("+release+") given. Aborting." )
-    	    return
-    	if release[6] == "3": prodArch = 'slc5_ia32_gcc434'
-    	summary = False
-    	if 'summaryOnly' in form :
-    	    summary = True
-    	
+                formatter.writeH3( "ERROR: Illegal arch ("+arch+") and/or release ("+release+") given. Aborting." )
+                return
+        else :
+            formatter.writeH3( "ERROR: no arch ("+arch+") or release ("+release+") given. Aborting." )
+            return
+        if release[6] == "3": prodArch = 'slc5_ia32_gcc434'
+        summary = False
+        if 'summaryOnly' in form :
+            summary = True
+
         formatter = TWikiFormatter('CMSSW Integration Build QA page', release=release)
 
-    	import datetime
-    	import re
-    	rc, slhc, yr,mon,day,hr = re.search('CMSSW_(\d+_\d+|\d+_\d+_[\w\d]+)_X(_SLHC|)_(\d\d\d\d)-(\d\d)-(\d\d)-(\d\d)\d\d',release).groups()
-    	buildDate = datetime.date(int(yr), int(mon), int(day))
-    	wkDay = buildDate.strftime('%a').lower()
-    	stamp = rc.replace('_','.')+'-'+wkDay+'-'+hr
-    	
-    	self.relPath = config.siteInfo['afsPath']+'/'+arch+'/www/'+wkDay+'/'+stamp+'/'+release+'/'
-    	OutRel  = config.siteInfo['OutHtml']+'/'+release
-    	OutArch = config.siteInfo['OutHtml']+'/'+release+'/'+arch
-    	formatter.writeH1("CMSSW Integration Build QA Info")
+        import datetime
+        import re
+        rc, slhc, yr,mon,day,hr = re.search('CMSSW_(\d+_\d+|\d+_\d+_[\w\d]+)_X(_SLHC|)_(\d\d\d\d)-(\d\d)-(\d\d)-(\d\d)\d\d',release).groups()
+        buildDate = datetime.date(int(yr), int(mon), int(day))
+        wkDay = buildDate.strftime('%a').lower()
+        stamp = rc.replace('_','.')+'-'+wkDay+'-'+hr
+
+        self.relPath = config.siteInfo['afsPath']+'/'+arch+'/www/'+wkDay+'/'+stamp+'/'+release+'/'
+        OutRel  = config.siteInfo['OutHtml']+'/'+release
+        OutArch = config.siteInfo['OutHtml']+'/'+release+'/'+arch
+        formatter.writeH1("CMSSW Integration Build QA Info")
         backToPortal = ' -- <a href="https://cmssdt.cern.ch/SDT/html/cmssdt-ib/">Back to IB portal</a>'
-    	formatter.writeH3('Integration Build '+ release + ' for architecture '+arch+backToPortal)
-    	
-    	# --------------------------------------------------------------------------------
-    	# first collect all information ...
-    	
-    	# prepare the plots and other info
-    	self.GP = GetPath(formatter, self.relPath, release, arch)
-    	self.GP.MakeLog()
-    	self.GP.MakeIgnominy(self.relPath)
-    	
+        formatter.writeH3('Integration Build '+ release + ' for architecture '+arch+backToPortal)
+
+        # --------------------------------------------------------------------------------
+        # first collect all information ...
+
+        # prepare the plots and other info
+        self.GP = GetPath(formatter, self.relPath, release, arch)
+        self.GP.MakeLog()
+        self.GP.MakeIgnominy(self.relPath)
+
         vgErrs = getValgrindErrors(release, arch)
         igErrs = self.GP.igErrors()
         ddErr  = self.getDDErrors(prodArch, wkDay, stamp, release)
@@ -368,7 +365,7 @@ class InfoMaker(object):
             GP = GetPath(formatter, self.relPath, release, prodArch)
             GP.MakeLog()
             GP.MakeIgnominy(self.relPath)
-    	
+
         # dir and file size info:
         dfsErrs = -1
         dfsErrDir, dfsErrFil, dsMax, fsMax = self.getDirFileSizeErrors(release, arch)
@@ -376,36 +373,36 @@ class InfoMaker(object):
             dfsErrs = dfsErrDir+dfsErrFil
 
         # ********** end of collecting info - now prepare output **********
-    	
-    	# if summary was requested, write pkl file and return
-    	#-ap: ToDo: check that we have all the info, rewrite if updates are available ...
-    	if summary:
-    	    summPath = config.siteInfo['OutPath']+'/'+release+'/'+arch
-    	    self.writeSummary(summPath, vgErrs, igErrs, ddErr, self.GP.cfgInfo, (dfsErrDir,dfsErrFil), 0,fwliteTotal[0])
-    	    formatter.write('summary written')
-    	    return
 
-    	# ... then set up the TOC/summary
-    	formatter.write('<a name="top" ></a>')
-    	
-    	tmsStyle = 'white'
+        # if summary was requested, write pkl file and return
+        #-ap: ToDo: check that we have all the info, rewrite if updates are available ...
+        if summary:
+            summPath = config.siteInfo['OutPath']+'/'+release+'/'+arch
+            self.writeSummary(summPath, vgErrs, igErrs, ddErr, self.GP.cfgInfo, (dfsErrDir,dfsErrFil), 0,fwliteTotal[0])
+            formatter.write('summary written')
+            return
 
-    	igString = ''
-    	igStyle = "passed"
-    	if int(igErrs) < 0:
-    	    igStyle = 'unknown'
-    	elif int(igErrs) > 0:
-    	    igStyle = 'failed'
-    	formatter.write('<p><a href="#ignominy" class="a'+igStyle+'">Ignominy Information</a></p>')
-    	
-    	ddStyle = 'passed'
-    	ddNum = 'No'
-    	if ddErr[0] < 0:
-    	    ddStyle = 'unknown'
-    	elif ddErr[0] > 0:
-    	    ddStyle = 'failed'
-    	    ddNum = str( ddErr[0] )
-    	formatter.write('<p><a href="#dupDict" class="a'+ddStyle+'">Duplicate definitions of dictionaries</a></p>')
+        # ... then set up the TOC/summary
+        formatter.write('<a name="top" ></a>')
+
+        tmsStyle = 'white'
+
+        igString = ''
+        igStyle = "passed"
+        if int(igErrs) < 0:
+            igStyle = 'unknown'
+        elif int(igErrs) > 0:
+            igStyle = 'failed'
+        formatter.write('<p><a href="#ignominy" class="a'+igStyle+'">Ignominy Information</a></p>')
+
+        ddStyle = 'passed'
+        ddNum = 'No'
+        if ddErr[0] < 0:
+            ddStyle = 'unknown'
+        elif ddErr[0] > 0:
+            ddStyle = 'failed'
+            ddNum = str( ddErr[0] )
+        formatter.write('<p><a href="#dupDict" class="a'+ddStyle+'">Duplicate definitions of dictionaries</a></p>')
 
         dfsStyle = 'unknown'
         dfsNum   = 'No'
@@ -414,7 +411,7 @@ class InfoMaker(object):
             if dfsErrs > 0:
                 dfsStyle = 'failed'
                 dfsNum   = '('+str( dfsErrDir )+','+str(dfsErrFil)+')'
-    	formatter.write('<p><a href="#dirAndFileSize" class="a'+dfsStyle+'">Directory and File size checks</a></p>')
+        formatter.write('<p><a href="#dirAndFileSize" class="a'+dfsStyle+'">Directory and File size checks</a></p>')
 
         crvErrs = -1
         try:
@@ -428,7 +425,7 @@ class InfoMaker(object):
             if crvErrs > 0:
                 crvStyle = 'failed'
                 crvNum   = str( crvErrs )
-    	formatter.write('<p><a href="#codeRules" class="a'+crvStyle+'">Code Rule Violations</a></p>')
+        formatter.write('<p><a href="#codeRules" class="a'+crvStyle+'">Code Rule Violations</a></p>')
 
         fwBSStyle = 'unknown'
         if fwliteTotal[0] > -1 :
@@ -438,24 +435,24 @@ class InfoMaker(object):
             elif fwliteTotal[0] == 3: fwBSStyle = 'skipped'
             else: fwBSStyle = 'failed'
         formatter.write('<p><a href="#FWLiteBuildSet" class="a'+fwBSStyle+'">FWLite BuildSet</a></p>')
-	
-    	# ================================================================================
-    	# Architecture specific info
-    	# ================================================================================
-    	
-    	formatter.writeH2("Architecture dependent Information")
-    	formatter.write('<hr size=5px>\n')
-    	
-    	# ================================================================================
-    	# Architecture independent info
-    	# ================================================================================
-    	
-    	formatter.writeH2("Architecture Independent Information")
-    	formatter.write('<hr size=5px>\n')
 
-    	# --------------------------------------------------------------------------------
+        # ================================================================================
+        # Architecture specific info
+        # ================================================================================
+
+        formatter.writeH2("Architecture dependent Information")
+        formatter.write('<hr size=5px>\n')
+
+        # ================================================================================
+        # Architecture independent info
+        # ================================================================================
+
+        formatter.writeH2("Architecture Independent Information")
+        formatter.write('<hr size=5px>\n')
+
+        # --------------------------------------------------------------------------------
         formatter.writeAnchor('codeRules')
-    	formatter.writeH3("Information on code-rule violations", styleClass=crvStyle)
+        formatter.writeH3("Information on code-rule violations", styleClass=crvStyle)
 
         codeRulesPage = self.relPath+'/codeRules/cmsCRPage.html'
         if not os.path.exists(codeRulesPage):
@@ -464,10 +461,10 @@ class InfoMaker(object):
             codeRulesPageURL = config.siteInfo['HtmlPath']+'/rc/'+self.relPath[self.relBaseLen:]+'/codeRules/cmsCRPage.html'
             formatter.write('<p>A total of '+crvNum+' files with code rules violations.</p>')
             formatter.write('<p><a href="'+codeRulesPageURL+'">Details on code-rule violations</a> </p>')
-    	
-    	# --------------------------------------------------------------------------------
+
+        # --------------------------------------------------------------------------------
         formatter.writeAnchor('dirAndFileSize')
-    	formatter.writeH3("Dir and File Size Information", styleClass=dfsStyle)
+        formatter.writeH3("Dir and File Size Information", styleClass=dfsStyle)
         if dfsStyle == 'unknown':
             formatter.write('No Dir and File size info available<p></p>')
         else:
@@ -494,74 +491,74 @@ class InfoMaker(object):
                     formatter.writeRow([self.topFiles[i][0], str(float(self.topFiles[i][1])/MByte)])
                 formatter.endTable()
 
-            except Exception, e:
+            except Exception as e:
                 formatter.write("Error loading treeInfo: "+str(e))
 
-    	# --------------------------------------------------------------------------------
-
-	formatter.writeAnchor('FWLiteBuildSet')
-	formatter.writeH3("FWLite BuildSet", styleClass=fwBSStyle)
-	fwliteStr = "No information (yet?) available"
-	if fwliteTotal[0] > -1:
-	    fwliteStr = '<ul><li><a href="'+config.siteInfo['HtmlPath']+'/rc/'+self.relPath[self.relBaseLen:]+'/'+fwliteTotal[1]+'"> FWLite Log </a></li>'
-	    if not fwliteTotal[2]: fwliteStr += '<li> No FWLite BuildSet information available </li></ul>'
-	    else: fwliteStr += '<li><a href="'+config.siteInfo['HtmlPath']+'/rc/'+self.relPath[self.relBaseLen:]+'/'+fwliteTotal[2]+'"> FWLite BuildSet information </a></li></ul>'
-    	formatter.write(fwliteStr)
-	
         # --------------------------------------------------------------------------------
 
-    	formatter.writeAnchor('ignominy')
-    	formatter.writeH3("Ignominy Information", styleClass=igStyle)
-    	if igErrs < 0:
-    	    formatter.write("No information (yet?) available")
-    	else:
-    	    formatter.write(self.GP.igSummary())
-    	    formatter.write(self.GP.igCycles())
-    	    formatter.write(self.GP.igLevels())
-    	
-    	# --------------------------------------------------------------------------------
-    	
-    	pycfgString = ''
-    	pycfgStyle = "passed"
-    	pycfgNum   = "No"
-    	if not self.GP.pycfgInfo[2]:
-    	    pycfgStyle = 'unknown'
-    	if self.GP.pycfgInfo[1] and len(self.GP.pycfgInfo[1]) > 0:
-    	    pycfgStyle = 'failed'
-    	    pycfgNum = str( len(self.GP.pycfgInfo[1]) )
-    	
-    	formatter.writeH3("Log file for checking Python Configuration files", styleClass=pycfgStyle)
-    	pycfgString += ' <a href="'+config.siteInfo['HtmlPath']+'/rc/'+self.relPath[self.relBaseLen:]+'testLogs/chkPyConf.log"'
-    	pycfgString += '> '+pycfgNum+' packages with old style configuration files found in release </a>'
-    	pycfgString += '<ul>'
-    	if self.GP.pycfgInfo[1] :
-    	    for pkg in self.GP.pycfgInfo[0]:
-    	        pycfgString += '<li> '+pkg+ '</li>'
-    	pycfgString += '</ul>'
-    	
-    	formatter.write(pycfgString)
-#   	  formatter.startTable(2,['Python Configuration Checking','Graph'])
-#   	  formatter.writeRow([pycfgString, '<img src=\"'+OutRel+'/ChkPy.png\" width=300px height=200px onclick="enlarge(this)" onmouseout="ensmall(this)" id="vmem" alt="Virtual memory info" />'])
-#   	  formatter.endTable()
-    	
-    	# --------------------------------------------------------------------------------
-    	formatter.writeAnchor('dupDict')
-    	formatter.writeH3("Duplicate definitions of dictionaries", styleClass=ddStyle)
-    	formatter.startUl()
-    	formatter.writeLi('<a href="'+config.siteInfo['CgiHtmlPath']+'showDupDict.py/'+self.relPath[self.relBaseLen:]+'testLogs/dupDict-dup.log">'+str(ddErr[1])+' duplicate definitions of dictionaries as found in class_def.xml files</a>')
-    	formatter.writeLi('<a href="'+config.siteInfo['CgiHtmlPath']+'showDupDict.py/'+self.relPath[self.relBaseLen:]+'testLogs/dupDict-lostDefs.log">'+str(ddErr[2])+' definition of dictionaries in the "wrong" library</a>')
-    	formatter.writeLi('<a href="'+config.siteInfo['CgiHtmlPath']+'showDupDict.py/'+self.relPath[self.relBaseLen:]+'testLogs/dupDict-edmPD.log">'+str(ddErr[3])+' duplicate definitions of dictionaries as found in edmPlugins </a>')
-    	formatter.endUl()
-    	
-    	# --------------------------------------------------------------------------------
-    	formatter.writeH3("Status of documentation")
-    	formatter.startUl()
-    	formatter.writeLi('<a href="'+config.siteInfo['CgiHtmlPath']+'checkDocProxy.py?inPath='+self.relPath+'/src">Status of documentation for each subsystem and package (takes a while)</a>')
-    	formatter.endUl()
+        formatter.writeAnchor('FWLiteBuildSet')
+        formatter.writeH3("FWLite BuildSet", styleClass=fwBSStyle)
+        fwliteStr = "No information (yet?) available"
+        if fwliteTotal[0] > -1:
+            fwliteStr = '<ul><li><a href="'+config.siteInfo['HtmlPath']+'/rc/'+self.relPath[self.relBaseLen:]+'/'+fwliteTotal[1]+'"> FWLite Log </a></li>'
+            if not fwliteTotal[2]: fwliteStr += '<li> No FWLite BuildSet information available </li></ul>'
+            else: fwliteStr += '<li><a href="'+config.siteInfo['HtmlPath']+'/rc/'+self.relPath[self.relBaseLen:]+'/'+fwliteTotal[2]+'"> FWLite BuildSet information </a></li></ul>'
+        formatter.write(fwliteStr)
+
+        # --------------------------------------------------------------------------------
+
+        formatter.writeAnchor('ignominy')
+        formatter.writeH3("Ignominy Information", styleClass=igStyle)
+        if igErrs < 0:
+            formatter.write("No information (yet?) available")
+        else:
+            formatter.write(self.GP.igSummary())
+            formatter.write(self.GP.igCycles())
+            formatter.write(self.GP.igLevels())
+
+        # --------------------------------------------------------------------------------
+
+        pycfgString = ''
+        pycfgStyle = "passed"
+        pycfgNum   = "No"
+        if not self.GP.pycfgInfo[2]:
+            pycfgStyle = 'unknown'
+        if self.GP.pycfgInfo[1] and len(self.GP.pycfgInfo[1]) > 0:
+            pycfgStyle = 'failed'
+            pycfgNum = str( len(self.GP.pycfgInfo[1]) )
+
+        formatter.writeH3("Log file for checking Python Configuration files", styleClass=pycfgStyle)
+        pycfgString += ' <a href="'+config.siteInfo['HtmlPath']+'/rc/'+self.relPath[self.relBaseLen:]+'testLogs/chkPyConf.log"'
+        pycfgString += '> '+pycfgNum+' packages with old style configuration files found in release </a>'
+        pycfgString += '<ul>'
+        if self.GP.pycfgInfo[1] :
+            for pkg in self.GP.pycfgInfo[0]:
+                pycfgString += '<li> '+pkg+ '</li>'
+        pycfgString += '</ul>'
+ 
+        formatter.write(pycfgString)
+#         formatter.startTable(2,['Python Configuration Checking','Graph'])
+#         formatter.writeRow([pycfgString, '<img src=\"'+OutRel+'/ChkPy.png\" width=300px height=200px onclick="enlarge(this)" onmouseout="ensmall(this)" id="vmem" alt="Virtual memory info" />'])
+#         formatter.endTable()
+        
+        # --------------------------------------------------------------------------------
+        formatter.writeAnchor('dupDict')
+        formatter.writeH3("Duplicate definitions of dictionaries", styleClass=ddStyle)
+        formatter.startUl()
+        formatter.writeLi('<a href="'+config.siteInfo['CgiHtmlPath']+'showDupDict.py/'+self.relPath[self.relBaseLen:]+'testLogs/dupDict-dup.log">'+str(ddErr[1])+' duplicate definitions of dictionaries as found in class_def.xml files</a>')
+        formatter.writeLi('<a href="'+config.siteInfo['CgiHtmlPath']+'showDupDict.py/'+self.relPath[self.relBaseLen:]+'testLogs/dupDict-lostDefs.log">'+str(ddErr[2])+' definition of dictionaries in the "wrong" library</a>')
+        formatter.writeLi('<a href="'+config.siteInfo['CgiHtmlPath']+'showDupDict.py/'+self.relPath[self.relBaseLen:]+'testLogs/dupDict-edmPD.log">'+str(ddErr[3])+' duplicate definitions of dictionaries as found in edmPlugins </a>')
+        formatter.endUl()
+
+        # --------------------------------------------------------------------------------
+        formatter.writeH3("Status of documentation")
+        formatter.startUl()
+        formatter.writeLi('<a href="'+config.siteInfo['CgiHtmlPath']+'checkDocProxy.py?inPath='+self.relPath+'/src">Status of documentation for each subsystem and package (takes a while)</a>')
+        formatter.endUl()
 
     def usage(self) :
-        print 'usage : ',sys.argv[0]
-        print ""
+        print ('usage : ',sys.argv[0])
+        print ("")
         return
 
 if __name__ == "__main__" :
