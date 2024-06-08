@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import os, sys, string
 
@@ -14,31 +14,31 @@ class SimpleAsciiFormatter :
         return
     
     def showLine(self) :
-        print "\n================================================================================\n"
+        print ("\n================================================================================\n")
         return
     
     def write(self, arg="") :
-        print arg
+        print (arg)
         return
 
     def writeB(self, arg="") :
-        print arg
+        print (arg)
         return
 
     def writeBr(self) :
-        print 
+        print ('')
         return
 
     def writeH1(self, arg="") :
-        print arg
+        print (arg)
         return
     
     def writeH2(self, arg="") :
-        print arg
+        print (arg)
         return
 
     def writeH3(self, arg="") :
-        print arg
+        print (arg)
         return
     
     def startTable(self, colSizes, colLabels) :
@@ -46,12 +46,12 @@ class SimpleAsciiFormatter :
         self.format = ""
         for fmt in self.cols :
             self.format += "%"+str(fmt)+"s "
-        print self.format % tuple(colLabels)
+        print (self.format % tuple(colLabels))
 
         return
 
     def writeRow(self, args) :
-        print self.format % tuple(args)
+        print (self.format % tuple(args))
 
         return
 
