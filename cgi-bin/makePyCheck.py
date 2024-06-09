@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import urllib2, re, os, sys,cgi
+import re, os, sys,cgi
 import cgitb; cgitb.enable() ## cgitb.enable(display=0, logdir=os.getcwd()+"/../cgi-logs/")
 
-class makePyCheck(object) :
+class makePyCheck(object):
     def __init__(self,logfile,outpath) :
         import config
         self.outPath= outpath
@@ -19,7 +19,7 @@ class makePyCheck(object) :
         self.PyInfo.write('\n')
         self.PyInfo.write('<html>\n<head>\n<link rel="stylesheet" type="text/css" href="http://cern.ch/cms-sdt/css/intbld.css"><Title>Checking Python Configuration file</Title></head><body>')
         current_pkg=''
-               pkg = {}
+        pkg = {}
         try:
                 lines=open(self.logfile)
         except:
