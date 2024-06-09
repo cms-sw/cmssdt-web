@@ -2,7 +2,7 @@
 import bottle, os, re
 from os.path import exists
 from bottle import route, debug, abort, response
-from commands import getstatusoutput
+from subprocess import getstatusoutput
 from time import strptime
 app = bottle.default_app()
 debug(False)
