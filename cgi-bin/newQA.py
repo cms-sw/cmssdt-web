@@ -550,12 +550,6 @@ class InfoMaker(object):
         formatter.writeLi('<a href="'+config.siteInfo['CgiHtmlPath']+'showDupDict.py/'+self.relPath[self.relBaseLen:]+'testLogs/dupDict-edmPD.log">'+str(ddErr[3])+' duplicate definitions of dictionaries as found in edmPlugins </a>')
         formatter.endUl()
 
-        # --------------------------------------------------------------------------------
-        formatter.writeH3("Status of documentation")
-        formatter.startUl()
-        formatter.writeLi('<a href="'+config.siteInfo['CgiHtmlPath']+'checkDocProxy.py?inPath='+self.relPath+'/src">Status of documentation for each subsystem and package (takes a while)</a>')
-        formatter.endUl()
-
     def usage(self) :
         print ('usage : ',sys.argv[0])
         print ("")
