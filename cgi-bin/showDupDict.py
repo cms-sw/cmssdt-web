@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # make sure this is first to trap also problems in includes later
 import cgitb; cgitb.enable() ## cgitb.enable(display=0, logdir=os.getcwd()+"/../cgi-logs/")
@@ -105,7 +105,7 @@ class ScramAnalyzer(object):
             logFile = open(normPath, 'r')
             lines = logFile.readlines()
             logFile.close()
-        except Exception, e:
+        except Exception as e:
             self.formatter.write("no log file found. Please try again later.")
             self.formatter.write(str(e))
             return
