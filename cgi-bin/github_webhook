@@ -71,18 +71,22 @@ def check_signature(data, repo_config):
   if sha_name != 'sha1': return False
   secret_file = BASE_DIRECTORY+'/secrets/github_hook_secret'
   try:
-    from commands import getstatusoutput as run_cmd
+    from subprocess import getstatusoutput as run_cmd
     err, out = run_cmd("echo '%s' | openssl enc -d -a -base64 -aes-256-cbc -salt -pass file:%s" % (repo_config.GITHUB_WEBHOOK_TOKEN, secret_file))
     if err: return False
     secret = out.strip("\n")
-  except:
+  except Exception as e:
+    print("Error running command",str(e))
     try:
-      secret = open(secret_file).read().split('\n')[0].strip()
+      secret = open(secret_file, 'rb').read().decode().split('\n')[0].strip().encode()
     except Exception as e:
       print("Unable to read secret file")
       return False
-  mac = hmac.new(str(secret), msg=data, digestmod=sha1)
-  print(str(mac.hexdigest()) , str(signature))
+  try:
+    mac = hmac.new(secret, msg=data.encode(), digestmod=sha1)
+    print(str(mac.hexdigest()) , str(signature))
+  except Exception as e:
+    print("ERROR:",str(e))
   return str(mac.hexdigest()) == str(signature)
 
 #check source ip in white list fucntion
@@ -129,7 +133,6 @@ except: xparam.append({"name":"ACTION","value":""})
 if ("labeled" in xparam[-1]["value"]) and (not repo_name.startswith("cms-sw/")):
   print("Ignored Event/Action:", xparam)
   sys.exit()
-
 etype=""
 if   event in ['pull_request']:etype="pull_request"
 elif event in ['issues', 'issue_comment','comp_issue_comment']: etype="issue"
