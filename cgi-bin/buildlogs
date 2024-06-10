@@ -79,17 +79,17 @@ def addOnTestsRawConfig(architecture, release, filename):
 #----- relValTests
 @route('/<architecture>/<release>/pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
 def relValTests(architecture, release, workflow, filename):
-  if filename.endswith(".root"): extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(urllib.unquote(filename)),False)
-  return "<pre>"+extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(urllib.unquote(filename)),False)+"</pre>"
+  if filename.endswith(".root"): extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(unquote(filename)),False)
+  return "<pre>"+extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(unquote(filename)),False)+"</pre>"
 
 @route('/raw/<architecture>/<release>/pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
 def relValTestsRaw(architecture, release, workflow, filename):
   response.set_header('Content-Type', 'text/plain')
-  return extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(urllib.unquote(filename)),True)
+  return extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(unquote(filename)),True)
 
 @route('/raw_read_config/<architecture>/<release>/pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
 def relValTestsRawConfig(architecture, release, workflow, filename):
-  return extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(urllib.unquote(filename) + "-read_config"),False)
+  return extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(unquote(filename) + "-read_config"),False)
 #----- 
 
 @route('/<architecture>/<release>/depViolationLogs/<subsystem>/<package>')
