@@ -4,6 +4,7 @@ from os.path import exists
 from bottle import route, debug, abort, response
 from subprocess import getstatusoutput
 from time import strptime
+from urllib.parse import unquote
 app = bottle.default_app()
 debug(False)
 DAYS=["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
@@ -62,39 +63,33 @@ def unitTestRawConfig(architecture, release, subsystem, package):
 #----- addOnTests 
 @route('/<architecture>/<release>/addOnTests/logs/<filename>')
 def addOnTests(architecture, release, filename):
-  import urllib
-  return "<pre>"+extractFile(architecture, release, 'addOnTests', 'addOnTests/logs', sanitize(urllib.unquote(filename)),False)+"</pre>"
+  return "<pre>"+extractFile(architecture, release, 'addOnTests', 'addOnTests/logs', sanitize(unquote(filename)),False)+"</pre>"
 
 # to get raw JSON data
 @route('/raw/<architecture>/<release>/addOnTests/logs/<filename>')
 def addOnTestsRaw(architecture, release, filename):
-  import urllib
   response.set_header('Content-Type', 'text/plain')
-  return extractFile(architecture, release, 'addOnTests', 'addOnTests/logs', sanitize(urllib.unquote(filename)),True)
+  return extractFile(architecture, release, 'addOnTests', 'addOnTests/logs', sanitize(unquote(filename)),True)
 
 # to get display configs
 @route('/raw_read_config/<architecture>/<release>/addOnTests/logs/<filename>')
 def addOnTestsRawConfig(architecture, release, filename):
-  import urllib
-  return extractFile(architecture, release, 'addOnTests', 'addOnTests/logs', sanitize(urllib.unquote(filename) + "-read_config"),False)
+  return extractFile(architecture, release, 'addOnTests', 'addOnTests/logs', sanitize(unquote(filename) + "-read_config"),False)
 
 #----- relValTests
 @route('/<architecture>/<release>/pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
 def relValTests(architecture, release, workflow, filename):
-  import urllib
-  if filename.endswith(".root"): extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(urllib.unquote(workflow))+'/'+sanitize(urllib.unquote(filename)),False)
-  return "<pre>"+extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(urllib.unquote(workflow))+'/'+sanitize(urllib.unquote(filename)),False)+"</pre>"
+  if filename.endswith(".root"): extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(urllib.unquote(filename)),False)
+  return "<pre>"+extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(urllib.unquote(filename)),False)+"</pre>"
 
 @route('/raw/<architecture>/<release>/pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
 def relValTestsRaw(architecture, release, workflow, filename):
-  import urllib
   response.set_header('Content-Type', 'text/plain')
-  return extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(urllib.unquote(workflow))+'/'+sanitize(urllib.unquote(filename)),True)
+  return extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(urllib.unquote(filename)),True)
 
 @route('/raw_read_config/<architecture>/<release>/pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
 def relValTestsRawConfig(architecture, release, workflow, filename):
-  import urllib
-  return extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(urllib.unquote(workflow))+'/'+sanitize(urllib.unquote(filename) + "-read_config"),False)  
+  return extractFile(architecture, release, 'pyRelValMatrixLogs', 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(urllib.unquote(filename) + "-read_config"),False)
 #----- 
 
 @route('/<architecture>/<release>/depViolationLogs/<subsystem>/<package>')
