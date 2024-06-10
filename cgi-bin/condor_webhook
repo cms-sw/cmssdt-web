@@ -13,7 +13,8 @@ def check_signature(payload):
   from hashlib import sha256
   e, token = run_cmd("sha256sum %s/secrets/github_hook_secret | sed 's| .*||'" % BASE_DIRECTORY)
   if e: return False
-  return payload['signature']==sha256(payload['condor_job_id']+':'+payload['work_dir']+' '+token).hexdigest()
+  sign = payload['condor_job_id']+':'+payload['work_dir']+' '+token
+  return payload['signature']==sha256(sign.encode()).hexdigest()
 
 #check source ip in white list fucntion
 def check_ip():
