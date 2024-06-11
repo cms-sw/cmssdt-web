@@ -73,10 +73,13 @@ def check_signature(data, repo_config):
   try:
     from subprocess import getstatusoutput as run_cmd
     err, out = run_cmd("echo '%s' | openssl enc -d -md md5 -a -base64 -aes-256-cbc -salt -pass file:%s 2>/dev/null" % (repo_config.GITHUB_WEBHOOK_TOKEN, secret_file))
-    if err: return False
+    if err:
+      print("Error running  openssl enc -d command")
+      return False
     secret = out.strip("\n")
+    print("OK: read webhook token from repo_config")
   except Exception as e:
-    print("Error running command",str(e))
+    print("Error running command",str(e), ". Trying local secret now")
     try:
       secret = open(secret_file, 'rb').read().decode().split('\n')[0].strip().encode()
     except Exception as e:
