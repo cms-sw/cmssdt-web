@@ -76,7 +76,7 @@ def check_signature(data, repo_config):
     if err:
       print("Error running  openssl enc -d command")
       return False
-    secret = out.strip("\n")
+    secret = out.strip("\n").encode()
     print("OK: read webhook token from repo_config")
   except Exception as e:
     print("Error running command",str(e), ". Trying local secret now")
