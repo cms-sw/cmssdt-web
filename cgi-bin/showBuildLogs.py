@@ -466,7 +466,7 @@ class BuildLogDisplay(object):
         self.libChkErrMap = {}
         if not fwlite and ((not testName) or (testName=='libchk')):
           try:
-            libChkFile = open(self.normPath+'/new/libchk.pkl','r')
+            libChkFile = open(self.normPath+'/new/libchk.pkl','rb')
             lcPklr = Unpickler(libChkFile)
             self.libChkErrMap = lcPklr.load()
             libChkFile.close()
