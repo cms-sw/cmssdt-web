@@ -1,12 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys, json, re, base64, ssl
-from urllib2 import Request, urlopen
-print "Content-Type: application/json\n"
+from urllib.request import Request, urlopen
+print ("Content-Type: application/json\n")
 ES7_CERN_URL = "https://es-cmssdt.cern.ch:9203"
 ES_CERN_URL = "https://es-cmssdt1.cern.ch/es"
 
 def send_error(msg):
-  print '{"proxy-error":"%s"}' % msg
+  print ('{"proxy-error":"%s"}' % msg)
   sys.exit()
 
 try:
@@ -41,14 +41,15 @@ try:
     if '?' in url: url = "%s&%s" % (url, params)
     else: url = "%s?%s" % (url, params)
   header = {"Content-Type": "application/json"}
-  header['Authorization'] = 'Basic %s' % base64.b64encode("%s:%s" % (es_user, es_pass))
+  auth="%s:%s" % (es_user, es_pass)
+  header['Authorization'] = 'Basic %s' % base64.b64encode(auth.encode()).decode()
   try:
-    request = Request(url, query, header)
+    request = Request(url, query.encode(), header)
     request.get_method = lambda: method
     try: sslcon = ssl._create_unverified_context()
     except Exception as e: sslcon =  None
-    print urlopen(request, context=sslcon).read()
+    print (urlopen(request, context=sslcon).read())
   except Exception as e:
     send_error("Couldn't send data to elastic search: %s\nurl:%s\nquery:%s" % (str(e),url, query))
 except Exception as e:
-  send_error("Invalid data, can not read json input.")
+    send_error("Invalid data, can not read json input: %s" % str(e))

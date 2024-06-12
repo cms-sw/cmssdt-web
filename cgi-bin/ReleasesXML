@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import cgi;
 
-print "Content-type: text/plain\n"
+print ("Content-type: text/plain\n")
 
 form = cgi.FieldStorage();
 
@@ -45,10 +45,10 @@ for line in releases_file:
     
 releases_file.close()
 
-print "<projects>"
+print ("<projects>")
 for arch in archs:
-  print """  <architecture name="%s">""" % arch
+  print ("  <architecture name=\"%s\">" % arch)
   for rel in archs[arch]:
-    print "    "+rel
-  print "  </architecture>"
-print "</projects>"
+    print ("    "+rel)
+  print ("  </architecture>")
+print ("</projects>")
