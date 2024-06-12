@@ -331,7 +331,7 @@ class BuildLogDisplay(object):
         
         col = ' - '
         colStyle = ' '
-        if self.libChkErrMap.has_key(pkg.name()) and len(self.libChkErrMap[pkg.name()])>0:
+        if (pkg.name() in self.libChkErrMap) and len(self.libChkErrMap[pkg.name()])>0:
             detailId = 'lc_'+pkg.name().replace('/','_')
             info =  "hide<br/> unnecessary direct dependencies: <br/> "
             info += '<br/>'.join(self.libChkErrMap[pkg.name()]).replace('Unnecessary direct dependence','')
@@ -357,7 +357,7 @@ class BuildLogDisplay(object):
         col = ' - '
         colStyle = ' '
         if len(self.sa.errPkg.keys()) > 0:
-            if self.sa.errPkg.has_key(pkg.name()):
+            if pkg.name() in  self.sa.errPkg:
                 pkgOK = False
                 self.addRow = True
                 detailId = 'scerr1_'+pkg.name().replace('/','_')
@@ -383,7 +383,7 @@ class BuildLogDisplay(object):
         col = ' - '
         colStyle = ' '
         if len(self.sa.warnPkg.keys()) > 0:
-            if self.sa.warnPkg.has_key(pkg.name()):
+            if pkg.name() in self.sa.warnPkg:
                 pkgOK = False
                 detailId = 'scwarn1_'+pkg.name().replace('/','_')
                 info = "hide<br/> <br/> " + '<br/>'.join(self.sa.warnPkg[pkg.name()])
