@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os, sys, glob, cgi
 import cgitb; cgitb.enable() ## cgitb.enable(display=0, logdir=os.getcwd()+"/../cgi-logs/")
@@ -17,8 +17,8 @@ prodArch='slc5_amd64_gcc434'
 if "release" in form:
     release = form["release"].value
 if not isValidRelease(release):
-    print "Content-Type: text/html" + '\n\n'     # HTML is following
-    print '<html><head><title>ERROR</title></head><body><h2>Error, illegal (or no) release specified :'+release+'</h2></body></html>'
+    print ("Content-Type: text/html" + '\n\n')     # HTML is following
+    print ('<html><head><title>ERROR</title></head><body><h2>Error, illegal (or no) release specified :'+release+'</h2></body></html>')
     sys.exit()
 
 scriptPath = os.path.normpath( os.path.split( os.path.abspath(sys.argv[0]) )[0] )
@@ -48,15 +48,12 @@ for cyc in cycles:
             cmd += ' >'+ tmpFile +' 2>&1'
             ret = os.system(cmd)
             if ret != 0:
-                print "ERROR converting ", jsonFile
-                print "      cmd used : ", cmd
+                print ("ERROR converting ", jsonFile)
+                print ("      cmd used : ", cmd)
             else:
                 os.system('rm -rf '+tmpDir)
 
 msg = "Content-Type: text/html" + '\n\n'     # HTML is following
 msg += "".join(lines)
 msg = msg.replace('@@IB@@', release)
-print msg
-            
-
-
+print (msg)

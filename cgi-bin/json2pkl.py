@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os, sys
 
@@ -21,26 +21,7 @@ def json2pkl(inFile, outFile=None):
     	    	    
     pF.close()
 
-    print "Successfully converted ",inFile, ' to ', outFile
-
-#     aaData = []
-#     ib = data[0]
-#     for i,s in data[1].items():
-#         try:
-#             aaData.append([ib, 'dirSize', i, s])
-#         except Exception, e:
-#             print "ERROR for dir ", item
-#             raise e
-#     for i,s in data[2].items():
-#         try:
-#             aaData.append([ib, 'fileSize', i, s])
-#         except Exception, e:
-#             print "ERROR for file ", item
-#             raise e
-# 
-#     jfo = open('../html/treeInfo-IBsrc.json', 'w')
-#     json.dump({ 'aaData' : aaData }, jfo)
-#     jfo.close()
+    print ("Successfully converted ",inFile, ' to ', outFile)
 
     return
 if __name__ == '__main__':

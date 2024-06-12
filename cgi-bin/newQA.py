@@ -270,7 +270,7 @@ class InfoMaker(object):
                 ret = os.system(cmd)
 
             if os.path.exists(pklFileName): # continue only if conversion is OK
-                pklIn = open(pklFileName,'r')
+                pklIn = open(pklFileName,'rb')
                 from pickle import Unpickler
                 upklr = Unpickler(pklIn)
                 data = upklr.load()
