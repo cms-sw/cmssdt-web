@@ -48,7 +48,7 @@ try:
     request.get_method = lambda: method
     try: sslcon = ssl._create_unverified_context()
     except Exception as e: sslcon =  None
-    print (urlopen(request, context=sslcon).read())
+    print (urlopen(request, context=sslcon).read().decode())
   except Exception as e:
     send_error("Couldn't send data to elastic search: %s\nurl:%s\nquery:%s" % (str(e),url, query))
 except Exception as e:
