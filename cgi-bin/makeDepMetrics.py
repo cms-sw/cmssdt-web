@@ -162,9 +162,9 @@ class mkDepMetrics(object) :
                     self.levels += '<li> <a href=\"'+config.siteInfo['macms01Path']+'/ignominy/'+self.arch+'/'+self.packagename+'/igRun/subsystem.'+str(list[level][pack][0])+'/PROJECT-'+str(list[level][pack][0])+'-'+str(list[level][pack][module].replace('/','-'))+'-O.gif.html\">'+str(list[level][pack][module])+'</a></li>\n'
                 self.levels += '</ul>\n'
             self.levels += '</li></ul></li></ul>\n'
-        if listlen is not 0 : 
+        if listlen > 0: 
             self.levels += '</div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>\n'
-        else : 
+        else:
             self.leves += '</div><br><br><br>\n'
         self.levels += ' </span> </div> '
 
