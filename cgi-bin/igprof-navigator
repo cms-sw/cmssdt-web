@@ -42,6 +42,7 @@ import locale
 from locale import format
 import os
 import cgi
+import html
 import socket
 import shutil
 import _thread
@@ -234,7 +235,7 @@ def summary(database, out, cumulative):
     if not l:
       continue
     rank, name, count, calls = l.split("@@@")
-    name = cgi.escape(name)
+    name = html.escape(name)
     path = join(absPath, str(rank))
     if float(total_count):
       percent = 100*(float(count) / float(total_count))
@@ -378,7 +379,7 @@ def flatProfile(database, out, rank):
     percent = format("%.2f", float(percent), True)
     if percent == "-101.00":
       percent = "new"
-    name = cgi.escape(name)
+    name = html.escape(name)
 
     out.write("""<tr class="parentrow">
                  <td></td>
@@ -403,7 +404,7 @@ def flatProfile(database, out, rank):
   (rank, name, self_count, cumulative_count, kids, self_calls, total_calls,
    self_paths, total_paths, percent) = output.split("@@@")
 
-  name = cgi.escape(name)
+  name = html.escape(name)
 
   if isPerfTicks:
     self_count = int(self_count) * tick_period
@@ -441,7 +442,7 @@ def flatProfile(database, out, rank):
      from_parent_calls, total_calls,
      from_parent_paths, total_paths,
      cumulative_count, percent) = l.split("@@@")
-    name = cgi.escape(name)
+    name = html.escape(name)
     if isPerfTicks:
       from_parent_counts = int(from_parent_counts) * tick_period
       cumulative_counts = int(cumulative_counts) * tick_period
