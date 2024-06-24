@@ -87,10 +87,9 @@ if not hasattr (str, "rsplit"):
 # Notice that on slc4 (i.e. lxplus), there is no sqlite available, so we rely
 # on my personal copy of it.
 def doQuery(query, database):
+  sqlite="sqlite3"
   if os.path.exists("/usr/bin/sqlite3"):
     sqlite="/usr/bin/sqlite3"
-  else:
-    sqlite="/afs/cern.ch/user/e/eulisse/www/bin/sqlite"
   return getstatusoutput("echo '%s' | %s -separator @@@ %s" % (query, sqlite, database))
 
 # Helper to get the high level summary information for the profile.
