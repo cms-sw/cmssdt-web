@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
 # make sure this is first to trap also problems in includes later
-import cgitb; cgitb.enable() ## cgitb.enable(display=0, logdir=os.getcwd()+"/../cgi-logs/")
 
-import os, sys, cgi, time, re
+import os, sys, html, time, re
 
 scriptPath = '/afs/cern.ch/cms/sdt/web/cgi-bin/'
 if scriptPath not in sys.path:
@@ -68,8 +67,8 @@ class ScramAnalyzer(object):
             issueList.sort()
             for pkg in issueList:
                 errIn = self.dupInfo[pkg]
-                err = [ cgi.escape(x) for x in errIn ] # escape each element to show "<"
-                self.formatter.writeRow([cgi.escape(pkg.decode('ascii','ignore')), delimiter.join(err)])
+                err = [ html.escape(x) for x in errIn ] # escape each element to show "<"
+                self.formatter.writeRow([html.escape(pkg.decode('ascii','ignore')), delimiter.join(err)])
             self.formatter.endTable()
         else:
             self.formatter.writeH3('No duplicate dictionaries found for '+fileName+' were found ! Great ! :) ')
