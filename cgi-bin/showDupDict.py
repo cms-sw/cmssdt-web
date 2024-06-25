@@ -55,7 +55,7 @@ class ScramAnalyzer(object):
 
     def showLogFile(self, fileName):
 
-        issueList = self.dupInfo.keys()
+        issueList = list(self.dupInfo.keys())
         
         if len(issueList) > 0:
             self.formatter.writeH3('')
