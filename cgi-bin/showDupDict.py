@@ -48,6 +48,8 @@ class ScramAnalyzer(object):
                 else:
                     issueItem = line.strip()
                 emptyLine = False
+        if '' in self.dupInfo:
+            del self.dupInfo['']
 
         return
     # --------------------------------------------------------------------------------
@@ -68,7 +70,7 @@ class ScramAnalyzer(object):
             for pkg in issueList:
                 errIn = self.dupInfo[pkg]
                 err = [ html.escape(x) for x in errIn ] # escape each element to show "<"
-                self.formatter.writeRow([html.escape(pkg.decode('ascii','ignore')), delimiter.join(err)])
+                self.formatter.writeRow([html.escape(pkg), delimiter.join(err)])
             self.formatter.endTable()
         else:
             self.formatter.writeH3('No duplicate dictionaries found for '+fileName+' were found ! Great ! :) ')
