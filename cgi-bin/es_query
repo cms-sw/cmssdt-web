@@ -2,8 +2,8 @@
 import sys, json, re, base64, ssl
 from urllib.request import Request, urlopen
 print ("Content-Type: application/json\n")
-ES7_CERN_URL = "https://es-cmssdt.cern.ch:9203"
-ES_CERN_URL = "https://es-cmssdt1.cern.ch/es"
+ES7_CERN_URL = "https://os-cmssdt.cern.ch:9203"
+ES_CERN_URL = "https://os-cmssdt1.cern.ch/es"
 
 def send_error(msg):
   print ('{"proxy-error":"%s"}' % msg)
