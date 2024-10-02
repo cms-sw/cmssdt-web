@@ -157,7 +157,7 @@ class InfoMaker(object):
             ffile = config.siteInfo['afsPath']+self.relPath[self.relBaseLen:]+'/testLogs/dupDict-'+nfile+'.log'
             cnt =-1
             if os.path.exists(ffile):
-                err, out = getstatusoutput("grep -v '^Searching for ' "+ffile+" | grep -v '^\*\*\*\* SKIPPING ' | grep -v '^ *$' | wc -l")
+                err, out = getstatusoutput("grep -v '^Searching for ' "+ffile+r" | grep -v '^\*\*\*\* SKIPPING ' | grep -v '^ *$' | wc -l")
                 cnt = int(out)
                 total = total + cnt
             errs.append(cnt)
@@ -173,9 +173,9 @@ class InfoMaker(object):
                 xFile = open(timingFile)
                 for line in xFile.readlines():
                     line = line.strip()
-                    if (avg == -1) and (re.match("^Average time per workflow:\s*\d+\s*s\s*$",line)):
-                        avg = int(re.sub("\s*s\s*$",'',re.sub("^Average time per workflow:\s*",'',line)))
-                    elif re.match("^CMSSW_.+-Workflow.xml:\s*.+$",line): count += 1
+                    if (avg == -1) and (re.match(r"^Average time per workflow:\s*\d+\s*s\s*$",line)):
+                        avg = int(re.sub(r"\s*s\s*$",'',re.sub(r"^Average time per workflow:\s*",'',line)))
+                    elif re.match(r"^CMSSW_.+-Workflow.xml:\s*.+$",line): count += 1
                 xFile.close()
             except Exception as e:
                 print ('ERROR during '+timingFile+' file : ' + str(e))
@@ -334,7 +334,7 @@ class InfoMaker(object):
 
         import datetime
         import re
-        rc, slhc, yr,mon,day,hr = re.search('CMSSW_(\d+_\d+|\d+_\d+_[\w\d]+)_X(_SLHC|)_(\d\d\d\d)-(\d\d)-(\d\d)-(\d\d)\d\d',release).groups()
+        rc, slhc, yr,mon,day,hr = re.search(r'CMSSW_(\d+_\d+|\d+_\d+_[\w\d]+)_X(_SLHC|)_(\d\d\d\d)-(\d\d)-(\d\d)-(\d\d)\d\d',release).groups()
         buildDate = datetime.date(int(yr), int(mon), int(day))
         wkDay = buildDate.strftime('%a').lower()
         stamp = rc.replace('_','.')+'-'+wkDay+'-'+hr
