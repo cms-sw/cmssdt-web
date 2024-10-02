@@ -29,14 +29,14 @@ class ScramAnalyzer(object):
     def analyzeLogFile(self, lines):
 
         scramErrRe = {
-                       'error' : [ re.compile('\*+.?ERROR:.*?\s*src/([A-Za-z].*?/[A-Za-z].*?)/.*'),
-                                   re.compile('.*?/MakeData/DirCache.mk:\d+:\s+No such file exists:\s+src/([A-Za-z].*?/[A-Za-z].*?)/.*'),
+                       'error' : [ re.compile(r'\*+.?ERROR:.*?\s*src/([A-Za-z].*?/[A-Za-z].*?)/.*'),
+                                   re.compile(r'.*?/MakeData/DirCache.mk:\d+:\s+No such file exists:\s+src/([A-Za-z].*?/[A-Za-z].*?)/.*'),
                                  ],
-                       'warning' : [ re.compile('\*+WARNING:.*?\s*src/([A-Za-z].*?/[A-Za-z].*?)/.*'),
+                       'warning' : [ re.compile(r'\*+WARNING:.*?\s*src/([A-Za-z].*?/[A-Za-z].*?)/.*'),
                                    ],
-                       'errorEx' : [ re.compile('^\s*\*+\s*ERROR:.*'),
+                       'errorEx' : [ re.compile(r'^\s*\*+\s*ERROR:.*'),
                                    ],
-                       'warningEx' : [ re.compile('^\s*\*+\s*WARNING:.*'),
+                       'warningEx' : [ re.compile(r'^\s*\*+\s*WARNING:.*'),
                                      ],
                      }
         self.errPkg  = {}

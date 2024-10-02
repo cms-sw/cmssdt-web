@@ -111,7 +111,7 @@ class LogViewer(object):
             # formatter.writeH3( "ERROR opening or reading logFile: "+logFileName )
             return passed, failed, timeout, notrun, stepOK, stepFail
         
-        logRe = re.compile('.*(cmsRun|cmsDriver.py)\s+(.*?)\s:\s([PF].*?D)\s.*')
+        logRe = re.compile(r'.*(cmsRun|cmsDriver.py)\s+(.*?)\s:\s([PF].*?D)\s.*')
 
         for line in lines:
 

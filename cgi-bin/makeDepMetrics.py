@@ -42,7 +42,7 @@ class mkDepMetrics(object) :
         contents=self.contents
         writeflag = False
         cycleflag = False
-        typeCycle = re.compile('^(Cycle \w*)')
+        typeCycle = re.compile(r'^(Cycle \w*)')
         if len(contents)==0 :
             # self.page.write('<ul><li> No data about summary\n</li></ul>')
             return False
