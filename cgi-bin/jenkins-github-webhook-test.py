@@ -4,7 +4,7 @@ from jenkins_callback import build_jobs
 import sys, json
 
 try: jenkins_server=sys.argv[1]
-except: jenkins_server="http://cmsjenkins03.cern.ch:8080/jenkins"
+except: jenkins_server="http://cmsjenkins04.cern.ch:8080/jenkins"
 
 params = []
 params.append({"name":"JOB_PARAM1","value":"cmssdt1"})
