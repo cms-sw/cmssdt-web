@@ -1,16 +1,34 @@
 #!/bin/bash
 echo -e "Content-type:text/plain\n"
+
+# Sanitize input
 export PATH_INFO=$(echo "${PATH_INFO}"   | tr ' ;' '\n\n' | head -1 | grep '^[/][a-zA-Z0-9_/.-]*$')
 export SCRIPT_URL=$(echo "${SCRIPT_URL}" | tr ' ;' '\n\n' | head -1 | grep '^[/][a-zA-Z0-9_/.-]*$')
+
+# Function to return HTTP 403 error
+return_403() {
+  echo -e "Status: 403 Forbidden\n"
+  echo "403 Forbidden: Access denied"
+  exit 0
+}
+
 if [ $(echo "${PATH_INFO}" | grep '/summary.html$' | wc -l) -gt 0 ] ; then
   dir=${DOCUMENT_ROOT}/$(echo "${SCRIPT_URL}" | sed "s|${SCRIPT_NAME}|/SDT|;s|/summary.html$||")/testsResults
+  # Check if directory exists and is both readable and executable
+  if [ -e "${dir}" ] && ( [ ! -r "${dir}" ] || [ ! -x "${dir}" ] ); then
+    return_403
+  fi
   if [ -f "${dir}.txt" ] ; then cat "${dir}.txt" ; fi
-  if [ -d "${dir}" ]     ; then cat "${dir}"/*.txt 2>/dev/null || true ; fi
+  if [ -d "${dir}" ] ; then cat "${dir}"/*.txt 2>/dev/null || true ; fi
 elif [ $(echo "${PATH_INFO}" | grep '/pr-result$' | wc -l) -gt 0 ] ; then
   dir=${DOCUMENT_ROOT}/$(echo "${SCRIPT_URL}" | sed "s|${SCRIPT_NAME}|/SDT|;s|/pr-result$||")/testsResults
+  # Check if directory exists and is both readable and executable
+  if [ -e "${dir}" ] && ( [ ! -r "${dir}" ] || [ ! -x "${dir}" ] ); then
+    return_403
+  fi
   if [ -d "$dir" ] ; then
     if [ $(ls -d "${dir}"/*-failed.res 2>/dev/null | wc -l) -gt 0 ] ; then
-      FTESTS="$(cat ${dir}/*-failed.res | tr '\n' ' '| grep -v '^ *$')"
+      FTESTS="$(cat ${dir}/*-failed.res | tr '\n' ' ' | grep -v '^ *$')"
       if [ "${FTESTS}" != "" ] ; then
         echo "**Failed Tests**: ${FTESTS}"
       fi
