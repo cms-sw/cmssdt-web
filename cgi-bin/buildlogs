@@ -116,9 +116,9 @@ def getArchiveFile(archive, fileToExtract, raw=True, checkPath=True):
         if checkPath and (fileToExtract[0]!="/"): fileToExtract="./"+fileToExtract
         command = format("tar xOzf %(archive)s%(ext)s %(filename)s", archive=archive, filename=fileToExtract, ext=ext)
         break
-  if not command: abort(400, "Bad Request")
+  if not command: abort(404, "Archive file not found")
   err, out = getstatusoutput(command)
-  if err: abort(400, "Bad Request")
+  if err: abort(500, "Archive extraction failed")
   if not raw: out = out.replace('&','&amp').replace('<','&lt;').replace('>','&gt;')
   return out
 
@@ -127,7 +127,7 @@ def extractFile(architecture, release, archive, subdir, fileToExtract, raw=True)
   wwwFile = www+'/'+subdir+'/'+fileToExtract
   if exists(wwwFile):
     err, out = getstatusoutput('cat '+wwwFile)
-    if err: abort(400, "Bad Request")
+    if err: abort(500, "Unable to read extraced file")
     if not raw: out = out.replace('&','&amp').replace('<','&lt;').replace('>','&gt;')
     return out
   archive = www+'/'+archive
@@ -154,7 +154,7 @@ def getReleaseWWW(architecture, release):
                   release=sanitize(release),
                   basedir=BASE_AFS_DIR)
   if not exists(archive):
-    abort(400, "Bad Request")
+    abort(404, "Archive file not found")
   return archive
 
 if __name__ == '__main__':
