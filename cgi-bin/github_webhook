@@ -157,4 +157,9 @@ try:
     xparam.append({"name":"PAYLOAD","value":json.dumps(payload)})
 except: pass
 
+req_processor = "cms-bot"
+try: req_processor = repo_config.REQUEST_PROCESSOR
+except: pass
+xparam.append({"name":"REQUEST_PROCESSOR","value":req_processor})
+
 build_jobs(repo_config.JENKINS_SERVER, [(json.dumps({"parameter":xparam}),"github-webhook")])
