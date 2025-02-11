@@ -4,7 +4,7 @@ echo ""
 read POST_STRING
 TOKEN=$(echo "${POST_STRING}" | grep '^TOKEN=[a-zA-Z0-9+_-]*$' | sed 's|^TOKEN=||')
 if [ "${TOKEN}" != "" ] ; then
- echo "${TOKEN}" | openssl enc -e -a -base64 -aes-256-cbc -md sha512 -salt  -pbkdf2 -pass file:/data/secrets/github_hook_secret
+ echo "${TOKEN}" | openssl enc -e -md md5 -a -base64 -aes-256-cbc -salt -pbkdf2 -pass file:/data/secrets/github_hook_secret
 else
   echo "Invalid/Missing TOKEN sent"
 fi
