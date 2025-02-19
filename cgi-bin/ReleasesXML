@@ -41,7 +41,11 @@ for line in releases_file:
     rels.append(data["label"])
     arch = data["architecture"]
     if arch not in archs: archs[arch]=[]
-    archs[arch].append("""<project label="%(label)s" type="%(type)s" state="%(state)s"/>""" % data)
+    extra_tag = ""
+    if "default_micro_arch" in data:
+       extra_tag = " default_micro_arch=\"%s\"" % data["default_micro_arch"]
+    data["extra_tag"]=extra_tag
+    archs[arch].append("""<project label="%(label)s" type="%(type)s" state="%(state)s"%(extra_tag)s/>""" % data)
     
 releases_file.close()
 
