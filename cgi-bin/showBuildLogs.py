@@ -504,7 +504,8 @@ class BuildLogDisplay(object):
         UnitTestType = ""
         if not fwlite:
           if (not testName) or (testName == "utests") or (testName.startswith('utests/gpu/')):
-            UnitTestType = testName[6:]
+            if testName:
+                UnitTestType = testName[6:]
             self.unitTestResults = self.getUnitTests(self.normPath, UnitTestType)
           if (not testName) or (testName=='DepViol'):
             self.getDepViol(self.normPath)
