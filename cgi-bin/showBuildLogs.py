@@ -85,7 +85,6 @@ class BuildLogDisplay(object):
 
         #self.unitTestLogs = {}
         self.unitTestResults = {}
-        self.GPUunitTestResults = {}
         self.IWYU = {}
         self.InvalidIncludes = {}
         self.Python3 = {}
@@ -101,18 +100,12 @@ class BuildLogDisplay(object):
       
     # --------------------------------------------------------------------------------
 
-    def getUnitTests(self, path):
+    def getUnitTests(self, path, subdir):
 
-        #import glob
-        #unitTstLogs = glob.glob(path+'/unitTestLogs/*/*/unitTest.log')
-        #for item in unitTstLogs:
-        #    words = item.split('/')
-        #    pkg = words[-3]+'/'+words[-2]
-        #    self.unitTestLogs[pkg] = item
         unitTestResults = {}
         try:
-          wwwFile = path+'/unitTestResults.pkl'
-          if not os.path.exists(wwwFile): wwwFile=path.replace('www/','')+'/unitTestResults.pkl'
+          wwwFile = path+subdir+'/unitTestResults.pkl'
+          if not os.path.exists(wwwFile): wwwFile=path.replace('/www/','/')+subdir+'/unitTestResults.pkl'
           summFile = open(wwwFile, 'rb')
           pklr = Unpickler(summFile)
           unitTestResults = pklr.load()
@@ -507,12 +500,12 @@ class BuildLogDisplay(object):
         for key, val in nErrorInfo.items():
             totErr += int(val)
         totErr += len(self.libChkErrMap.keys())
-        
+
+        UnitTestType = ""
         if not fwlite:
-          if (not testName) or (testName=='utests'):
-            self.unitTestResults = self.getUnitTests(self.normPath)
-          if (not testName) or (testName=='gpu_utests'):
-            self.GPUunitTestResults = self.getUnitTests(self.normPath+"/GPU")
+          if (not testName) or (testName == "utests") or (testName.startswith('utests/gpu/')):
+            UnitTestType = testName[6:]
+            self.unitTestResults = self.getUnitTests(self.normPath, UnitTestType)
           if (not testName) or (testName=='DepViol'):
             self.getDepViol(self.normPath)
           if (not testName) or (testName=='IWYU'):
@@ -522,6 +515,8 @@ class BuildLogDisplay(object):
           if (not testName) or (testName=='python3'):
             self.getPython3(self.normPath)
 
+        if UnitTestType:
+          UnitTestType = "  "+UnitTestType[5:]
         lcErrs = 0
         if not fwlite: 
           for pkg in self.libChkErrMap.keys() :
@@ -587,14 +582,9 @@ class BuildLogDisplay(object):
         
         # and a column for the unitTests:
         if not fwlite and self.unitTestResults:
-          hdrs.append('UnitTest')
+          hdrs.append('UnitTest' + UnitTestType)
           szHdr.append(20)
 
-        # and a column for the GPU unitTests:
-        if not fwlite and self.GPUunitTestResults:
-          hdrs.append('GPU UnitTest')
-          szHdr.append(20)
-        
         #  add headers for libcheck
         if (not fwlite) and len( self.libChkErrMap.keys() ) > 0:
             hdrs.append('libCheck')
@@ -658,8 +648,6 @@ class BuildLogDisplay(object):
                   self.showDepViol(pkg, row, rowStyle)
                   # add the unit-test log file if available
                   self.showUnitTest(pkg, row, rowStyle, self.unitTestResults)
-                  # add the GPU unit-test log file if available
-                  self.showUnitTest(pkg, row, rowStyle, self.GPUunitTestResults, "GPU")
                   # libchecker
                   self.showLibChecks(pkg, row, rowStyle)
                   # IWYU
@@ -716,8 +704,6 @@ class BuildLogDisplay(object):
               isOK = self.showDepViol(pkg, row, rowStyle)  and isOK
               # add the unit-test log file if available
               isOK = self.showUnitTest(pkg, row, rowStyle, self.unitTestResults) and isOK
-              # add the unit-test log file if available
-              isOK = self.showUnitTest(pkg, row, rowStyle, self.GPUunitTestResults, "GPU") and isOK
               # libChecker
               isOK1 = self.showLibChecks(pkg, row, rowStyle)
               # IWYU
@@ -769,8 +755,6 @@ class BuildLogDisplay(object):
               self.showDepViol(pkg, row, rowStyle)
               # add the unit-test log file if available
               self.showUnitTest(pkg, row, rowStyle, self.unitTestResults)
-              # add the unit-test log file if available
-              self.showUnitTest(pkg, row, rowStyle, self.GPUunitTestResults, "GPU")
               # if len( self.libChkErrMap.keys() ) > 0:
               self.showLibChecks(pkg, row, rowStyle)
               # if len( self.IWYU.keys() ) > 0:
@@ -821,8 +805,7 @@ class BuildLogDisplay(object):
             # add the unit-test log file if available
             if not fwlite:
               self.showUnitTest(pkg, row, rowStyle, self.unitTestResults)
-              self.showUnitTest(pkg, row, rowStyle, self.GPUunitTestResults, "GPU")
-                    
+
             if (not fwlite) and len( self.libChkErrMap.keys() ) > 0:
                 row.append( ' - ' )
                 rowStyle.append( ' ' )
