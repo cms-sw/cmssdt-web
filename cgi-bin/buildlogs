@@ -37,20 +37,20 @@ def buildLog(architecture, release, subsystem, package):
 @route('/<architecture>/<release>/<gpublock:re:(gpu/[a-zA-Z0-9_-]+/|)>unitTestLogs/<subsystem>/<package>')
 def unitTest(architecture, release, gpublock, subsystem, package):
   utbase = gpublock + 'unitTestLogs'
-  return "<pre>"+extractFile(architecture, release, utbase, '', format("%(utbase)s/%(subsystem)s/%(package)s/unitTest.log", utbase, subsystem=sanitize(subsystem), package=sanitize(package)),False)+"</pre>"
+  return "<pre>"+extractFile(architecture, release, utbase, gpublock, format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),False)+"</pre>"
 
 # to get raw JSON data
 @route('/raw/<architecture>/<release>/<gpublock:re:(gpu/[a-zA-Z0-9_-]+/|)>unitTestLogs/<subsystem>/<package>')
 def unitTestRaw(architecture, release, gpublock, subsystem, package):
   response.set_header('Content-Type', 'text/plain')
   utbase = gpublock + 'unitTestLogs'
-  return extractFile(architecture, release, utbase, '', format("%(utbase)s/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),True)
+  return extractFile(architecture, release, utbase, gpublock, format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),True)
 
 # to get display configs
 @route('/raw_read_config/<architecture>/<release>/<gpublock:re:(gpu/[a-zA-Z0-9_-]+/|)>unitTestLogs/<subsystem>/<package>')
 def unitTestRawConfig(architecture, release, gpublock, subsystem, package):
   utbase = gpublock + 'unitTestLogs'
-  return extractFile(architecture, release, utbase, '', format("%(utbase)s/%(subsystem)s/%(package)s/unitTest.log-read_config", utbase, subsystem=sanitize(subsystem), package=sanitize(package)),False)
+  return extractFile(architecture, release, utbase, gpublock, format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log-read_config", subsystem=sanitize(subsystem), package=sanitize(package)),False)
 
 #----- addOnTests 
 @route('/<architecture>/<release>/addOnTests/logs/<filename>')
