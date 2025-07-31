@@ -11,7 +11,7 @@ debug(False)
 @route('/<architecture>/<release>/GPUunitTestLogs/<subsystem>/<package>')
 @route('/<architecture>/<release>/unitTestLogs/<subsystem>/<package>')
 @route('/<architecture>/<release>/addOnTests/logs/<filename>')
-@route('/<architecture>/<release>/pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
+@route('/<architecture>/<release>/<gpublock:re:(gpu/[^/]+/|)>pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
 def returnFileReader(**kwds):
     data = None
     with open('/var/www/SDT/html/logreader/index.html', 'r') as myfile:
