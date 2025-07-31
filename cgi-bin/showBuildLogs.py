@@ -582,7 +582,10 @@ class BuildLogDisplay(object):
         
         # and a column for the unitTests:
         if not fwlite and self.unitTestResults:
-          hdrs.append('UnitTest' + UnitTestType)
+          gpu_name = UnitTestType
+          if gpu_name:
+            gpu_name = "  "+gpu_name[5:]
+          hdrs.append('UnitTest' + gpu_name)
           szHdr.append(20)
 
         #  add headers for libcheck
@@ -647,7 +650,7 @@ class BuildLogDisplay(object):
                   # add the dependency violation log file if available
                   self.showDepViol(pkg, row, rowStyle)
                   # add the unit-test log file if available
-                  self.showUnitTest(pkg, row, rowStyle, self.unitTestResults)
+                  self.showUnitTest(pkg, row, rowStyle, self.unitTestResults, UnitTestType)
                   # libchecker
                   self.showLibChecks(pkg, row, rowStyle)
                   # IWYU
@@ -703,7 +706,7 @@ class BuildLogDisplay(object):
               #dependency violations
               isOK = self.showDepViol(pkg, row, rowStyle)  and isOK
               # add the unit-test log file if available
-              isOK = self.showUnitTest(pkg, row, rowStyle, self.unitTestResults) and isOK
+              isOK = self.showUnitTest(pkg, row, rowStyle, self.unitTestResults, UnitTestType) and isOK
               # libChecker
               isOK1 = self.showLibChecks(pkg, row, rowStyle)
               # IWYU
@@ -754,7 +757,7 @@ class BuildLogDisplay(object):
               # add the dependency violation log file if available
               self.showDepViol(pkg, row, rowStyle)
               # add the unit-test log file if available
-              self.showUnitTest(pkg, row, rowStyle, self.unitTestResults)
+              self.showUnitTest(pkg, row, rowStyle, self.unitTestResults, UnitTestType)
               # if len( self.libChkErrMap.keys() ) > 0:
               self.showLibChecks(pkg, row, rowStyle)
               # if len( self.IWYU.keys() ) > 0:
@@ -804,7 +807,7 @@ class BuildLogDisplay(object):
             
             # add the unit-test log file if available
             if not fwlite:
-              self.showUnitTest(pkg, row, rowStyle, self.unitTestResults)
+              self.showUnitTest(pkg, row, rowStyle, self.unitTestResults, UnitTestType)
 
             if (not fwlite) and len( self.libChkErrMap.keys() ) > 0:
                 row.append( ' - ' )
