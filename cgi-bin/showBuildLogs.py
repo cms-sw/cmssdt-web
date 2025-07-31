@@ -515,8 +515,6 @@ class BuildLogDisplay(object):
           if (not testName) or (testName=='python3'):
             self.getPython3(self.normPath)
 
-        if UnitTestType:
-          UnitTestType = "  "+UnitTestType[5:]
         lcErrs = 0
         if not fwlite: 
           for pkg in self.libChkErrMap.keys() :
@@ -608,6 +606,8 @@ class BuildLogDisplay(object):
             hdrs.append('Python3')
             szHdr.append(20)
 
+        if UnitTestType:
+            UnitTestType = UnitTestType[1:]+"/"
         self.formatter.startTable(szHdr, hdrs)
         rowIndex = 0
         # --------------------------------------------------------------------------------
