@@ -81,7 +81,7 @@ def relValTestsRaw(architecture, release, gpublock, workflow, filename):
   return extractFile(architecture, release, gpublock + 'pyRelValMatrixLogs', gpublock + 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(unquote(filename)),True)
 
 @route('/raw_read_config/<architecture>/<release>/<gpublock:re:(gpu/[a-zA-Z0-9_-]+/|)>pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
-def relValTestsRawConfig(architecture, release, workflow, filename):
+def relValTestsRawConfig(architecture, release, gpublock, workflow, filename):
   return extractFile(architecture, release, gpublock + 'pyRelValMatrixLogs', gpublock + 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(unquote(filename) + "-read_config"),False)
 #----- 
 
