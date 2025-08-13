@@ -10,7 +10,7 @@ def check_ip():
   if 'HTTP_X_FORWARDED_FOR' in os.environ and os.environ['HTTP_X_FORWARDED_FOR']!='':
     sip = os.environ['HTTP_X_FORWARDED_FOR']
   print("REMOTE_ADDR",sip)
-  return sip in ["2001:1458:d00:3f::100:48b"]:
+  return sip in ["2001:1458:d00:3f::100:48b"]
 
 if not check_ip():
   print ("Invalid Request/IP.")
