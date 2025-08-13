@@ -4,6 +4,17 @@ print ("Content-Type: text/html\n")
 from jenkins_callback import build_jobs
 import os , sys , cgi , json , re
 
+#check source ip in white list fucntion
+def check_ip():
+  sip = os.environ['REMOTE_ADDR']
+  if 'HTTP_X_FORWARDED_FOR' in os.environ and os.environ['HTTP_X_FORWARDED_FOR']!='':
+    sip = os.environ['HTTP_X_FORWARDED_FOR']
+  print("REMOTE_ADDR",sip)
+  return sip in ["2001:1458:d00:3f::100:48b"]:
+
+if not check_ip():
+  print ("Invalid Request/IP.")
+  sys.exit(0)
 
 data = sys.stdin.read()
 try:
