@@ -12,6 +12,7 @@ DAYS=["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 def format(s, **kwds):
   return s % kwds
 
+RELVALS_DIR = r"((gpu|other)/[a-zA-Z0-9_-]+/|)"
 BASE_AFS_DIR="/data/sdt/buildlogs"
 @route('/')
 def index():
@@ -34,20 +35,20 @@ def buildLog(architecture, release, subsystem, package):
   return extractFile(architecture, release, 'new/html-logs', 'new', format("%(subsystem)s/%(package)s/log.html", subsystem=sanitize(subsystem), package=sanitize(package)))
 
 #----- unitTest
-@route('/<architecture>/<release>/<gpublock:re:(gpu/[a-zA-Z0-9_-]+/|)>unitTestLogs/<subsystem>/<package>')
+@route('f/<architecture>/<release>/<gpublock:re:{RELVALS_DIR}>unitTestLogs/<subsystem>/<package>')
 def unitTest(architecture, release, gpublock, subsystem, package):
   utbase = gpublock + 'unitTestLogs'
   return "<pre>"+extractFile(architecture, release, utbase, gpublock, format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),False)+"</pre>"
 
 # to get raw JSON data
-@route('/raw/<architecture>/<release>/<gpublock:re:(gpu/[a-zA-Z0-9_-]+/|)>unitTestLogs/<subsystem>/<package>')
+@route(f'/raw/<architecture>/<release>/<gpublock:re:{RELVALS_DIR}>unitTestLogs/<subsystem>/<package>')
 def unitTestRaw(architecture, release, gpublock, subsystem, package):
   response.set_header('Content-Type', 'text/plain')
   utbase = gpublock + 'unitTestLogs'
   return extractFile(architecture, release, utbase, gpublock, format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),True)
 
 # to get display configs
-@route('/raw_read_config/<architecture>/<release>/<gpublock:re:(gpu/[a-zA-Z0-9_-]+/|)>unitTestLogs/<subsystem>/<package>')
+@route('f/raw_read_config/<architecture>/<release>/<gpublock:re:{RELVALS_DIR}>unitTestLogs/<subsystem>/<package>')
 def unitTestRawConfig(architecture, release, gpublock, subsystem, package):
   utbase = gpublock + 'unitTestLogs'
   return extractFile(architecture, release, utbase, gpublock, format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log-read_config", subsystem=sanitize(subsystem), package=sanitize(package)),False)
@@ -69,18 +70,18 @@ def addOnTestsRawConfig(architecture, release, filename):
   return extractFile(architecture, release, 'addOnTests', 'addOnTests/logs', sanitize(unquote(filename) + "-read_config"),False)
 
 #----- relValTests
-@route('/<architecture>/<release>/<gpublock:re:(gpu/[a-zA-Z0-9_-]+/|)>pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
+@route(f'/<architecture>/<release>/<gpublock:re:{RELVALS_DIR}>pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
 def relValTests(architecture, release, gpublock, workflow, filename):
   if filename.endswith(".root"): extractFile(architecture, release, gpublock + 'pyRelValMatrixLogs', gpublock + 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(unquote(filename)),False)
   return "<pre>"+extractFile(architecture, release, gpublock + 'pyRelValMatrixLogs', gpublock + 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(unquote(filename)),False)+"</pre>"
 
 
-@route('/raw/<architecture>/<release>/<gpublock:re:(gpu/[a-zA-Z0-9_-]+/|)>pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
+@route(f'/raw/<architecture>/<release>/<gpublock:re:{RELVALS_DIR}>pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
 def relValTestsRaw(architecture, release, gpublock, workflow, filename):
   response.set_header('Content-Type', 'text/plain')
   return extractFile(architecture, release, gpublock + 'pyRelValMatrixLogs', gpublock + 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(unquote(filename)),True)
 
-@route('/raw_read_config/<architecture>/<release>/<gpublock:re:(gpu/[a-zA-Z0-9_-]+/|)>pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
+@route(f'/raw_read_config/<architecture>/<release>/<gpublock:re:{RELVALS_DIR}>pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
 def relValTestsRawConfig(architecture, release, gpublock, workflow, filename):
   return extractFile(architecture, release, gpublock + 'pyRelValMatrixLogs', gpublock + 'pyRelValPartialLogs', sanitize(unquote(workflow))+'/'+sanitize(unquote(filename) + "-read_config"),False)
 #----- 
