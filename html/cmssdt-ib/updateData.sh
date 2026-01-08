@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-rm -fr ./html/data/
-rm -fr /tmp/cms-io
-git clone --depth 1 https://github.com/cms-sw/cms-sw.github.io/ /tmp/cms-io
-mkdir -p ./SDT/html/data/
-mv /tmp/cms-io/_data/* ./SDT/html/data/
-rm -fr /tmp/cmnpps-io
+thisdir=$(dirname $0)
+cd ${thisdir}
+repo="cms-sw.github.io"
+rm -rf ./SDT
+mkdir -p ./SDT/public ./SDT/html
+git clone --depth 1 https://github.com/cms-sw/${repo} ./SDT/public/${repo}
+cd ./SDT/html
+ln -s ../public/${repo}/_data data
