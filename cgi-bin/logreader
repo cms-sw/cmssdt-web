@@ -5,12 +5,13 @@ from bottle import route, debug, abort, request, redirect
 from subprocess import getstatusoutput
 from time import strptime
 
+EXTRA_TEST = r"((gpu|other)/[a-zA-Z0-9_-]+/|)"
 app = bottle.default_app()
 debug(False)
 
-@route('/<architecture>/<release>/<gpublock:re:(gpu/[a-zA-Z0-9_-]+/|)>unitTestLogs/<subsystem>/<package>')
+@route(f'/<architecture>/<release>/<exblock:re:{EXTRA_TEST}>unitTestLogs/<subsystem>/<package>')
 @route('/<architecture>/<release>/addOnTests/logs/<filename>')
-@route('/<architecture>/<release>/<gpublock:re:(gpu/[a-zA-Z0-9_-]+/|)>pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
+@route(f'/<architecture>/<release>/<exblock:re:{EXTRA_TEST}>pyRelValMatrixLogs/run/<workflow:re:[^/]+>/<filename>')
 def returnFileReader(**kwds):
     data = None
     with open('/var/www/SDT/html/logreader/index.html', 'r') as myfile:
