@@ -35,7 +35,7 @@ def buildLog(architecture, release, subsystem, package):
   return extractFile(architecture, release, 'new/html-logs', 'new', format("%(subsystem)s/%(package)s/log.html", subsystem=sanitize(subsystem), package=sanitize(package)))
 
 #----- unitTest
-@route('f/<architecture>/<release>/<gpublock:re:{RELVALS_DIR}>unitTestLogs/<subsystem>/<package>')
+@route(f'/<architecture>/<release>/<gpublock:re:{RELVALS_DIR}>unitTestLogs/<subsystem>/<package>')
 def unitTest(architecture, release, gpublock, subsystem, package):
   utbase = gpublock + 'unitTestLogs'
   return "<pre>"+extractFile(architecture, release, utbase, gpublock, format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),False)+"</pre>"
@@ -48,7 +48,7 @@ def unitTestRaw(architecture, release, gpublock, subsystem, package):
   return extractFile(architecture, release, utbase, gpublock, format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log", subsystem=sanitize(subsystem), package=sanitize(package)),True)
 
 # to get display configs
-@route('f/raw_read_config/<architecture>/<release>/<gpublock:re:{RELVALS_DIR}>unitTestLogs/<subsystem>/<package>')
+@route(f'/raw_read_config/<architecture>/<release>/<gpublock:re:{RELVALS_DIR}>unitTestLogs/<subsystem>/<package>')
 def unitTestRawConfig(architecture, release, gpublock, subsystem, package):
   utbase = gpublock + 'unitTestLogs'
   return extractFile(architecture, release, utbase, gpublock, format("unitTestLogs/%(subsystem)s/%(package)s/unitTest.log-read_config", subsystem=sanitize(subsystem), package=sanitize(package)),False)
