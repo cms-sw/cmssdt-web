@@ -53,11 +53,16 @@ body {
     overflow: hidden;
     background: var(--cms-blue);
     box-shadow: 0 12px 28px rgba(6,43,79,.18);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .hero-img {
     width: 100%;
+    max-height: 280px;
     height: auto;
+    object-fit: cover;
     display: block;
 }
 
@@ -282,8 +287,8 @@ footer a:hover {
             <i class="fas fa-rocket"></i>
         </div>
         <div>
-            <h2>Portals & Integration Builds</h2>
-            <p>CMSSW build dashboards, CI services, monitoring, and operational tools.</p>
+            <h2>CMS Software Development Tools</h2>
+            <p>Central Service portal for CMSSW integration builds, documentation, CI/CD monitoring, developer tools and software release infrastructure maintained by SDT team.</p>
         </div>
     </div>
 
