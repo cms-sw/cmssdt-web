@@ -126,6 +126,7 @@ sys.path.insert(0,os.path.join(BASE_DIRECTORY,"sdt/cms-bot"))
 sys.path.insert(0,os.path.join(BASE_DIRECTORY,"sdt/cms-bot/repos",repo_name.replace("-","_")))
 import repo_config
 from github_hooks_config import get_repository_hooks, is_valid_gh_repo
+from cmsbot_v2 import use_cmsbot_v2
 
 #check valid data, ip and signature of source
 valid, event = check_event(payload)
@@ -167,5 +168,8 @@ req_processor = "cms-bot"
 try: req_processor = repo_config.REQUEST_PROCESSOR
 except: pass
 xparam.append({"name":"REQUEST_PROCESSOR","value":req_processor})
+
+if req_processor == "cms-bot":
+  xparam.append({"name":"CMS_BOT_VERSION","value": get_cmsbot_versions(payload)})
 
 build_jobs(repo_config.JENKINS_SERVER, [(json.dumps({"parameter":xparam}),"github-webhook")])
