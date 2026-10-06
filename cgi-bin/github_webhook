@@ -170,8 +170,8 @@ except: pass
 xparam.append({"name":"REQUEST_PROCESSOR","value":req_processor})
 
 if req_processor == "cms-bot":
-  bot_version = get_cmsbot_version(payload)
+  bot_version = str(get_cmsbot_version(payload))
   xparam.append({"name":"CMS_BOT_VERSION","value": bot_version})
-  print("bot version: ", bot_version)
+  print("CMSBOT: ", bot_version)
 
 build_jobs(repo_config.JENKINS_SERVER, [(json.dumps({"parameter":xparam}),"github-webhook")])
