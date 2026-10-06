@@ -126,7 +126,7 @@ sys.path.insert(0,os.path.join(BASE_DIRECTORY,"sdt/cms-bot"))
 sys.path.insert(0,os.path.join(BASE_DIRECTORY,"sdt/cms-bot/repos",repo_name.replace("-","_")))
 import repo_config
 from github_hooks_config import get_repository_hooks, is_valid_gh_repo
-from cmsbot_v2 import use_cmsbot_v2
+from cmsbot_versions import get_cmsbot_version
 
 #check valid data, ip and signature of source
 valid, event = check_event(payload)
