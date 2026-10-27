@@ -34,8 +34,7 @@ def check_event(data):
     cxt = data["context"].split("/")
     if (len(cxt)<2) or (cxt[0] not in ["bot", "cms"]) or (not re.match('^[1-9][0-9]*$', cxt[1])):
       return False,event
-    event = "issue_comment"
-    data["issue"] = {"number": cxt[1]}
+    data[event] = {"number": cxt[1]}
     return True, event
   if (event == 'push'):
     branch = data["ref"]
@@ -144,9 +143,8 @@ except: xparam.append({"name":"ACTION","value":""})
 if ("labeled" in xparam[-1]["value"]) and (not repo_name.startswith("cms-sw/")):
   print("Ignored Event/Action:", xparam)
   sys.exit()
-etype=""
-if   event in ['pull_request']:etype="pull_request"
-elif event in ['issues', 'issue_comment','comp_issue_comment']: etype="issue"
+etype=event
+if event in ['issues', 'issue_comment','comp_issue_comment']: etype="issue"
 try: xparam.append({"name":"ISSUE_NUMBER","value":payload[etype]["number"]})
 except: xparam.append({"name":"ISSUE_NUMBER","value":""})
 if event in ["release"]:
