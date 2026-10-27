@@ -121,6 +121,7 @@ try:
 except Exception as e:
   print("Invalid data, can not read json input")
   sys.exit()
+os.environ["GH_TOKEN_FILE"] = os.path.join(BASE_DIRECTORY,"secrets", "github_hook_secret")
 repo_name = payload["repository"]["full_name"]
 sys.path.insert(0,os.path.join(BASE_DIRECTORY,"sdt/cms-bot"))
 sys.path.insert(0,os.path.join(BASE_DIRECTORY,"sdt/cms-bot/repos",repo_name.replace("-","_")))
